@@ -1,0 +1,29 @@
+{
+  "parent": "create:mechanical_arm",
+  "display": {
+    "icon": {
+      "item": "minecraft:music_disc_13"
+    },
+    "title": {
+      "translate": "advancement.create.musical_arm"
+    },
+    "description": {
+      "translate": "advancement.create.musical_arm.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "0": {
+      "trigger": "create:musical_arm",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "0"
+    ]
+  ]
+}

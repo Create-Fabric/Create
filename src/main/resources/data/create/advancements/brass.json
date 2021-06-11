@@ -1,0 +1,35 @@
+{
+  "parent": "create:blaze_burner",
+  "display": {
+    "icon": {
+      "item": "create:brass_ingot"
+    },
+    "title": {
+      "translate": "advancement.create.brass"
+    },
+    "description": {
+      "translate": "advancement.create.brass.desc"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "create:brass_ingot"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "0"
+    ]
+  ]
+}

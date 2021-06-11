@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "create:ornate_iron_window"
+    }
+  },
+  "result": {
+    "item": "create:ornate_iron_window_pane",
+    "count": 16
+  }
+}

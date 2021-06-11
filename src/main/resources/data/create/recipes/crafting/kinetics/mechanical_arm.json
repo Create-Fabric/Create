@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LLA",
+    "LR ",
+    "ICI"
+  ],
+  "key": {
+    "L": {
+      "tag": "c:plates/brass"
+    },
+    "R": {
+      "item": "create:cogwheel"
+    },
+    "I": {
+      "item": "create:electron_tube"
+    },
+    "A": {
+      "item": "create:andesite_alloy"
+    },
+    "C": {
+      "item": "create:brass_casing"
+    }
+  },
+  "result": {
+    "item": "create:mechanical_arm"
+  }
+}

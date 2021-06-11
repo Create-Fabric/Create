@@ -1,0 +1,14 @@
+{
+  "type": "create:cutting",
+  "ingredients": [
+    {
+      "item": "minecraft:spruce_log"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:stripped_spruce_log"
+    }
+  ],
+  "processingTime": 50
+}

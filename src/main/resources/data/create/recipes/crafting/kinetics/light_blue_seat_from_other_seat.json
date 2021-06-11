@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "-"
+  ],
+  "key": {
+    "#": {
+      "tag": "c:dyes/light_blue"
+    },
+    "-": {
+      "tag": "create:seats"
+    }
+  },
+  "result": {
+    "item": "create:light_blue_seat"
+  }
+}

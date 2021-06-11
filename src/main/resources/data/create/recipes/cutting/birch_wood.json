@@ -1,0 +1,14 @@
+{
+  "type": "create:cutting",
+  "ingredients": [
+    {
+      "item": "minecraft:birch_wood"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:stripped_birch_wood"
+    }
+  ],
+  "processingTime": 50
+}

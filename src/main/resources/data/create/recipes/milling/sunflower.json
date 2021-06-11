@@ -1,0 +1,23 @@
+{
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "minecraft:sunflower"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:yellow_dye",
+      "count": 3
+    },
+    {
+      "item": "minecraft:orange_dye",
+      "chance": 0.25
+    },
+    {
+      "item": "minecraft:yellow_dye",
+      "chance": 0.25
+    }
+  ],
+  "processingTime": 100
+}

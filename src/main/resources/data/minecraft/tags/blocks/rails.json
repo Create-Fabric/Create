@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "create:cart_assembler",
+    "create:reinforced_rail",
+    "create:controller_rail"
+  ]
+}

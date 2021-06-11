@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "II",
+    "AA"
+  ],
+  "key": {
+    "A": {
+      "tag": "c:plates/iron"
+    },
+    "I": {
+      "item": "create:andesite_alloy"
+    }
+  },
+  "result": {
+    "item": "create:chute",
+    "count": 4
+  }
+}
