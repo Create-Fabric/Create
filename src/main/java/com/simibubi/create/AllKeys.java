@@ -31,7 +31,7 @@ public enum AllKeys {
 			if (!key.modifiable)
 				continue;
 
-			KeyBindingHelper.registerKeyBinding(key.keybind);
+			com.simibubi.create.lib.helper.KeyBindingHelper.keysToAdd.add(key.keybind);
 		}
 	}
 

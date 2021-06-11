@@ -28,7 +28,7 @@ import com.simibubi.create.content.curiosities.zapper.ZapperItem;
 import com.simibubi.create.content.logistics.block.funnel.FunnelItem;
 import com.simibubi.create.content.logistics.item.LinkedControllerServerHandler;
 import com.simibubi.create.foundation.command.AllCommands;
-import com.simibubi.create.foundation.config.ui.OpenConfigButton;
+import com.simibubi.create.foundation.config.ui.OpenCreateMenuButton;
 import com.simibubi.create.foundation.fluid.FluidHelper;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.ServerSpeedProvider;
@@ -40,9 +40,9 @@ import com.simibubi.create.lib.event.EntityEyeHeightCallback;
 import com.simibubi.create.lib.event.FluidPlaceBlockCallback;
 import com.simibubi.create.lib.event.LivingEntityEvents;
 import com.simibubi.create.lib.event.MobEntitySetTargetCallback;
-import com.simibubi.create.lib.event.ScreenInitCallback;
 import com.simibubi.create.lib.event.StartRidingCallback;
 
+import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
@@ -205,7 +205,7 @@ public class CommonEvents {
 		UseEntityCallback.EVENT.register(MinecartCouplingItem::handleInteractionWithMinecart);
 		UseEntityCallback.EVENT.register(MinecartContraptionItem::wrenchCanBeUsedToPickUpMinecartContraptions);
 		BlockPlaceCallback.EVENT.register(SymmetryHandler::onBlockPlaced);
-		ScreenInitCallback.EVENT.register(OpenConfigButton.OpenConfigButtonHandler::onGuiInit);
+		ScreenEvents.AFTER_INIT.register(OpenCreateMenuButton.OpenConfigButtonHandler::onGuiInit);
 	}
 
 }

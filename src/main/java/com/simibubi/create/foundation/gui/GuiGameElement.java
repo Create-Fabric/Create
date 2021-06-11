@@ -15,6 +15,8 @@ import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.lib.helper.ItemRendererHelper;
 import com.simibubi.create.lib.lba.fluid.FluidStack;
 
+import com.simibubi.create.lib.render.VirtualRenderingStateManager;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FireBlock;
@@ -194,10 +196,12 @@ public class GuiGameElement {
 				.getBlockColors()
 				.getColor(blockState, null, null, 0);
 			Vector3d rgb = ColorHelper.getRGB(color == -1 ? this.color : color);
-			blockRenderer.getBlockModelRenderer()
-				.render/*Model*/(ms.peek(), vb, blockState, blockmodel, (float) rgb.x, (float) rgb.y, (float) rgb.z,
-					0xF000F0, OverlayTexture.DEFAULT_UV/*, VirtualEmptyModelData.INSTANCE*/); // render does the same thing as renderModel, minus the ModelData
-			buffer.draw();																		// we pass an empty ModelData on Forge, so this should work
+			VirtualRenderingStateManager.runVirtually(() ->
+					blockRenderer.getBlockModelRenderer()
+						.render/*Model*/(ms.peek(), vb, blockState, blockmodel, (float) rgb.x, (float) rgb.y, (float) rgb.z,
+					0xF000F0, OverlayTexture.DEFAULT_UV)
+			);
+			buffer.draw();
 		}
 
 		@Override
@@ -228,8 +232,9 @@ public class GuiGameElement {
 			RenderType renderType, IVertexBuilder vb, MatrixStack ms) {
 			if (blockState.getBlock() instanceof FireBlock) {
 				RenderHelper.disableGuiDepthLighting();
-				blockRenderer.renderBlockAsEntity(blockState, ms, buffer, 0xF000F0, OverlayTexture.DEFAULT_UV/*,
-					VirtualEmptyModelData.INSTANCE*/); // see above comment about render and renderModel
+				VirtualRenderingStateManager.runVirtually(() ->
+					blockRenderer.renderBlockAsEntity(blockState, ms, buffer, 0xF000F0, OverlayTexture.DEFAULT_UV)
+				);
 				RenderHelper.enable();
 				buffer.draw();
 				RenderHelper.enableGuiDepthLighting();

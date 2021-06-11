@@ -5,12 +5,14 @@ import javax.annotation.Nullable;
 
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.config.AllConfigs;
+import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.DelegatedStencilElement;
 import com.simibubi.create.foundation.gui.ScreenOpener;
 import com.simibubi.create.foundation.gui.TextStencilElement;
 import com.simibubi.create.foundation.gui.Theme;
 import com.simibubi.create.foundation.gui.UIRenderHelper;
 import com.simibubi.create.foundation.gui.widgets.BoxWidget;
+import com.simibubi.create.foundation.item.TooltipHelper;
 
 import com.simibubi.create.lib.config.Config;
 
@@ -32,6 +34,7 @@ public class BaseConfigScreen extends ConfigScreen {
 	BoxWidget clientConfigWidget;
 	BoxWidget commonConfigWidget;
 	BoxWidget serverConfigWidget;
+	BoxWidget goBack;
 
 	Config clientSpec;
 	Config commonSpec;
@@ -40,8 +43,11 @@ public class BaseConfigScreen extends ConfigScreen {
 	String commonTile = "COMMON CONFIG";
 	String serverTile = "SERVER CONFIG";
 	String modID = Create.ID;
+	protected boolean returnOnClose;
 
 	/**
+	 * Note from Fabric: This is a lie, it will not work. This is a leftover from Forge.
+	 *
 	 * If you are a Create Addon dev and want to make use of the same GUI
 	 * for your mod's config, use this Constructor to create a entry point
 	 *
@@ -105,14 +111,18 @@ public class BaseConfigScreen extends ConfigScreen {
 
 	@Override
 	protected void init() {
+		clientSpec = AllConfigs.CLIENT.getConfig();
+		commonSpec = AllConfigs.COMMON.getConfig();
+		serverSpec = AllConfigs.SERVER.getConfig();
 		widgets.clear();
 		super.init();
+		returnOnClose = true;
 
-		TextStencilElement clientText = new TextStencilElement(client.fontRenderer, new StringTextComponent(clientTile).formatted(TextFormatting.BOLD)).centered(true, true);
+		TextStencilElement clientText = new TextStencilElement(client.fontRenderer, new StringTextComponent(clientTile)).centered(true, true);
 		widgets.add(clientConfigWidget = new BoxWidget(width / 2 - 100, height / 2 - 15 - 30, 200, 16).showingElement(clientText));
 
 		if (clientSpec != null) {
-			clientConfigWidget.withCallback(() -> ScreenOpener.open(new SubMenuConfigScreen(this, clientSpec)));
+			clientConfigWidget.withCallback(() -> linkTo(new SubMenuConfigScreen(this, "client", clientSpec)));
 			clientText.withElementRenderer(BoxWidget.gradientFactory.apply(clientConfigWidget));
 		} else {
 			clientConfigWidget.active = false;
@@ -120,11 +130,11 @@ public class BaseConfigScreen extends ConfigScreen {
 			clientText.withElementRenderer(DISABLED_RENDERER);
 		}
 
-		TextStencilElement commonText = new TextStencilElement(client.fontRenderer, new StringTextComponent(commonTile).formatted(TextFormatting.BOLD)).centered(true, true);
+		TextStencilElement commonText = new TextStencilElement(client.fontRenderer, new StringTextComponent(commonTile)).centered(true, true);
 		widgets.add(commonConfigWidget = new BoxWidget(width / 2 - 100, height / 2 - 15, 200, 16).showingElement(commonText));
 
 		if (commonSpec != null) {
-			commonConfigWidget.withCallback(() -> ScreenOpener.open(new SubMenuConfigScreen(this, commonSpec)));
+			commonConfigWidget.withCallback(() -> linkTo(new SubMenuConfigScreen(this, "common", commonSpec)));
 			commonText.withElementRenderer(BoxWidget.gradientFactory.apply(commonConfigWidget));
 		} else {
 			commonConfigWidget.active = false;
@@ -132,18 +142,46 @@ public class BaseConfigScreen extends ConfigScreen {
 			commonText.withElementRenderer(DISABLED_RENDERER);
 		}
 
-		TextStencilElement serverText = new TextStencilElement(client.fontRenderer, new StringTextComponent(serverTile).formatted(TextFormatting.BOLD)).centered(true, true);
+		TextStencilElement serverText = new TextStencilElement(client.fontRenderer, new StringTextComponent(serverTile)).centered(true, true);
 		widgets.add(serverConfigWidget = new BoxWidget(width / 2 - 100, height / 2 - 15 + 30, 200, 16).showingElement(serverText));
 
 		if (serverSpec != null && Minecraft.getInstance().world != null) {
-			serverConfigWidget.withCallback(() -> ScreenOpener.open(new SubMenuConfigScreen(this, serverSpec)));
+			serverConfigWidget.withCallback(() -> linkTo(new SubMenuConfigScreen(this, "server", serverSpec)));
 			serverText.withElementRenderer(BoxWidget.gradientFactory.apply(serverConfigWidget));
 		} else {
 			serverConfigWidget.active = false;
 			serverConfigWidget.updateColorsFromState();
 			serverText.withElementRenderer(DISABLED_RENDERER);
+			serverConfigWidget.active = true;
+			serverConfigWidget.getToolTip()
+				.add(new StringTextComponent("Stored individually per World"));
+			serverConfigWidget.getToolTip()
+				.addAll(TooltipHelper.cutTextComponent(
+					new StringTextComponent(
+						"Gameplay settings can only be accessed from the in-game menu after joining a World or Server."),
+					TextFormatting.GRAY, TextFormatting.GRAY));
 		}
 
 		ConfigScreen.modID = this.modID;
+
+		goBack = new BoxWidget(width / 2 - 134, height / 2, 20, 20).withPadding(2, 2)
+			.withCallback(this::onClose);
+		goBack.showingElement(AllIcons.I_CONFIG_BACK.asStencil()
+			.withElementRenderer(BoxWidget.gradientFactory.apply(goBack)));
+		goBack.getToolTip()
+			.add(new StringTextComponent("Go Back"));
+		widgets.add(goBack);
 	}
+
+	private void linkTo(Screen screen) {
+		returnOnClose = false;
+		ScreenOpener.open(screen);
+	}
+
+	@Override
+	public void onClose() {
+		super.onClose();
+		ScreenOpener.open(parent);
+	}
+
 }

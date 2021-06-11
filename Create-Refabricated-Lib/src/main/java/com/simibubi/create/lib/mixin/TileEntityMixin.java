@@ -29,14 +29,14 @@ public abstract class TileEntityMixin implements TileEntityExtensions, NBTSerial
 		return create$extraCustomData;
 	}
 
-	@Inject(method = "Lnet/minecraft/tileentity/TileEntity;fromTag(Lnet/minecraft/block/BlockState;Lnet/minecraft/nbt/CompoundNBT;)V",
+	@Inject(method = "fromTag(Lnet/minecraft/block/BlockState;Lnet/minecraft/nbt/CompoundNBT;)V",
 			at = @At("TAIL"))
 	public void fromTag(BlockState blockState, CompoundNBT compoundNBT, CallbackInfo ci) {
 		if (compoundNBT.contains(TileEntityHelper.EXTRA_DATA_KEY))
 			this.create$extraCustomData = compoundNBT.getCompound(TileEntityHelper.EXTRA_DATA_KEY);
 	}
 
-	@Inject(method = "Lnet/minecraft/tileentity/TileEntity;writeInternal(Lnet/minecraft/nbt/CompoundNBT;)Lnet/minecraft/nbt/CompoundNBT;",
+	@Inject(method = "writeInternal(Lnet/minecraft/nbt/CompoundNBT;)Lnet/minecraft/nbt/CompoundNBT;",
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompoundNBT;putString(Ljava/lang/String;Ljava/lang/String;)V"))
 	private void writeInternal(CompoundNBT compoundNBT, CallbackInfoReturnable<CompoundNBT> cir) {
 		if (this.create$extraCustomData != null) {

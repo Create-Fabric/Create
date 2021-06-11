@@ -24,7 +24,7 @@ import net.minecraft.util.ResourceLocation;
 @Mixin(AtlasTexture.class)
 public abstract class AtlasTextureMixin {
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/profiler/IProfiler;endStartSection(Ljava/lang/String;)V", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILEXCEPTION,
-			method = "Lnet/minecraft/client/renderer/texture/AtlasTexture;stitch(Lnet/minecraft/resources/IResourceManager;Ljava/util/stream/Stream;Lnet/minecraft/profiler/IProfiler;I)Lnet/minecraft/client/renderer/texture/AtlasTexture$SheetData;")
+			method = "stitch(Lnet/minecraft/resources/IResourceManager;Ljava/util/stream/Stream;Lnet/minecraft/profiler/IProfiler;I)Lnet/minecraft/client/renderer/texture/AtlasTexture$SheetData;")
 	public void create$stitch(IResourceManager iResourceManager, Stream<ResourceLocation> stream, IProfiler iProfiler, int i, CallbackInfoReturnable<AtlasTexture.SheetData> cir, Set<ResourceLocation> set) {
 		OnTextureStitchCallback.EVENT.invoker().onModelRegistry(new TextureStitchUtil(MixinHelper.cast(this), set));
 	}

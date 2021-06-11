@@ -44,7 +44,11 @@ public class CStress extends ConfigBase {
 
 	public static ConfigValue<Double> define(String path, double i) {
 		ConfigValue<Double> result = new ConfigValue<>(path, i);
+		result.max = Double.MAX_VALUE;
+		result.min = Double.MIN_VALUE;
+		result.setConstraint(ConfigValue.MIN_MAX);
 		getCurrentGroup().addConfigValue(result);
+		Config.valuesAndStrings.put(result.value.toString(), result);
 		return result;
 	}
 

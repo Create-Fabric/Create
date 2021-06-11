@@ -12,11 +12,13 @@ public abstract class ServerPlayerEntityMixin implements ServerPlayerEntityExten
 	@Unique
 	public boolean create$isFake = false;
 
+	@Unique
 	@Override
 	public boolean create$isFakePlayer() {
 		return create$isFake;
 	}
 
+	@Unique
 	@Override
 	public void create$setFake(boolean fake) {
 		create$isFake = fake;

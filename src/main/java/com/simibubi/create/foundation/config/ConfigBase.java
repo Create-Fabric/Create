@@ -11,16 +11,13 @@ import com.simibubi.create.lib.config.ConfigValue;
 
 public abstract class ConfigBase {
 
-	public Config getConfig() {
-		return null;
-	}
+	public abstract Config getConfig();
 
 	public static List<ConfigGroup> currentGroupSet = new ArrayList<>();
 	public static ConfigGroup currentGroup;
 	public static ConfigGroup getCurrentGroup() {
 		return currentGroup;
 	}
-	public static Object lock = new Object();
 
 	public static void initGroups(Config config) {
 		for (ConfigGroup group : currentGroupSet) {
@@ -61,14 +58,20 @@ public abstract class ConfigBase {
 	protected ConfigBool b(boolean current, String name, String... comment) {
 		ConfigBool result = new ConfigBool(name, current);
 		result.addComments(comment);
+		result.setConstraint(ConfigValue.TYPE);
 		getCurrentGroup().addConfigValue(result);
+		Config.valuesAndStrings.put(result.value.toString(), result);
 		return result;
 	}
 
 	protected ConfigFloat f(float current, float min, float max, String name, String... comment) {
 		ConfigFloat result = new ConfigFloat(name, current);
 		result.addComments(comment);
+		result.max = max;
+		result.min = min;
+		result.setConstraint(ConfigValue.MIN_MAX);
 		getCurrentGroup().addConfigValue(result);
+		Config.valuesAndStrings.put(result.value.toString(), result);
 		return result;
 	}
 
@@ -79,7 +82,11 @@ public abstract class ConfigBase {
 	protected ConfigInt i(int current, int min, int max, String name, String... comment) {
 		ConfigInt result = new ConfigInt(name, current);
 		result.addComments(comment);
+		result.max = max;
+		result.min = min;
+		result.setConstraint(ConfigValue.MIN_MAX);
 		getCurrentGroup().addConfigValue(result);
+		Config.valuesAndStrings.put(result.value.toString(), result);
 		return result;
 	}
 
@@ -90,7 +97,9 @@ public abstract class ConfigBase {
 	protected <T extends Enum<T>> ConfigEnum<T> e(T defaultValue, String name, String... comment) {
 		ConfigEnum<T> result = new ConfigEnum<T>(name, defaultValue);
 		result.addComments(comment);
+		result.setConstraint(ConfigValue.TYPE);
 		getCurrentGroup().addConfigValue(result);
+		Config.valuesAndStrings.put(result.value.toString(), result);
 		return result;
 	}
 

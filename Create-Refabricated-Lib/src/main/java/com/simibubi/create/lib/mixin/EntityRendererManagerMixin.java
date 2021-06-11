@@ -18,7 +18,7 @@ import net.minecraft.resources.IReloadableResourceManager;
 
 @Environment(EnvType.CLIENT)
 @Mixin(EntityRendererManager.class)
-public class EntityRendererManagerMixin {
+public abstract class EntityRendererManagerMixin {
 	@Inject(at = @At("RETURN"), method = "<init>")
 	public void create$EntityRendererManager(TextureManager textureManager, ItemRenderer itemRenderer, IReloadableResourceManager iReloadableResourceManager, FontRenderer fontRenderer, GameSettings gameSettings, CallbackInfo ci) {
 		OnPlayerRendererInitCallback.EVENT.invoker().register();

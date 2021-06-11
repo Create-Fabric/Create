@@ -101,9 +101,11 @@ public abstract class GhostBlockRenderer {
 			ms.translate(-.5, -.5, -.5);
 
 			// dispatcher.getBlockModelRenderer().renderModel(ms.peek(), vb, params.state, model, 1f, 1f, 1f, 0xF000F0, OverlayTexture.DEFAULT_UV, VirtualEmptyModelData.INSTANCE);
-			renderModel(params, ms.peek(), vb, params.state, model, 1f, 1f, 1f,
-				WorldRenderer.getLightmapCoordinates(mc.world, pos), OverlayTexture.DEFAULT_UV/*,
-				VirtualEmptyModelData.INSTANCE*/);
+			VirtualRenderingStateManager.runVirtually(() ->
+				renderModel(params, ms.peek(), vb, params.state, model, 1f, 1f, 1f,
+					WorldRenderer.getLightmapCoordinates(mc.world, pos), OverlayTexture.DEFAULT_UV/*,
+				VirtualEmptyModelData.INSTANCE*/)
+			);
 
 			// buffer.draw();
 			// clean

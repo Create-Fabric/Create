@@ -2,7 +2,10 @@ package com.simibubi.create.foundation.worldgen;
 
 import java.util.Optional;
 
+import com.simibubi.create.foundation.config.AllConfigs;
 import com.simibubi.create.foundation.config.ConfigBase;
+import com.simibubi.create.lib.config.Config;
+import com.simibubi.create.lib.config.ConfigGroup;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
 import net.minecraft.block.Block;
@@ -25,18 +28,20 @@ public class ConfigDrivenFeatureEntry extends ConfigBase {
 									float frequency) {
 		this.id = id;
 		this.block = block;
-		this.clusterSize = i(clusterSize, 0, "clusterSize");
-		this.minHeight = i(0, 0, "minHeight");
-		this.maxHeight = i(256, 0, "maxHeight");
-		this.frequency = f(frequency, 0, 512, "frequency", "Amount of clusters generated per Chunk.",
+		this.clusterSize = i(clusterSize, 0, id + "_clusterSize");
+		this.minHeight = i(0, 0, id + "_minHeight");
+		this.maxHeight = i(256, 0, id + "_maxHeight");
+		this.frequency = f(frequency, 0, 512, id + "_frequency", "Amount of clusters generated per Chunk.",
 				"  >1 to spawn multiple.", "  <1 to make it a chance.", "  0 to disable.");
 	}
 
 	public ConfigDrivenFeatureEntry between(int minHeight, int maxHeight) {
 //		allValues.remove(this.minHeight);
 //		allValues.remove(this.maxHeight);
-		this.minHeight = i(minHeight, 0, "minHeight");
-		this.maxHeight = i(maxHeight, 0, "maxHeight");
+//		this.minHeight = i(minHeight, 0, id + "_minHeight");
+//		this.maxHeight = i(maxHeight, 0, id + "_maxHeight");
+		this.minHeight.set(minHeight);
+		this.maxHeight.set(maxHeight);
 		return this;
 	}
 
@@ -56,7 +61,19 @@ public class ConfigDrivenFeatureEntry extends ConfigBase {
 	}
 
 	public void addToConfig() {
-		registerAll();
+		ConfigGroup group = new ConfigGroup(id, 0);
+		group.setConfig(getConfig());
+		getConfig().groups.add(group);
+		group.configs.add(clusterSize);
+		group.configs.add(minHeight);
+		group.configs.add(maxHeight);
+		group.configs.add(frequency);
+		group.registerValues();
+	}
+
+	@Override
+	public Config getConfig() {
+		return AllConfigs.COMMON.worldGen.getConfig();
 	}
 
 	@Override

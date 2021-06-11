@@ -13,8 +13,6 @@ public class ConfigValue<T> {
 	// only for number-based values
 	public Number min;
 	public Number max;
-	// only for enums
-	public Class<T> clazz;
 
 	public ConfigValue(String key, T value) {
 		this.value = value;
@@ -40,10 +38,6 @@ public class ConfigValue<T> {
 	}
 
 	// specific setters
-
-	public void setClass(Class<T> clazz) {
-		this.clazz = clazz;
-	}
 
 	public void setMin(Number min) {
 		this.min = min;
@@ -78,10 +72,14 @@ public class ConfigValue<T> {
 		boolean fits(Object newValue, ConfigValue value);
 	}
 
+	public void setConstraint(Constraint constraint) {
+		this.constraint = constraint;
+	}
+
 	public boolean fitsConstraint(T newValue) {
 		return constraint.fits(newValue, this);
 	}
 
-	public static final Constraint MIN_MAX = (newValue, value) -> ((double) newValue) >= ((double) value.min) && ((double) value.max) >= ((double) newValue);
-	public static final Constraint TYPE = (newValue, value) -> newValue.getClass() == value.clazz;
+	public static final Constraint MIN_MAX = (newValue, value) -> ((Number) newValue).doubleValue() >= value.min.doubleValue() && value.max.doubleValue() >= ((Number) newValue).doubleValue();
+	public static final Constraint TYPE = (newValue, value) -> newValue.getClass() == value.value.getClass();
 }

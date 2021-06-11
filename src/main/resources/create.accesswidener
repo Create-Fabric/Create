@@ -6,7 +6,6 @@ accessible class net/minecraft/client/particle/ParticleManager$IParticleMetaFact
 
 accessible class net/minecraft/world/chunk/ChunkStatus$IGenerationWorker
 accessible class net/minecraft/world/chunk/ChunkStatus$ILoadingWorker
-mutable field net/minecraft/world/chunk/ChunkStatus FULL (Lnet/minecraft/world/chunk/ChunkStatus;FULL:Lnet/minecraft/world/chunk/ChunkStatus;)
 
 accessible class net/minecraft/util/palette/IResizeCallback
 

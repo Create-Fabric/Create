@@ -31,7 +31,7 @@ public abstract class TemplateMixin implements TemplateExtensions {
 	}
 
 	@Inject(at = @At(value = "INVOKE", shift = At.Shift.BEFORE, target = "Lnet/minecraft/world/gen/feature/template/Template;spawnEntities(Lnet/minecraft/world/IServerWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/Mirror;Lnet/minecraft/util/Rotation;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/MutableBoundingBox;Z)V"),
-			method = "Lnet/minecraft/world/gen/feature/template/Template;place(Lnet/minecraft/world/IServerWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/gen/feature/template/PlacementSettings;Ljava/util/Random;I)Z", cancellable = true)
+			method = "place(Lnet/minecraft/world/IServerWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/gen/feature/template/PlacementSettings;Ljava/util/Random;I)Z", cancellable = true)
 	public void create$place(IServerWorld iServerWorld, BlockPos blockPos, BlockPos blockPos2, PlacementSettings placementSettings, Random random, int i, CallbackInfoReturnable<Boolean> cir) {
 		create$addEntitiesToWorld(iServerWorld, blockPos, placementSettings);
 		cir.setReturnValue(true);

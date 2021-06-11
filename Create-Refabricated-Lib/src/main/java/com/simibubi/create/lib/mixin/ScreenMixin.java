@@ -1,7 +1,6 @@
 package com.simibubi.create.lib.mixin;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,12 +14,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.simibubi.create.lib.event.RenderTooltipBorderColorCallback;
-import com.simibubi.create.lib.event.ScreenInitCallback;
-import com.simibubi.create.lib.utility.MixinHelper;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.Widget;
@@ -44,9 +40,6 @@ public abstract class ScreenMixin {
 	private ItemStack create$cachedStack = ItemStack.EMPTY;
 	@Unique
 	private RenderTooltipBorderColorCallback.BorderColorEntry create$borderColorEntry = null;
-
-	@Shadow
-	protected abstract <T extends Widget> T addButton(T widget);
 
 	@Inject(method = "renderTooltip(Lcom/mojang/blaze3d/matrix/MatrixStack;Lnet/minecraft/item/ItemStack;II)V", at = @At("HEAD"))
 	private void create$cacheItemStack(MatrixStack matrixStack, ItemStack itemStack, int i, int j, CallbackInfo ci) {
@@ -79,14 +72,5 @@ public abstract class ScreenMixin {
 	@Inject(method = "renderOrderedTooltip", at = @At("RETURN"))
 	private void create$wipeBorderColors(MatrixStack matrixStack, List<? extends IReorderingProcessor> list, int i, int j, CallbackInfo ci) {
 		create$borderColorEntry = null;
-	}
-
-	@Inject(at = @At("TAIL"), method = "init(Lnet/minecraft/client/Minecraft;II)V")
-	public void init(Minecraft minecraft, int i, int j, CallbackInfo ci) {
-		Consumer<Widget> remove = (widget) -> {
-			buttons.remove(widget);
-			children.remove(widget);
-		};
-		ScreenInitCallback.EVENT.invoker().onScreenInit(MixinHelper.cast(this), this.buttons, this::addButton, remove);
 	}
 }

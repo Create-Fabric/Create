@@ -10,10 +10,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.simibubi.create.foundation.render.backend.FastRenderDispatcher;
 import com.simibubi.create.foundation.render.backend.instancing.IInstanceRendered;
 
-import net.minecraft.client.renderer.chunk.ChunkRenderDispatcher;
-import net.minecraft.tileentity.TileEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.renderer.chunk.ChunkRenderDispatcher;
+import net.minecraft.tileentity.TileEntity;
 
 @Environment(EnvType.CLIENT)
 @Mixin(ChunkRenderDispatcher.CompiledChunk.class)
@@ -25,7 +25,7 @@ public class CancelTileEntityRenderMixin {
 	 * list of tile entities to render. By filtering the output here, we prevent the game from
 	 * doing unnecessary light lookups and frustum checks.
 	 */
-	@Inject(at = @At("RETURN"), method = "getTileEntities", cancellable = true)
+	@Inject(at = @At("RETURN"), method = "getTileEntities")
 	private void noRenderInstancedTiles(CallbackInfoReturnable<List<TileEntity>> cir) {
 		if (FastRenderDispatcher.available()) {
 			List<TileEntity> tiles = cir.getReturnValue();

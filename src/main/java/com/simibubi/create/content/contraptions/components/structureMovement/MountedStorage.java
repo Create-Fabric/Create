@@ -1,6 +1,7 @@
 package com.simibubi.create.content.contraptions.components.structureMovement;
 
 import com.simibubi.create.AllTileEntities;
+import com.simibubi.create.content.contraptions.processing.ProcessingInventory;
 import com.simibubi.create.content.logistics.block.inventories.AdjustableCrateBlock;
 import com.simibubi.create.content.logistics.block.inventories.BottomlessItemHandler;
 import com.simibubi.create.foundation.utility.NBTHelper;
@@ -47,7 +48,8 @@ public class MountedStorage {
 			return true;
 
 		LazyOptional<IItemHandler> capability = TransferUtil.getItemHandler(te);
-		return capability.orElse(null) instanceof ItemStackHandler;
+		IItemHandler handler = capability.orElse(null);
+		return handler instanceof ItemStackHandler && !(handler instanceof ProcessingInventory);
 	}
 
 	public MountedStorage(TileEntity te) {

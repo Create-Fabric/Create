@@ -14,15 +14,6 @@ import net.minecraft.client.renderer.GameRenderer;
 @Environment(EnvType.CLIENT)
 @Mixin(GameRenderer.class)
 public interface GameRendererAccessor {
-	@Accessor("rendererUpdateCount")
-	int create$rendererUpdateCount();
-
-	@Invoker("bobView")
-	void create$bobView(MatrixStack matrixStack, float f);
-
-	@Invoker("bobViewWhenHurt")
-	void create$bobViewWhenHurt(MatrixStack matrixStack, float f);
-
 	@Invoker("getFOVModifier")
 	double create$getFOVModifier(ActiveRenderInfo camera, float tickDelta, boolean changingFov);
 }

@@ -3,6 +3,7 @@ package com.simibubi.create.lib.mixin;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 import com.simibubi.create.lib.extensions.AbstractRailBlockExtensions;
 
@@ -19,11 +20,13 @@ public abstract class AbstractRailBlockMixin implements AbstractRailBlockExtensi
 	@Shadow
 	public abstract Property<RailShape> getShapeProperty();
 
+	@Unique
 	@Override
 	public RailShape create$getRailDirection(BlockState state, IBlockReader world, BlockPos pos, @Nullable AbstractMinecartEntity cart) {
 		return state.get(getShapeProperty());
 	}
 
+	@Unique
 	@Override
 	public RailShape create$getRailDirection(BlockState state) {
 		return state.get(getShapeProperty());

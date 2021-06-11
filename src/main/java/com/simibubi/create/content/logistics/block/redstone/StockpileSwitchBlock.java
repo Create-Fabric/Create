@@ -1,5 +1,7 @@
 package com.simibubi.create.content.logistics.block.redstone;
 
+import java.util.Random;
+
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.AllTileEntities;
@@ -9,7 +11,6 @@ import com.simibubi.create.foundation.gui.ScreenOpener;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.lib.block.CanConnectRedstoneBlock;
 import com.simibubi.create.lib.extensions.BlockExtensions;
-import com.simibubi.create.lib.extensions.TileEntityExtensions;
 import com.simibubi.create.lib.utility.LazyOptional;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
@@ -36,6 +37,7 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class StockpileSwitchBlock extends HorizontalBlock implements ITE<StockpileSwitchTileEntity>, IWrenchable, CanConnectRedstoneBlock, ITileEntityProvider, BlockExtensions {
 
@@ -87,11 +89,14 @@ public class StockpileSwitchBlock extends HorizontalBlock implements ITE<Stockpi
 	public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
 		if (side == blockState.get(HORIZONTAL_FACING).getOpposite())
 			return 0;
-		try {
-			return getTileEntity(blockAccess, pos).isPowered() ? 15 : 0;
-		} catch (TileEntityException e) {
-		}
-		return 0;
+		return getTileEntityOptional(blockAccess, pos).filter(StockpileSwitchTileEntity::isPowered)
+			.map($ -> 15)
+			.orElse(0);
+	}
+
+	@Override
+	public void scheduledTick(BlockState blockState, ServerWorld world, BlockPos pos, Random random) {
+		getTileEntityOptional(world, pos).ifPresent(StockpileSwitchTileEntity::updatePowerAfterDelay);
 	}
 
 	@Override

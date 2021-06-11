@@ -6,6 +6,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
+import com.simibubi.create.lib.render.VirtualRenderingStateManager;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
@@ -119,8 +121,8 @@ public class SuperByteBufferCache {
 		BufferBuilder builder = new BufferBuilder(512);
 
 		builder.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-		blockRenderer.render(mc.world, model, referenceState, BlockPos.ZERO.up(255), ms, builder, true,
-			mc.world.rand, 42, OverlayTexture.DEFAULT_UV);
+		VirtualRenderingStateManager.runVirtually(() -> blockRenderer.render(mc.world, model, referenceState, BlockPos.ZERO.up(255), ms, builder, true,
+				mc.world.rand, 42, OverlayTexture.DEFAULT_UV));
 		builder.finishDrawing();
 		return builder;
 	}

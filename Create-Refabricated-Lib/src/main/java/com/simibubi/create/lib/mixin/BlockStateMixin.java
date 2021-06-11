@@ -8,5 +8,4 @@ import net.minecraft.block.BlockState;
 
 @Mixin(BlockState.class)
 public abstract class BlockStateMixin implements BlockStateExtensions {
-
 }

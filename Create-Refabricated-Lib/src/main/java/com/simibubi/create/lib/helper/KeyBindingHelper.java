@@ -1,5 +1,8 @@
 package com.simibubi.create.lib.helper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.simibubi.create.lib.mixin.accessor.KeyBindingAccessor;
 import com.simibubi.create.lib.utility.MixinHelper;
 
@@ -17,6 +20,8 @@ public final class KeyBindingHelper {
 	private static KeyBindingAccessor get(KeyBinding keyBinding) {
 		return MixinHelper.cast(keyBinding);
 	}
+
+	public static List<KeyBinding> keysToAdd = new ArrayList<>();
 
 	private KeyBindingHelper() { }
 }

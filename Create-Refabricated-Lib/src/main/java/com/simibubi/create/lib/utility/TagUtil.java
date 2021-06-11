@@ -1,6 +1,7 @@
 package com.simibubi.create.lib.utility;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 import net.fabricmc.fabric.impl.tag.extension.TagDelegate;
 import net.minecraft.block.Block;
@@ -14,51 +15,55 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.ResourceLocation;
 
 public class TagUtil {
+	private static final String CREATE = "create";
+	private static final String COMMON = "c";
+	private static final String TIC = "tconstruct";
+
 	// blocks
-	public static final ITag.INamedTag<Block> WINDMILL_SAILS = new TagDelegate<>(new ResourceLocation("windmill_sails"), BlockTags::getCollection);
-	public static final ITag.INamedTag<Block> FAN_HEATERS = new TagDelegate<>(new ResourceLocation("fan_heaters"), BlockTags::getCollection);
-	public static final ITag.INamedTag<Block> WINDOWABLE = new TagDelegate<>(new ResourceLocation("windowable"), BlockTags::getCollection);
-	public static final ITag.INamedTag<Block> NON_MOVABLE = new TagDelegate<>(new ResourceLocation("non_movable"), BlockTags::getCollection);
-	public static final ITag.INamedTag<Block> BRITTLE = new TagDelegate<>(new ResourceLocation("brittle"), BlockTags::getCollection);
-	public static final ITag.INamedTag<Block> BLOCKS$SEATS = new TagDelegate<>(new ResourceLocation("seats"), BlockTags::getCollection);
-	public static final ITag.INamedTag<Block> SAILS = new TagDelegate<>(new ResourceLocation("sails"), BlockTags::getCollection);
-	public static final ITag.INamedTag<Block> BLOCKS$VALVE_HANDLES = new TagDelegate<>(new ResourceLocation("valve_handles"), BlockTags::getCollection);
-	public static final ITag.INamedTag<Block> FAN_TRANSPARENT = new TagDelegate<>(new ResourceLocation("fan_transparent"), BlockTags::getCollection);
-	public static final ITag.INamedTag<Block> SAFE_NBT = new TagDelegate<>(new ResourceLocation("safe_nbt"), BlockTags::getCollection);
+	public static final ITag.INamedTag<Block> WINDMILL_SAILS = new TagDelegate<>(new ResourceLocation(CREATE, "windmill_sails"), BlockTags::getCollection);
+	public static final ITag.INamedTag<Block> FAN_HEATERS = new TagDelegate<>(new ResourceLocation(CREATE, "fan_heaters"), BlockTags::getCollection);
+	public static final ITag.INamedTag<Block> WINDOWABLE = new TagDelegate<>(new ResourceLocation(CREATE, "windowable"), BlockTags::getCollection);
+	public static final ITag.INamedTag<Block> NON_MOVABLE = new TagDelegate<>(new ResourceLocation(CREATE, "non_movable"), BlockTags::getCollection);
+	public static final ITag.INamedTag<Block> BRITTLE = new TagDelegate<>(new ResourceLocation(CREATE, "brittle"), BlockTags::getCollection);
+	public static final ITag.INamedTag<Block> BLOCKS$SEATS = new TagDelegate<>(new ResourceLocation(CREATE, "seats"), BlockTags::getCollection);
+	public static final ITag.INamedTag<Block> SAILS = new TagDelegate<>(new ResourceLocation(CREATE, "sails"), BlockTags::getCollection);
+	public static final ITag.INamedTag<Block> BLOCKS$VALVE_HANDLES = new TagDelegate<>(new ResourceLocation(CREATE, "valve_handles"), BlockTags::getCollection);
+	public static final ITag.INamedTag<Block> FAN_TRANSPARENT = new TagDelegate<>(new ResourceLocation(CREATE, "fan_transparent"), BlockTags::getCollection);
+	public static final ITag.INamedTag<Block> SAFE_NBT = new TagDelegate<>(new ResourceLocation(CREATE, "safe_nbt"), BlockTags::getCollection);
 
 	// items
-	public static final ITag.INamedTag<Item> CRUSHED_ORES = new TagDelegate<>(new ResourceLocation("crushed_ores"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> ITEMS$SEATS = new TagDelegate<>(new ResourceLocation("seats"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> ITEMS$VALVE_HANDLES = new TagDelegate<>(new ResourceLocation("valve_handles"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> UPRIGHT_ON_BELT = new TagDelegate<>(new ResourceLocation("upright_on_belt"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> CREATE_INGOTS = new TagDelegate<>(new ResourceLocation("create_ingots"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> BEACON_PAYMENT = new TagDelegate<>(new ResourceLocation("beacon_payment"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> INGOTS = new TagDelegate<>(new ResourceLocation("ingots"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> NUGGETS = new TagDelegate<>(new ResourceLocation("nuggets"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> PLATES = new TagDelegate<>(new ResourceLocation("plates"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> COBBLESTONE = new TagDelegate<>(new ResourceLocation("cobblestone"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> CRUSHED_ORES = new TagDelegate<>(new ResourceLocation(CREATE, "crushed_ores"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> ITEMS$SEATS = new TagDelegate<>(new ResourceLocation(CREATE, "seats"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> ITEMS$VALVE_HANDLES = new TagDelegate<>(new ResourceLocation(CREATE, "valve_handles"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> UPRIGHT_ON_BELT = new TagDelegate<>(new ResourceLocation(CREATE, "upright_on_belt"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> CREATE_INGOTS = new TagDelegate<>(new ResourceLocation(CREATE, "create_ingots"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> BEACON_PAYMENT = new TagDelegate<>(new ResourceLocation(COMMON, "beacon_payment"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> INGOTS = new TagDelegate<>(new ResourceLocation(COMMON, "ingots"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> NUGGETS = new TagDelegate<>(new ResourceLocation(COMMON, "nuggets"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> PLATES = new TagDelegate<>(new ResourceLocation(COMMON, "plates"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> COBBLESTONE = new TagDelegate<>(new ResourceLocation(COMMON, "cobblestone"), ItemTags::getCollection);
 
 	// TIC compat
-	public static final ITag.INamedTag<Block> SLIMY_LOGS = new TagDelegate<>(new ResourceLocation("slimy_logs"), BlockTags::getCollection);
-	public static final ITag.INamedTag<Item> SLIMEBALLS = new TagDelegate<>(new ResourceLocation("slime_balls"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Block> SLIMY_LOGS = new TagDelegate<>(new ResourceLocation(TIC, "slimy_logs"), BlockTags::getCollection);
+	public static final ITag.INamedTag<Item> SLIMEBALLS = new TagDelegate<>(new ResourceLocation(TIC, "slime_balls"), ItemTags::getCollection);
 
 	// dyes
-	public static final ITag.INamedTag<Item> BLACK_DYES = new TagDelegate<>(new ResourceLocation("black_dyes"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> BLUE_DYES = new TagDelegate<>(new ResourceLocation("blue_dyes"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> BROWN_DYES = new TagDelegate<>(new ResourceLocation("brown_dyes"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> CYAN_DYES = new TagDelegate<>(new ResourceLocation("cyan_dyes"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> GRAY_DYES = new TagDelegate<>(new ResourceLocation("gray_dyes"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> GREEN_DYES = new TagDelegate<>(new ResourceLocation("green_dyes"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> LIGHT_BLUE_DYES = new TagDelegate<>(new ResourceLocation("light_blue_dyes"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> LIGHT_GRAY_DYES = new TagDelegate<>(new ResourceLocation("light_gray_dyes"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> LIME_DYES = new TagDelegate<>(new ResourceLocation("lime_dyes"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> MAGENTA_DYES = new TagDelegate<>(new ResourceLocation("magenta_dyes"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> ORANGE_DYES = new TagDelegate<>(new ResourceLocation("orange_dyes"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> PINK_DYES = new TagDelegate<>(new ResourceLocation("pink_dyes"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> PURPLE_DYES = new TagDelegate<>(new ResourceLocation("purple_dyes"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> RED_DYES = new TagDelegate<>(new ResourceLocation("red_dyes"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> WHITE_DYES = new TagDelegate<>(new ResourceLocation("white_dyes"), ItemTags::getCollection);
-	public static final ITag.INamedTag<Item> YELLOW_DYES = new TagDelegate<>(new ResourceLocation("yellow_dyes"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> BLACK_DYES = new TagDelegate<>(new ResourceLocation(COMMON, "black_dyes"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> BLUE_DYES = new TagDelegate<>(new ResourceLocation(COMMON, "blue_dyes"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> BROWN_DYES = new TagDelegate<>(new ResourceLocation(COMMON, "brown_dyes"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> CYAN_DYES = new TagDelegate<>(new ResourceLocation(COMMON, "cyan_dyes"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> GRAY_DYES = new TagDelegate<>(new ResourceLocation(COMMON, "gray_dyes"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> GREEN_DYES = new TagDelegate<>(new ResourceLocation(COMMON, "green_dyes"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> LIGHT_BLUE_DYES = new TagDelegate<>(new ResourceLocation(COMMON, "light_blue_dyes"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> LIGHT_GRAY_DYES = new TagDelegate<>(new ResourceLocation(COMMON, "light_gray_dyes"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> LIME_DYES = new TagDelegate<>(new ResourceLocation(COMMON, "lime_dyes"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> MAGENTA_DYES = new TagDelegate<>(new ResourceLocation(COMMON, "magenta_dyes"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> ORANGE_DYES = new TagDelegate<>(new ResourceLocation(COMMON, "orange_dyes"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> PINK_DYES = new TagDelegate<>(new ResourceLocation(COMMON, "pink_dyes"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> PURPLE_DYES = new TagDelegate<>(new ResourceLocation(COMMON, "purple_dyes"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> RED_DYES = new TagDelegate<>(new ResourceLocation(COMMON, "red_dyes"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> WHITE_DYES = new TagDelegate<>(new ResourceLocation(COMMON, "white_dyes"), ItemTags::getCollection);
+	public static final ITag.INamedTag<Item> YELLOW_DYES = new TagDelegate<>(new ResourceLocation(COMMON, "yellow_dyes"), ItemTags::getCollection);
 
 	// helper methods
 	public static ITag.INamedTag getTagFromResourceLocation(ResourceLocation location) {
@@ -91,7 +96,7 @@ public class TagUtil {
 			case "brown_dyes": return BROWN_DYES;
 			case "cyan_dyes": return CYAN_DYES;
 			case "gray_dyes": return GRAY_DYES;
-			case "green_dyes": return BLUE_DYES;
+			case "green_dyes": return GREEN_DYES;
 			case "light_blue_dyes": return LIGHT_BLUE_DYES;
 			case "light_gray_dyes": return LIGHT_GRAY_DYES;
 			case "lime_dyes": return LIME_DYES;

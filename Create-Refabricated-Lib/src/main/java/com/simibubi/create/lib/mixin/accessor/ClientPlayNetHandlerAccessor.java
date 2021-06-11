@@ -13,7 +13,4 @@ import net.minecraft.client.network.play.ClientPlayNetHandler;
 public interface ClientPlayNetHandlerAccessor {
 	@Accessor("viewDistance")
 	int create$viewDistance();
-
-	@Accessor("client")
-	Minecraft create$getClient();
 }

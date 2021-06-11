@@ -8,15 +8,21 @@ import com.simibubi.create.foundation.block.connected.ConnectedTextureBehaviour.
 import com.simibubi.create.foundation.utility.Iterate;
 
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
+import net.fabricmc.fabric.api.renderer.v1.model.SpriteFinder;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockDisplayReader;
 
 public class CTModel extends ForwardingBakedModel {
+
+	private static final ThreadLocal<SpriteFinder> SPRITE_FINDER = ThreadLocal.withInitial(() -> SpriteFinder.get(Minecraft.getInstance().getModelManager().method_24153(AtlasTexture.LOCATION_BLOCKS_TEXTURE)));
 
 	private ConnectedTextureBehaviour behaviour;
 
@@ -65,8 +71,11 @@ public class CTModel extends ForwardingBakedModel {
 	public void emitBlockQuads(IBlockDisplayReader blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context) {
 		CTData data = createCTData(blockView, pos, state);
 		context.pushTransform(quad -> {
+			TextureAtlasSprite original = SPRITE_FINDER.get().find(quad, 0);
 			CTSpriteShiftEntry spriteShift = behaviour.get(state, quad.lightFace());
 			if (spriteShift == null)
+				return true;
+			if (original != spriteShift.getOriginal())
 				return true;
 			int index = data.get(quad.lightFace());
 			if (index == -1)

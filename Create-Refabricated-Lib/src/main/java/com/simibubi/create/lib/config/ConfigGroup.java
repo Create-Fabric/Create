@@ -58,6 +58,7 @@ public class ConfigGroup {
 
 	public void setConfig(Config config) {
 		this.config = config;
+		config.groups.add(this);
 	}
 
 	public Config getConfig() {
