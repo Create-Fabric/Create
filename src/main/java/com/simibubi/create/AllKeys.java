@@ -10,7 +10,8 @@ import net.minecraft.client.settings.KeyBinding;
 public enum AllKeys {
 
 	TOOL_MENU("toolmenu", GLFW.GLFW_KEY_LEFT_ALT),
-	ACTIVATE_TOOL("", GLFW.GLFW_KEY_LEFT_CONTROL),
+	// TODO maybe one day we can set things up so it doesn't overwrite the sprint keybind when on left ctrl
+	ACTIVATE_TOOL("", GLFW.GLFW_KEY_RIGHT_CONTROL),
 
 	;
 
@@ -31,7 +32,7 @@ public enum AllKeys {
 			if (!key.modifiable)
 				continue;
 
-			com.simibubi.create.lib.helper.KeyBindingHelper.keysToAdd.add(key.keybind);
+			KeyBindingHelper.registerKeyBinding(key.keybind);
 		}
 	}
 
