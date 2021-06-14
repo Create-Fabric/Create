@@ -1,6 +1,7 @@
 plugins {
 	id("fabric-loom") // Change the version in buildSrc/build.gradle.kts
-	checkstyle
+	id("io.github.juuxel.loom-quiltflower") version "1.1.0" apply false
+	`checkstyle`
 	`maven-publish`
 }
 
@@ -48,6 +49,7 @@ tasks["clean"].dependsOn(cleanMappings)
 
 val setupBasicFabric: Project.() -> Unit = {
 	apply(plugin = "fabric-loom")
+	apply(plugin = "io.github.juuxel.loom-quiltflower")
 
 	dependencies {
 		// We could also use properties["..."] here but this looks cleaner
@@ -170,12 +172,11 @@ repositories {
 dependencies {
 	val registrate_version: String by project
 	val lba_version: String by project
+	val reach_entity_attributes_version: String by project
 	val arrp_version: String by project
-	val cloth_config_version: String by project
 	val modmenu_version: String by project
 	val rei_version: String by project
 	val databreaker_version: String by project
-	val reach_entity_attributes_version: String by project
 
 	implementation(project(":Create-Refabricated-Lib"))
 	include(project(":Create-Refabricated-Lib"))
@@ -199,11 +200,6 @@ dependencies {
 	modImplementation("net.devtech", "arrp", arrp_version)
 	include("net.devtech", "arrp", arrp_version)
 
-	// Cloth Config
-	modApi("me.shedaniel.cloth", "cloth-config-fabric", cloth_config_version) {
-		exclude(group = "net.fabricmc.fabric-api")
-	}
-
 	// ModMenu
 	modImplementation("com.terraformersmc", "modmenu", modmenu_version)
 
@@ -223,7 +219,7 @@ com.simibubi.create.grdl.PropertiesHandler(project).setupProperties()
 
 tasks {
 	withType<Wrapper> {
-		gradleVersion = "6.8.3"
+		gradleVersion = "7.0.2"
 		distributionType = Wrapper.DistributionType.BIN
 	}
 

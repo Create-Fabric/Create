@@ -18,10 +18,6 @@ repositories {
 			includeGroup("com.github.PepperCode1")
 		}
 	}
-
-	maven("https://hephaestus.dev/release") {
-		name = "Conrad"
-	}
 }
 
 dependencies {

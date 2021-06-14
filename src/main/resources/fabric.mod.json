@@ -52,8 +52,6 @@
     "create_lib": "*",
     "registrate": "*",
     "libblockattributes_items": "*",
-    "libblockattributes_fluids": "*",
-    "cloth-config2": "*",
-    "advanced_runtime_resource_pack": "*"
+    "libblockattributes_fluids": "*"
   }
 }
