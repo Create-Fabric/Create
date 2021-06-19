@@ -45,6 +45,11 @@ package com.simibubi.create.foundation.data.recipe;
 //import net.minecraft.tags.ItemTags;
 //import net.minecraft.util.IItemProvider;
 //import net.minecraft.util.ResourceLocation;
+//import net.minecraftforge.common.Tags;
+//import net.minecraftforge.common.crafting.CraftingHelper;
+//import net.minecraftforge.common.crafting.conditions.ICondition;
+//import net.minecraftforge.common.crafting.conditions.ModLoadedCondition;
+//import net.minecraftforge.common.crafting.conditions.NotCondition;
 //
 //@SuppressWarnings("unused")
 //public class StandardRecipeGen extends CreateRecipeProvider {
@@ -952,9 +957,10 @@ package com.simibubi.create.foundation.data.recipe;
 //		COPPER_BACKTANK = create(AllItems.COPPER_BACKTANK).unlockedByTag(I::copper)
 //			.viaShaped(b -> b.key('G', I.shaft())
 //				.key('A', I.andesite())
+//				.key('B', I.copperBlock())
 //				.key('P', I.copper())
 //				.patternLine("AGA")
-//				.patternLine("PPP")
+//				.patternLine("PBP")
 //				.patternLine(" P ")),
 //
 //		DIVING_BOOTS = create(AllItems.DIVING_BOOTS).unlockedByTag(I::copper)
@@ -963,6 +969,17 @@ package com.simibubi.create.foundation.data.recipe;
 //				.patternLine("P P")
 //				.patternLine("P P")
 //				.patternLine("G G")),
+//
+//		LINKED_CONTROLLER = create(AllItems.LINKED_CONTROLLER).unlockedBy(AllBlocks.REDSTONE_LINK::get)
+//			.viaShaped(b -> b.key('S', ItemTags.WOODEN_BUTTONS)
+//				.key('P', AllBlocks.REDSTONE_LINK.get())
+//				.patternLine("SSS")
+//				.patternLine(" P ")
+//				.patternLine("SSS")),
+//
+//		CRAFTING_BLUEPRINT = create(AllItems.CRAFTING_BLUEPRINT).unlockedBy(() -> Items.CRAFTING_TABLE)
+//			.viaShapeless(b -> b.addIngredient(Items.PAINTING)
+//				.addIngredient(Items.CRAFTING_TABLE)),
 //
 //		SLIME_BALL = create(() -> Items.SLIME_BALL).unlockedBy(AllItems.DOUGH::get)
 //			.viaShapeless(b -> b.addIngredient(AllItems.DOUGH.get())

@@ -22,6 +22,8 @@ package com.simibubi.create.compat.jei;
 //		PlayerEntity player, boolean maxTransfer, boolean doTransfer) {
 //		if (!(recipe instanceof IRecipe))
 //			return null;
+//		if (!doTransfer)
+//			return null;
 //		IRecipe<?> iRecipe = (IRecipe<?>) recipe;
 //		// Continued server-side in BlueprintItem.assignCompleteRecipe()
 //		AllPackets.channel.sendToServer(new BlueprintAssignCompleteRecipePacket(iRecipe.getId()));

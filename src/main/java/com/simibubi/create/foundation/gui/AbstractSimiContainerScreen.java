@@ -34,6 +34,8 @@ import net.minecraft.util.text.ITextComponent;
 public abstract class AbstractSimiContainerScreen<T extends Container> extends ContainerScreen<T> {
 
 	protected List<Widget> widgets;
+	protected int windowXOffset;
+	protected int windowYOffset;
 
 	public AbstractSimiContainerScreen(T container, PlayerInventory inv, ITextComponent title) {
 		super(container, inv, title);
@@ -43,6 +45,18 @@ public abstract class AbstractSimiContainerScreen<T extends Container> extends C
 	protected void setWindowSize(int width, int height) {
 		this.xSize = width;
 		this.ySize = height;
+	}
+
+	protected void setWindowOffset(int xOffset, int yOffset) {
+		windowXOffset = xOffset;
+		windowYOffset = yOffset;
+	}
+
+	@Override
+	protected void init() {
+		super.init();
+		guiLeft += windowXOffset;
+		guiTop += windowYOffset;
 	}
 
 	@Override
@@ -260,5 +274,17 @@ public abstract class AbstractSimiContainerScreen<T extends Container> extends C
 	 */
 	public List<Rectangle2d> getExtraAreas() {
 		return Collections.emptyList();
+	}
+
+	@Deprecated
+	protected void debugWindowArea(MatrixStack matrixStack) {
+		fill(matrixStack, guiLeft + xSize, guiTop + ySize, guiLeft, guiTop, 0xd3d3d3d3);
+	}
+
+	@Deprecated
+	protected void debugExtraAreas(MatrixStack matrixStack) {
+		for (Rectangle2d area : getExtraAreas()) {
+			fill(matrixStack, area.getX() + area.getWidth(), area.getY() + area.getHeight(), area.getX(), area.getY(), 0xd3d3d3d3);
+		}
 	}
 }

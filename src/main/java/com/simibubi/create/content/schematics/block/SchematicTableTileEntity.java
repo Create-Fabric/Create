@@ -1,6 +1,7 @@
 package com.simibubi.create.content.schematics.block;
 
 import com.simibubi.create.foundation.tileEntity.SyncedTileEntity;
+import com.simibubi.create.foundation.utility.Lang;
 
 import com.simibubi.create.lib.lba.item.ItemStackHandler;
 
@@ -118,7 +119,7 @@ public class SchematicTableTileEntity extends SyncedTileEntity implements ITicka
 
 	@Override
 	public ITextComponent getDisplayName() {
-		return new StringTextComponent(Registry.BLOCK_ENTITY_TYPE.getKey(getType()).toString());
+		return Lang.translate("gui.schematicTable.title");
 	}
 
 }

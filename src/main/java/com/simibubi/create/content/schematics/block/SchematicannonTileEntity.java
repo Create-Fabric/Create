@@ -32,6 +32,7 @@ import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.utility.BlockHelper;
 import com.simibubi.create.foundation.utility.IPartialSafeNBT;
 import com.simibubi.create.foundation.utility.Iterate;
+import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.NBTProcessors;
 import com.simibubi.create.lib.block.CustomRenderBoundingBox;
 import com.simibubi.create.lib.lba.item.EmptyHandler;
@@ -71,7 +72,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
 
@@ -153,7 +153,7 @@ public class SchematicannonTileEntity extends SmartTileEntity implements INamedC
 		inventory = new SchematicannonInventory(this);
 		statusMsg = "idle";
 		state = State.STOPPED;
-		printingEntityIndex = 0;
+		printingEntityIndex = -1;
 		printStage = PrintStage.BLOCKS;
 		deferredBlocks = new LinkedList<>();
 		replaceMode = 2;
@@ -599,7 +599,7 @@ public class SchematicannonTileEntity extends SmartTileEntity implements INamedC
 		schematicLoaded = true;
 		state = State.PAUSED;
 		statusMsg = "ready";
-		printingEntityIndex = 0;
+		printingEntityIndex = -1;
 		printStage = PrintStage.BLOCKS;
 		deferredBlocks.clear();
 		updateChecklist();
@@ -704,9 +704,9 @@ public class SchematicannonTileEntity extends SmartTileEntity implements INamedC
 		}
 
 		if (printStage == PrintStage.ENTITIES) {
-			if (printingEntityIndex < entities.size()) {
-				currentPos = entities.get(printingEntityIndex).getBlockPos().subtract(schematicAnchor);
+			if (printingEntityIndex + 1 < entities.size()) {
 				printingEntityIndex++;
+				currentPos = entities.get(printingEntityIndex).getBlockPos().subtract(schematicAnchor);
 			} else {
 				finishedPrinting();
 			}
@@ -912,7 +912,7 @@ public class SchematicannonTileEntity extends SmartTileEntity implements INamedC
 	}
 
 	protected void launchBlock(BlockPos target, ItemStack stack, BlockState state, @Nullable CompoundNBT data) {
-		if (state.isAir())
+		if (!state.isAir())
 			blocksPlaced++;
 		flyingBlocks.add(new LaunchedItem.ForBlockState(this.getPos(), target, stack, state, data));
 		playFiringSound();
@@ -940,7 +940,7 @@ public class SchematicannonTileEntity extends SmartTileEntity implements INamedC
 
 	@Override
 	public ITextComponent getDisplayName() {
-		return new StringTextComponent(Registry.BLOCK_ENTITY_TYPE.getKey(getType()).toString());
+		return Lang.translate("gui.schematicannon.title");
 	}
 
 	public void updateChecklist() {

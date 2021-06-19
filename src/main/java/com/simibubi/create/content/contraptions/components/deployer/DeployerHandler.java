@@ -5,6 +5,14 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.simibubi.create.content.contraptions.components.structureMovement.mounted.CartAssemblerBlockItem;
+
+import net.minecraft.block.DoublePlantBlock;
+
+import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
+import net.minecraft.entity.merchant.villager.VillagerEntity;
+import net.minecraft.state.properties.DoubleBlockHalf;
+
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.Multimap;
@@ -162,8 +170,14 @@ public class DeployerHandler {
 				}
 				if (cancelResult == ActionResultType.PASS) {
 					if (entity.processInitialInteract(player, hand)
-						.isAccepted())
+						.isAccepted()){
+						if (entity instanceof AbstractVillagerEntity) {
+							AbstractVillagerEntity villager = ((AbstractVillagerEntity) entity);
+							if (villager.getCustomer() instanceof DeployerFakePlayer)
+								villager.setCustomer(null);
+						}
 						success = true;
+					}
 					else if (entity instanceof LivingEntity && stack.useOnEntity(player, (LivingEntity) entity, hand)
 						.isAccepted())
 						success = true;

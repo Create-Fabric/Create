@@ -3,6 +3,7 @@ package com.simibubi.create.content.logistics.block.inventories;
 import org.jetbrains.annotations.NotNull;
 
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.lib.lba.item.IItemHandler;
 import com.simibubi.create.lib.lba.item.ItemStackHandler;
 import com.simibubi.create.lib.utility.LazyOptional;
@@ -159,7 +160,7 @@ public class AdjustableCrateTileEntity extends CrateTileEntity implements INamed
 
 	@Override
 	public ITextComponent getDisplayName() {
-		return new StringTextComponent(Registry.BLOCK_ENTITY_TYPE.getKey(getType()).toString());
+		return Lang.translate("gui.adjustable_crate.title");
 	}
 
 	public void sendToContainer(PacketBuffer buffer) {

@@ -5,6 +5,7 @@ import static com.simibubi.create.foundation.block.connected.CTSpriteShifter.CTT
 import static com.simibubi.create.foundation.block.connected.CTSpriteShifter.CTType.OMNIDIRECTIONAL;
 import static com.simibubi.create.foundation.block.connected.CTSpriteShifter.CTType.VERTICAL;
 
+import java.util.Arrays;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
@@ -78,7 +79,11 @@ public class AllSpriteShifts {
 	//
 
 	private static void populateMaps() {
-		WoodTypeHelper.stream()
+		WoodType[] supportedWoodTypes = new WoodType[]{
+			WoodType.OAK, WoodType.SPRUCE, WoodType.BIRCH, WoodType.ACACIA, WoodType.JUNGLE, WoodType.DARK_OAK,
+			WoodType.CRIMSON, WoodType.WARPED
+		};
+		Arrays.stream(supportedWoodTypes)
 			.forEach(woodType -> WOODEN_WINDOWS.put(woodType, vertical("palettes/" + woodType.getName() + "_window")));
 
 		for (PaletteStoneVariants paletteStoneVariants : PaletteStoneVariants.values()) {

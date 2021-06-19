@@ -237,6 +237,7 @@ public class ClientEvents {
 		CreateClient.SCHEMATIC_HANDLER.renderOverlay(ms, buffer, light, overlay, partialTicks);
 		LinkedControllerClientHandler.renderOverlay(ms, buffer, light, overlay, partialTicks);
 		BlueprintOverlayRenderer.renderOverlay(ms, buffer, light, overlay, partialTicks);
+		GoggleOverlayRenderer.renderOverlay(ms, buffer, light, overlay, partialTicks);
 	}
 
 	public static RenderTooltipBorderColorCallback.BorderColorEntry getItemTooltipColor(ItemStack stack,
@@ -370,7 +371,6 @@ public class ClientEvents {
 
 		// External Events
 
-		HudRenderCallback.EVENT.register(GoggleOverlayRenderer::lookingAtBlocksThroughGogglesShowsTooltip);
 		RenderHandCallback.EVENT.register(ExtendoGripRenderHandler::onRenderPlayerHand);
 		RenderHandCallback.EVENT.register(ZapperRenderHandler::onRenderPlayerHand);
 		UseBlockCallback.EVENT.register(ItemUseOverrides::onBlockActivated);

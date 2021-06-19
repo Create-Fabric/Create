@@ -49,7 +49,7 @@ tasks["clean"].dependsOn(cleanMappings)
 
 val setupBasicFabric: Project.() -> Unit = {
 	apply(plugin = "fabric-loom")
-	apply(plugin = "io.github.juuxel.loom-quiltflower")
+//	apply(plugin = "io.github.juuxel.loom-quiltflower")
 
 	dependencies {
 		// We could also use properties["..."] here but this looks cleaner

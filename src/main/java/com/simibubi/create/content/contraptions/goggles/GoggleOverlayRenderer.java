@@ -22,6 +22,7 @@ import com.simibubi.create.foundation.utility.outliner.Outliner.OutlineEntry;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -39,8 +40,10 @@ public class GoggleOverlayRenderer {
 
 	private static final Map<Object, OutlineEntry> outlines = CreateClient.OUTLINER.getOutlines();
 
-	public static void lookingAtBlocksThroughGogglesShowsTooltip(MatrixStack ms, float v) {
+	public static void renderOverlay(MatrixStack ms, IRenderTypeBuffer buffer, int light, int overlay,
+		float partialTicks) {
 		RayTraceResult objectMouseOver = Minecraft.getInstance().objectMouseOver;
+
 		if (!(objectMouseOver instanceof BlockRayTraceResult))
 			return;
 
@@ -48,9 +51,8 @@ public class GoggleOverlayRenderer {
 			if (!entry.isAlive())
 				continue;
 			Outline outline = entry.getOutline();
-			if (outline instanceof ValueBox && !((ValueBox) outline).isPassive) {
+			if (outline instanceof ValueBox && !((ValueBox) outline).isPassive)
 				return;
-			}
 		}
 
 		BlockRayTraceResult result = (BlockRayTraceResult) objectMouseOver;
