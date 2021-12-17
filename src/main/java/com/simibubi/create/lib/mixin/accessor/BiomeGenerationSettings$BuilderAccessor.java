@@ -5,7 +5,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 import net.minecraft.world.level.biome.BiomeGenerationSettings;
@@ -21,12 +23,14 @@ public interface BiomeGenerationSettings$BuilderAccessor {
 	Map<GenerationStep.Carving, List<Supplier<ConfiguredWorldCarver<?>>>> getCarvers();
 
 	@Accessor("carvers")
+	@Mutable
 	void setCarvers(Map<GenerationStep.Carving, List<Supplier<ConfiguredWorldCarver<?>>>> carvers);
 
 	@Accessor("features")
-	List<List<Supplier<ConfiguredFeature<?, ?>>>> getFeatures();
+	List<List<Supplier<PlacedFeature>>> getFeatures();
 
 	@Accessor("features")
-	void setFeatures(List<List<Supplier<ConfiguredFeature<?, ?>>>> features);
+	@Mutable
+	void setFeatures(List<List<Supplier<PlacedFeature>>> features);
 
 }

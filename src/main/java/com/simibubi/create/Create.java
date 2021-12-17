@@ -89,7 +89,6 @@ public class Create implements ModInitializer {
 		AllTileEntities.register();
 		AllMovementBehaviours.register();
 		AllInteractionBehaviours.register();
-		AllWorldFeatures.register();
 		AllEnchantments.register();
 		FurnaceEngineModifiers.register();
 		BlockSpoutingBehaviour.register();
@@ -101,7 +100,6 @@ public class Create implements ModInitializer {
 		init();
 		// datagen, not needed
 //		modEventBus.addListener(EventPriority.LOWEST, Create::gatherData);
-		AllWorldFeatures.registerOreFeatures();
 		AllRecipeTypes.register();
 		AllParticleTypes.register();
 		AllSoundEvents.register();
@@ -116,6 +114,10 @@ public class Create implements ModInitializer {
 		CommonEvents.register();
 
 		REGISTRATE.get().register();
+		AllWorldFeatures.register();
+		AllWorldFeatures.registerFeatures();
+		AllWorldFeatures.registerPlacementTypes();
+		AllWorldFeatures.registerOreFeatures();
 		AllTileEntities.registerStorages();
 		AllPackets.channel.initServerListener();
 	}
@@ -130,8 +132,6 @@ public class Create implements ModInitializer {
 //		event.enqueueWork(() -> {
 			AllTriggers.register();
 			SchematicProcessor.register();
-			AllWorldFeatures.registerFeatures();
-			AllWorldFeatures.registerPlacementTypes();
 //		});
 	}
 
