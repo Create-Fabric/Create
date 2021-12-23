@@ -3,7 +3,6 @@
   "minVersion": "0.8",
   "package": "com.simibubi.create.lib.mixin",
   "compatibilityLevel": "JAVA_17",
-  "plugin": "com.simibubi.create.lib.mixin.CreateLibMixinPlugin",
   "mixins": [
     "accessor.AbstractMinecartAccessor",
     "accessor.AbstractSelectionList$EntryAccessor",
