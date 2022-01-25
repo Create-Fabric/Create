@@ -19,6 +19,7 @@ import com.simibubi.create.compat.rei.category.CreateRecipeCategory;
 import com.simibubi.create.compat.rei.category.CrushingCategory;
 import com.simibubi.create.compat.rei.category.DeployingCategory;
 import com.simibubi.create.compat.rei.category.FanBlastingCategory;
+import com.simibubi.create.compat.rei.category.FanHauntingCategory;
 import com.simibubi.create.compat.rei.category.FanSmokingCategory;
 import com.simibubi.create.compat.rei.category.FanWashingCategory;
 import com.simibubi.create.compat.rei.category.ItemDrainCategory;
@@ -40,6 +41,7 @@ import com.simibubi.create.compat.rei.display.CrushingDisplay;
 import com.simibubi.create.compat.rei.display.DeployingDisplay;
 import com.simibubi.create.compat.rei.display.FanBlastingDisplay;
 import com.simibubi.create.compat.rei.display.FanSmokingDisplay;
+import com.simibubi.create.compat.rei.display.FanHauntingDisplay;
 import com.simibubi.create.compat.rei.display.FanWashingDisplay;
 import com.simibubi.create.compat.rei.display.ItemDrainDisplay;
 import com.simibubi.create.compat.rei.display.MechanicalCraftingDisplay;
@@ -55,6 +57,7 @@ import com.simibubi.create.compat.rei.display.SpoutDisplay;
 import com.simibubi.create.content.contraptions.components.crusher.AbstractCrushingRecipe;
 import com.simibubi.create.content.contraptions.components.deployer.DeployerApplicationRecipe;
 import com.simibubi.create.content.contraptions.components.fan.SplashingRecipe;
+import com.simibubi.create.content.contraptions.components.fan.HauntingRecipe;
 import com.simibubi.create.content.contraptions.components.millstone.MillingRecipe;
 import com.simibubi.create.content.contraptions.components.press.MechanicalPressTileEntity;
 import com.simibubi.create.content.contraptions.components.press.PressingRecipe;
@@ -116,7 +119,11 @@ public class CreateREI implements REIClientPlugin {
 	private final CreateRecipeCategory washing = register("fan_washing", FanWashingCategory::new).recipes(AllRecipeTypes.SPLASHING)
 			.catalystStack(ProcessingViaFanCategory.getFan("fan_washing"))
 			.build();
-
+			
+	private final CreateRecipeCategory haunting = register("fan_haunting", FanHauntingCategory::new).recipes(AllRecipeTypes.HAUNTING)
+			.catalystStack(ProcessingViaFanCategory.getFan("fan_haunting"))
+			.build();
+	
 	private final CreateRecipeCategory smoking = register("fan_smoking", FanSmokingCategory::new).recipes(() -> RecipeType.SMOKING)
 			.catalystStack(ProcessingViaFanCategory.getFan("fan_smoking"))
 			.build();
@@ -258,6 +265,7 @@ public class CreateREI implements REIClientPlugin {
 		registry.registerFiller(FillingRecipe.class, SpoutDisplay::new);
 		registry.registerFiller(CraftingRecipe.class, MechanicalCraftingDisplay::new);
 		registry.registerFiller(SmokingRecipe.class, FanSmokingDisplay::new);
+		registry.registerFiller(HauntingRecipe.class, FanHauntingDisplay::new);
 		registry.registerFiller(AbstractCookingRecipe.class, FanBlastingDisplay::new);
 		registry.registerFiller(SplashingRecipe.class, FanWashingDisplay::new);
 		registry.registerFiller(DeployerApplicationRecipe.class, DeployingDisplay::new);
