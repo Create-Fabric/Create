@@ -2,14 +2,18 @@ package com.simibubi.create.foundation.gui;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.platform.InputConstants.Key;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.gui.widget.AbstractSimiWidget;
-import com.simibubi.create.lib.mixin.client.accessor.ScreenAccessor;
+import io.github.fabricators_of_create.porting_lib.mixin.client.accessor.ScreenAccessor;
 
+import io.github.fabricators_of_create.porting_lib.util.KeyBindingHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
@@ -113,6 +117,22 @@ public abstract class AbstractSimiScreen extends Screen {
 		ms.popPose();
 	}
 
+	@Override
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		boolean keyPressed = super.keyPressed(keyCode, scanCode, modifiers);
+		if (keyPressed || getFocused() != null)
+			return keyPressed;
+
+		InputConstants.Key mouseKey = InputConstants.getKey(keyCode, scanCode);
+		Key invKeyCode = KeyBindingHelper.getKeyCode(this.minecraft.options.keyInventory);
+		if (Objects.equals(invKeyCode, mouseKey)) {
+			this.onClose();
+			return true;
+		}
+
+		return false;
+	}
+
 	protected void prepareFrame() {
 	}
 
@@ -123,7 +143,7 @@ public abstract class AbstractSimiScreen extends Screen {
 	protected abstract void renderWindow(PoseStack ms, int mouseX, int mouseY, float partialTicks);
 
 	protected void renderWindowForeground(PoseStack ms, int mouseX, int mouseY, float partialTicks) {
-		for (Widget widget : ((ScreenAccessor) this).create$getRenderables()) {
+		for (Widget widget : ((ScreenAccessor) this).port_lib$getRenderables()) {
 			if (widget instanceof AbstractSimiWidget simiWidget && simiWidget.isHoveredOrFocused()) {
 				List<Component> tooltip = simiWidget.getToolTip();
 				if (!tooltip.isEmpty())
@@ -138,21 +158,6 @@ public abstract class AbstractSimiScreen extends Screen {
 	@Deprecated
 	protected void debugWindowArea(PoseStack matrixStack) {
 		fill(matrixStack, guiLeft + windowWidth, guiTop + windowHeight, guiLeft, guiTop, 0xD3D3D3D3);
-	}
-
-	@Override
-	public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
-		boolean keyPressed = super.keyPressed(pKeyCode, pScanCode, pModifiers);
-		if (keyPressed || getFocused() != null)
-			return keyPressed;
-
-		InputConstants.Key mouseKey = InputConstants.getKey(pKeyCode, pScanCode);
-		if (this.minecraft.options.keyInventory.matchesMouse(mouseKey.getValue())/*.isActiveAndMatches(mouseKey)*/) {
-			this.onClose();
-			return true;
-		}
-
-		return false;
 	}
 
 }

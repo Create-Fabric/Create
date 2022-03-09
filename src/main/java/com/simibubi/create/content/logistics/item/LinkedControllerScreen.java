@@ -14,9 +14,9 @@ import com.simibubi.create.foundation.gui.container.AbstractSimiContainerScreen;
 import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.lib.mixin.common.accessor.SlotAccessor;
-import com.simibubi.create.lib.util.ItemStackUtil;
-import com.simibubi.create.lib.util.PlayerEntityHelper;
+import io.github.fabricators_of_create.porting_lib.mixin.common.accessor.SlotAccessor;
+import io.github.fabricators_of_create.porting_lib.util.ItemStackUtil;
+import io.github.fabricators_of_create.porting_lib.util.PlayerEntityHelper;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.Rect2i;
@@ -98,7 +98,7 @@ public class LinkedControllerScreen extends AbstractSimiContainerScreen<LinkedCo
 			super.renderTooltip(ms, x, y);
 			return;
 		}
-		renderComponentTooltip(ms, addToTooltip(new LinkedList<>(), ((SlotAccessor) hoveredSlot).create$getSlotIndex()), x, y/*, font*/);
+		renderComponentTooltip(ms, addToTooltip(new LinkedList<>(), ((SlotAccessor) hoveredSlot).port_lib$getSlotIndex()), x, y/*, font*/);
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class LinkedControllerScreen extends AbstractSimiContainerScreen<LinkedCo
 		List<Component> list = super.getTooltipFromItem(stack);
 		if (hoveredSlot.container == menu.playerInventory)
 			return list;
-		return hoveredSlot != null ? addToTooltip(list, ((SlotAccessor)hoveredSlot).create$getSlotIndex()) : list;
+		return hoveredSlot != null ? addToTooltip(list, ((SlotAccessor)hoveredSlot).port_lib$getSlotIndex()) : list;
 	}
 
 	private List<Component> addToTooltip(List<Component> list, int slot) {

@@ -6,8 +6,8 @@ import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 import com.simibubi.create.content.contraptions.components.structureMovement.train.capability.MinecartController;
 import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.lib.util.LazyOptional;
-import com.simibubi.create.lib.util.MinecartAndRailUtil;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
 
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -54,8 +54,7 @@ public class MinecartSim2020 {
 		if (c instanceof MinecartFurnace)
 			return Mth.equal(((MinecartFurnace) c).xPush, 0)
 				&& Mth.equal(((MinecartFurnace) c).zPush, 0);
-		LazyOptional<MinecartController> capability =
-				MinecartAndRailUtil.getControllerLazy(c);
+		LazyOptional<MinecartController> capability = c.lazyController();
 		if (capability.isPresent() && capability.orElse(null)
 			.isStalled())
 			return false;

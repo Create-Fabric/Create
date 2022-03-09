@@ -3,8 +3,9 @@ package com.simibubi.create.content.contraptions.components.press;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.AllSoundEvents;
@@ -24,10 +25,10 @@ import com.simibubi.create.foundation.tileEntity.behaviour.belt.BeltProcessingBe
 import com.simibubi.create.foundation.tileEntity.behaviour.belt.TransportedItemStackHandlerBehaviour;
 import com.simibubi.create.foundation.utility.NBTHelper;
 import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.lib.transfer.item.ItemHandlerHelper;
-import com.simibubi.create.lib.transfer.item.ItemStackHandler;
-import com.simibubi.create.lib.transfer.item.RecipeWrapper;
-import com.simibubi.create.lib.util.NBTSerializer;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -346,22 +347,20 @@ public class MechanicalPressTileEntity extends BasinOperatingTileEntity {
 		return AllRecipeTypes.PRESSING.find(pressingInv, level);
 	}
 
-	private static final List<ResourceLocation> RECIPE_DENY_LIST =
-		ImmutableList.of(new ResourceLocation("occultism", "spirit_trade"), new ResourceLocation("occultism", "ritual"));
+	private static final Set<ResourceLocation> RECIPE_DENY_SET =
+		ImmutableSet.of(new ResourceLocation("occultism", "spirit_trade"), new ResourceLocation("occultism", "ritual"));
 
 	public static <C extends Container> boolean canCompress(Recipe<C> recipe) {
-		NonNullList<Ingredient> ingredients = recipe.getIngredients();
-		if (!(recipe instanceof CraftingRecipe))
+		if (!(recipe instanceof CraftingRecipe) || !AllConfigs.SERVER.recipes.allowShapedSquareInPress.get())
 			return false;
 
 		RecipeSerializer<?> serializer = recipe.getSerializer();
-		for (ResourceLocation denied : RECIPE_DENY_LIST)
-			if (serializer != null && denied.equals(Registry.RECIPE_SERIALIZER.getKey(serializer)))
+
+			if (serializer != null && RECIPE_DENY_SET.contains(Registry.RECIPE_SERIALIZER.getKey(serializer)))
 				return false;
 
-		return AllConfigs.SERVER.recipes.allowShapedSquareInPress.get()
-			&& (ingredients.size() == 4 || ingredients.size() == 9) && ItemHelper.condenseIngredients(ingredients)
-				.size() == 1;
+		NonNullList<Ingredient> ingredients = recipe.getIngredients();
+		return (ingredients.size() == 4 || ingredients.size() == 9) && ItemHelper.matchAllIngredients(ingredients);
 	}
 
 	@Override

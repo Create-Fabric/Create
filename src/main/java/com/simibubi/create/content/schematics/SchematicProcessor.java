@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 import com.mojang.serialization.Codec;
 import com.simibubi.create.foundation.utility.NBTProcessors;
-import com.simibubi.create.lib.extensions.StructureProcessorExtensions;
+import io.github.fabricators_of_create.porting_lib.extensions.StructureProcessorExtensions;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -51,7 +51,7 @@ public class SchematicProcessor extends StructureProcessor implements StructureP
 
 	@Nullable
 	@Override
-	public StructureTemplate.StructureEntityInfo create$processEntity(LevelReader world, BlockPos pos, StructureTemplate.StructureEntityInfo rawInfo,
+	public StructureTemplate.StructureEntityInfo processEntity(LevelReader world, BlockPos pos, StructureTemplate.StructureEntityInfo rawInfo,
 			StructureTemplate.StructureEntityInfo info, StructurePlaceSettings settings, StructureTemplate template) {
 		return EntityType.by(info.nbt).flatMap(type -> {
 			if (world instanceof Level) {

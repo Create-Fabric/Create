@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import com.simibubi.create.lib.mixin.common.accessor.DimensionTypeAccessor;
+import io.github.fabricators_of_create.porting_lib.mixin.common.accessor.DimensionTypeAccessor;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -205,7 +205,7 @@ public class SchematicChunkSource extends ChunkSource {
 		}
 
 		private static final DummyLevel DUMMY_LEVEL = new DummyLevel(null, null,
-				DimensionTypeAccessor.create$getDefaultOverworld(), null, false, false, 0);
+				DimensionTypeAccessor.port_lib$getDefaultOverworld(), null, false, false, 0);
 
 		public EmptierChunk(RegistryAccess registryAccess) {
 			super(DUMMY_LEVEL.withAccess(registryAccess), null);

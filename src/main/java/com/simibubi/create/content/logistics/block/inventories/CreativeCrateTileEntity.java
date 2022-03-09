@@ -9,9 +9,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.tileEntity.behaviour.filtering.FilteringBehaviour;
-import com.simibubi.create.lib.transfer.item.IItemHandler;
-import com.simibubi.create.lib.transfer.item.ItemTransferable;
-import com.simibubi.create.lib.util.LazyOptional;
+import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -44,8 +44,8 @@ public class CreativeCrateTileEntity extends CrateTileEntity implements ItemTran
 	}
 
 	@Override
-	public IItemHandler getItemHandler(@Nullable Direction direction) {
-		return itemHandler.orElse(null);
+	public LazyOptional<IItemHandler> getItemHandler(@Nullable Direction direction) {
+		return itemHandler.cast();
 	}
 
 	public FilteringBehaviour createFilter() {

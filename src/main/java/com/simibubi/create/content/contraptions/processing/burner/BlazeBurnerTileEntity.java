@@ -13,7 +13,7 @@ import com.simibubi.create.foundation.utility.AngleHelper;
 import com.simibubi.create.foundation.utility.Color;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
-import com.simibubi.create.lib.util.BurnUtil;
+import io.github.fabricators_of_create.porting_lib.util.BurnUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -170,14 +170,14 @@ public class BlazeBurnerTileEntity extends SmartTileEntity {
 		FuelType newFuel = FuelType.NONE;
 		int newBurnTime;
 
-		if (AllItemTags.BLAZE_BURNER_SPECIAL_FUEL.matches(itemStack)) {
+		if (AllItemTags.BLAZE_BURNER_FUEL_SPECIAL.matches(itemStack)) {
 			newBurnTime = 1000;
 			newFuel = FuelType.SPECIAL;
 		} else {
 			newBurnTime = BurnUtil.getBurnTime(itemStack);
 			if (newBurnTime > 0)
 				newFuel = FuelType.NORMAL;
-			else if (AllItemTags.BLAZE_BURNER_REGULAR_FUEL.matches(itemStack)) {
+			else if (AllItemTags.BLAZE_BURNER_FUEL_REGULAR.matches(itemStack)) {
 				newBurnTime = 1600; // Same as coal
 				newFuel = FuelType.NORMAL;
 			}

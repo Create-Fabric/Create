@@ -24,9 +24,9 @@ import com.simibubi.create.foundation.tileEntity.behaviour.inventory.InvManipula
 import com.simibubi.create.foundation.utility.BlockFace;
 import com.simibubi.create.foundation.utility.Pointing;
 import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.lib.transfer.item.IItemHandler;
-import com.simibubi.create.lib.transfer.item.ItemTransferable;
-import com.simibubi.create.lib.util.LazyOptional;
+import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -146,7 +146,7 @@ public class MechanicalCrafterTileEntity extends KineticTileEntity implements It
 
 	@Override
 	public void write(CompoundTag compound, boolean clientPacket) {
-		compound.put("Inventory", inventory.create$serializeNBT());
+		compound.put("Inventory", inventory.serializeNBT());
 
 		CompoundTag inputNBT = new CompoundTag();
 		input.write(inputNBT);
@@ -173,7 +173,7 @@ public class MechanicalCrafterTileEntity extends KineticTileEntity implements It
 		Phase phaseBefore = phase;
 		GroupedItems before = this.groupedItems;
 
-		inventory.create$deserializeNBT(compound.getCompound("Inventory"));
+		inventory.deserializeNBT(compound.getCompound("Inventory"));
 		input.read(compound.getCompound("ConnectedInput"));
 		groupedItems = GroupedItems.read(compound.getCompound("GroupedItems"));
 		phase = Phase.IDLE;
@@ -508,8 +508,8 @@ public class MechanicalCrafterTileEntity extends KineticTileEntity implements It
 
 	@Nullable
 	@Override
-	public IItemHandler getItemHandler(@Nullable Direction direction) {
-		return invSupplier.orElse(null);
+	public LazyOptional<IItemHandler> getItemHandler(@Nullable Direction direction) {
+		return invSupplier.cast();
 	}
 
 	public void connectivityChanged() {

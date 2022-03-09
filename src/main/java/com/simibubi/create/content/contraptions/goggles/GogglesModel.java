@@ -1,7 +1,8 @@
 package com.simibubi.create.content.contraptions.goggles;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllBlockPartials;
-import com.simibubi.create.lib.render.TransformTypeDependentItemBakedModel;
+import io.github.fabricators_of_create.porting_lib.render.TransformTypeDependentItemBakedModel;
 
 import net.fabricmc.fabric.api.renderer.v1.model.ForwardingBakedModel;
 import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
@@ -14,7 +15,7 @@ public class GogglesModel extends ForwardingBakedModel implements TransformTypeD
 	}
 
 	@Override
-	public BakedModel create$handlePerspective(TransformType cameraTransformType) {
+	public BakedModel handlePerspective(TransformType cameraTransformType, PoseStack matrices) {
 		if (cameraTransformType == TransformType.HEAD)
 			return AllBlockPartials.GOGGLES.get();
 		return this;

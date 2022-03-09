@@ -10,7 +10,7 @@ import com.simibubi.create.foundation.block.ITE;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.filtering.FilteringBehaviour;
-import com.simibubi.create.lib.util.DamageSourceHelper;
+import io.github.fabricators_of_create.porting_lib.util.DamageSourceHelper;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -34,7 +34,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class SawBlock extends DirectionalAxisKineticBlock implements ITE<SawTileEntity> {
-	public static DamageSource damageSourceSaw = DamageSourceHelper.create$createArmorBypassingDamageSource("create.mechanical_saw");
+	public static DamageSource damageSourceSaw = DamageSourceHelper.port_lib$createArmorBypassingDamageSource("create.mechanical_saw");
 
 	public SawBlock(Properties properties) {
 		super(properties);

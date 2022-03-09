@@ -6,9 +6,11 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.content.logistics.item.filter.AttributeFilterContainer.WhitelistMode;
 import com.simibubi.create.content.logistics.item.filter.FilterItem;
 import com.simibubi.create.content.logistics.item.filter.ItemAttribute;
-import com.simibubi.create.lib.mixin.common.accessor.IngredientAccessor;
-import com.simibubi.create.lib.transfer.item.ItemStackHandler;
-import com.simibubi.create.lib.util.MultiItemValue;
+import io.github.fabricators_of_create.porting_lib.mixin.common.accessor.IngredientAccessor;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.util.MultiItemValue;
+
+import io.github.fabricators_of_create.porting_lib.util.ShapedRecipeUtil;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -81,10 +83,10 @@ public class BlueprintItem extends Item {
 
 		if (recipe instanceof ShapedRecipe) {
 			ShapedRecipe shapedRecipe = (ShapedRecipe) recipe;
-			for (int row = 0; row < shapedRecipe.getHeight(); row++)
-				for (int col = 0; col < shapedRecipe.getWidth(); col++)
+			for (int row = 0; row < ShapedRecipeUtil.HEIGHT; row++)
+				for (int col = 0; col < ShapedRecipeUtil.WIDTH; col++)
 					inv.setStackInSlot(row * 3 + col,
-							convertIngredientToFilter(ingredients.get(row * shapedRecipe.getWidth() + col)));
+							convertIngredientToFilter(ingredients.get(row * ShapedRecipeUtil.WIDTH + col)));
 		} else {
 			for (int i = 0; i < ingredients.size(); i++)
 				inv.setStackInSlot(i, convertIngredientToFilter(ingredients.get(i)));
@@ -93,7 +95,7 @@ public class BlueprintItem extends Item {
 
 	private static ItemStack convertIngredientToFilter(Ingredient ingredient) {
 		Ingredient.Value[] acceptedItems =
-				((IngredientAccessor) ingredient).create$getAcceptedItems(); // values
+				((IngredientAccessor) ingredient).port_lib$getValues(); // values
 		if (acceptedItems == null || acceptedItems.length > 18)
 			return ItemStack.EMPTY;
 		if (acceptedItems.length == 0)

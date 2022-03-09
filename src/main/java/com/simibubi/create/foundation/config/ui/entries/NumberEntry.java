@@ -11,7 +11,7 @@ import com.simibubi.create.foundation.config.ui.ConfigTextField;
 import com.simibubi.create.foundation.gui.Theme;
 import com.simibubi.create.foundation.gui.UIRenderHelper;
 import com.simibubi.create.foundation.gui.element.TextStencilElement;
-import com.simibubi.create.lib.mixin.client.accessor.AbstractWidgetAccessor;
+import io.github.fabricators_of_create.porting_lib.mixin.client.accessor.AbstractWidgetAccessor;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -152,7 +152,7 @@ public abstract class NumberEntry<T extends Number> extends ValueEntry<T> {
 		textField.x = x + width - 82 - resetWidth;
 		textField.y = y + 8;
 		textField.setWidth(Math.min(width - getLabelWidth(width) - resetWidth - minOffset - maxOffset, 40));
-		((AbstractWidgetAccessor) textField).create$setHeight(20);
+		((AbstractWidgetAccessor) textField).port_lib$setHeight(20);
 		textField.render(ms, mouseX, mouseY, partialTicks);
 
 		if (minText != null)

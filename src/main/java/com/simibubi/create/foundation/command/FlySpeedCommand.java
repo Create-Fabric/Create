@@ -4,7 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.simibubi.create.lib.mixin.common.accessor.ClientboundPlayerAbilitiesPacketAccessor;
+import io.github.fabricators_of_create.porting_lib.mixin.common.accessor.ClientboundPlayerAbilitiesPacketAccessor;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -36,7 +36,7 @@ public class FlySpeedCommand {
 	private static int sendFlySpeedUpdate(CommandContext<CommandSourceStack> ctx, ServerPlayer player, float speed) {
 		ClientboundPlayerAbilitiesPacket packet = new ClientboundPlayerAbilitiesPacket(player.getAbilities());
 //		 packet.setFlySpeed(speed);
-		((ClientboundPlayerAbilitiesPacketAccessor) packet).create$setFlyingSpeed(speed);
+		((ClientboundPlayerAbilitiesPacketAccessor) packet).port_lib$setFlyingSpeed(speed);
 //		ObfuscationReflectionHelper.setPrivateValue(ClientboundPlayerAbilitiesPacket.class, packet, speed, "f_132663_"); // flyingSpeed
 		player.connection.send(packet);
 

@@ -11,6 +11,16 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nonnull;
+
 import com.google.common.base.Predicates;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
@@ -134,7 +144,7 @@ public class CreateREI implements REIClientPlugin {
 			.build(),
 
 	autoShapeless = register("automatic_shapeless", MixingCategory::autoShapeless)
-			.recipes(r -> r.getSerializer() == RecipeSerializer.SHAPELESS_RECIPE && r.getIngredients()
+			.recipes(r -> r instanceof CraftingRecipe && !(r instanceof ShapedRecipe) && r.getIngredients()
 				.size() > 1 && !MechanicalPressTileEntity.canCompress((Recipe<?>) r),
 					BasinRecipe::convertShapeless)
 			.catalyst(AllBlocks.MECHANICAL_MIXER::get)
@@ -209,7 +219,7 @@ public class CreateREI implements REIClientPlugin {
 			.build(),
 
 	autoShaped = register("automatic_shaped", MechanicalCraftingCategory::new)
-			.recipes(r -> r.getSerializer() == RecipeSerializer.SHAPELESS_RECIPE && r.getIngredients()
+			.recipes(r -> r instanceof CraftingRecipe && !(r instanceof ShapedRecipe) && r.getIngredients()
 				.size() == 1)
 			.recipes(
 				r -> (r.getType() == RecipeType.CRAFTING && r.getType() != AllRecipeTypes.MECHANICAL_CRAFTING.getType())

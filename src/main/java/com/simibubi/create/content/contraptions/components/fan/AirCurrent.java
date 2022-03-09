@@ -17,8 +17,8 @@ import com.simibubi.create.foundation.tileEntity.behaviour.belt.TransportedItemS
 import com.simibubi.create.foundation.tileEntity.behaviour.belt.TransportedItemStackHandlerBehaviour.TransportedResult;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.lib.mixin.common.accessor.ServerGamePacketListenerImplAccessor;
-import com.simibubi.create.lib.util.DamageSourceHelper;
+import io.github.fabricators_of_create.porting_lib.mixin.common.accessor.ServerGamePacketListenerImplAccessor;
+import io.github.fabricators_of_create.porting_lib.util.DamageSourceHelper;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
 import net.fabricmc.api.EnvType;
@@ -109,7 +109,7 @@ public class AirCurrent {
 				() -> () -> enableClientPlayerSound(entity, Mth.clamp(speed / 128f * .4f, 0.01f, .4f)));
 
 			if (entity instanceof ServerPlayer)
-				((ServerGamePacketListenerImplAccessor) ((ServerPlayer) entity).connection).create$setAboveGroundTickCount(0);
+				((ServerGamePacketListenerImplAccessor) ((ServerPlayer) entity).connection).port_lib$setAboveGroundTickCount(0);
 
 			entityDistance -= .5f;
 			InWorldProcessing.Type processingType = getSegmentAt((float) entityDistance);

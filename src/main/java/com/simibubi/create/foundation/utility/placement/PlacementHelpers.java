@@ -20,7 +20,7 @@ import com.simibubi.create.foundation.utility.AngleHelper;
 import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.foundation.utility.animation.InterpolatedChasingAngle;
 import com.simibubi.create.foundation.utility.animation.InterpolatedChasingValue;
-import com.simibubi.create.lib.event.OverlayRenderCallback;
+import io.github.fabricators_of_create.porting_lib.event.OverlayRenderCallback;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -141,9 +141,9 @@ public class PlacementHelpers {
 	}
 
 	@Environment(EnvType.CLIENT)
-	public static void afterRenderOverlayLayer(PoseStack stack, float partialTicks, Window res, OverlayRenderCallback.Types type) {
+	public static boolean afterRenderOverlayLayer(PoseStack stack, float partialTicks, Window res, OverlayRenderCallback.Types type) {
 		if (type != OverlayRenderCallback.Types.CROSSHAIRS)
-			return;
+			return false;
 
 		Minecraft mc = Minecraft.getInstance();
 		Player player = mc.player;
@@ -155,6 +155,7 @@ public class PlacementHelpers {
 
 			drawDirectionIndicator(stack, partialTicks, screenX, screenY, progress);
 		}
+		return false;
 	}
 
 	public static float getCurrentAlpha() {

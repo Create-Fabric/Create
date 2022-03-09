@@ -18,8 +18,8 @@ import com.simibubi.create.foundation.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.gui.widget.IconButton;
 import com.simibubi.create.foundation.networking.AllPackets;
 import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.lib.mixin.common.accessor.PlayerAccessor;
-import com.simibubi.create.lib.mixin.common.accessor.SlotAccessor;
+import io.github.fabricators_of_create.porting_lib.mixin.common.accessor.PlayerAccessor;
+import io.github.fabricators_of_create.porting_lib.mixin.common.accessor.SlotAccessor;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.Rect2i;
@@ -95,7 +95,7 @@ public class BlueprintScreen extends AbstractSimiContainerScreen<BlueprintContai
 			super.renderTooltip(ms, x, y);
 			return;
 		};
-		renderComponentTooltip(ms, addToTooltip(new LinkedList<>(), ((SlotAccessor) hoveredSlot).create$getSlotIndex(), true), x, y);
+		renderComponentTooltip(ms, addToTooltip(new LinkedList<>(), ((SlotAccessor) hoveredSlot).port_lib$getSlotIndex(), true), x, y);
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class BlueprintScreen extends AbstractSimiContainerScreen<BlueprintContai
 		List<Component> list = super.getTooltipFromItem(stack);
 		if (hoveredSlot.container == menu.playerInventory)
 			return list;
-		return hoveredSlot != null ? addToTooltip(list, ((SlotAccessor) hoveredSlot).create$getSlotIndex(), false) : list;
+		return hoveredSlot != null ? addToTooltip(list, ((SlotAccessor) hoveredSlot).port_lib$getSlotIndex(), false) : list;
 	}
 
 	private List<Component> addToTooltip(List<Component> list, int slot, boolean isEmptySlot) {
@@ -140,7 +140,7 @@ public class BlueprintScreen extends AbstractSimiContainerScreen<BlueprintContai
 	@Override
 	protected void containerTick() {
 		if (!menu.contentHolder.isEntityAlive())
-			((PlayerAccessor) menu.player).create$closeScreen();
+			((PlayerAccessor) menu.player).port_lib$closeScreen();
 
 		super.containerTick();
 

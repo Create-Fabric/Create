@@ -5,9 +5,9 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
 import com.simibubi.create.foundation.tileEntity.SyncedTileEntity;
-import com.simibubi.create.lib.transfer.item.ItemStackHandler;
-import com.simibubi.create.lib.transfer.item.RecipeWrapper;
-import com.simibubi.create.lib.util.NBTSerializable;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializable;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -114,12 +114,12 @@ public class SmartInventory extends RecipeWrapper
 	}
 
 	@Override
-	public CompoundTag create$serializeNBT() {
+	public CompoundTag serializeNBT() {
 		return getInv().serializeNBT();
 	}
 
 	@Override
-	public void create$deserializeNBT(CompoundTag nbt) {
+	public void deserializeNBT(CompoundTag nbt) {
 		getInv().deserializeNBT(nbt);
 	}
 

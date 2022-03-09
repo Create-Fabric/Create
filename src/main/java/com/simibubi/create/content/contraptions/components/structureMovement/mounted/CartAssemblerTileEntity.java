@@ -21,9 +21,9 @@ import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.lib.util.LazyOptional;
-import com.simibubi.create.lib.util.MinecartAndRailUtil;
-import com.simibubi.create.lib.util.NBTSerializer;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -117,8 +117,7 @@ public class CartAssemblerTileEntity extends SmartTileEntity implements IDisplay
 			.isEmpty())
 			return;
 
-		LazyOptional<MinecartController> optional =
-			LazyOptional.ofObject(MinecartAndRailUtil.getController(cart));
+		LazyOptional<MinecartController> optional = cart.lazyController();
 		if (optional.isPresent() && optional.orElse(null)
 			.isCoupledThroughContraption())
 			return;

@@ -3,8 +3,8 @@ package com.simibubi.create.content.contraptions.components.structureMovement.tr
 import java.util.function.Supplier;
 
 import com.simibubi.create.foundation.networking.SimplePacketBase;
-import com.simibubi.create.lib.util.LazyOptional;
-import com.simibubi.create.lib.util.MinecartAndRailUtil;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
 import net.fabricmc.api.EnvType;
@@ -24,7 +24,7 @@ public class MinecartControllerUpdatePacket extends SimplePacketBase {
 	public MinecartControllerUpdatePacket(MinecartController controller) {
 		entityID = controller.cart()
 			.getId();
-		nbt = controller.create$serializeNBT();
+		nbt = controller.serializeNBT();
 	}
 
 	public MinecartControllerUpdatePacket(FriendlyByteBuf buffer) {
@@ -54,8 +54,8 @@ public class MinecartControllerUpdatePacket extends SimplePacketBase {
 		Entity entityByID = world.getEntity(entityID);
 		if (entityByID == null)
 			return;
-		LazyOptional.ofObject(MinecartAndRailUtil.getController((AbstractMinecart) entityByID))
-				.ifPresent(mc -> mc.create$deserializeNBT(nbt));
+		((AbstractMinecart) entityByID).lazyController()
+				.ifPresent(mc -> mc.deserializeNBT(nbt));
 	}
 
 }

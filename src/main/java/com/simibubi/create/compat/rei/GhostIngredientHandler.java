@@ -10,7 +10,7 @@ import com.simibubi.create.foundation.gui.container.GhostItemContainer;
 import com.simibubi.create.foundation.gui.container.GhostItemSubmitPacket;
 import com.simibubi.create.foundation.networking.AllPackets;
 
-import com.simibubi.create.lib.mixin.client.accessor.AbstractContainerScreenAccessor;
+import io.github.fabricators_of_create.porting_lib.mixin.client.accessor.AbstractContainerScreenAccessor;
 
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
@@ -95,7 +95,7 @@ public class GhostIngredientHandler<T extends GhostItemContainer<?>>
 			this.isAttributeFilter = isAttributeFilter;
 			Slot slot = gui.getMenu().slots.get(slotIndex + 36);
 			AbstractContainerScreenAccessor access = (AbstractContainerScreenAccessor) gui;
-			this.area = new Rectangle(access.create$getGuiLeft() + slot.x, access.create$getGuiTop() + slot.y, 16, 16);
+			this.area = new Rectangle(access.port_lib$getGuiLeft() + slot.x, access.port_lib$getGuiTop() + slot.y, 16, 16);
 		}
 
 		public void accept(I ingredient) {

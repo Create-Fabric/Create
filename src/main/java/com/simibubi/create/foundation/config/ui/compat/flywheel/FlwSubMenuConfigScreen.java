@@ -19,7 +19,7 @@ import com.simibubi.create.foundation.gui.widget.BoxWidget;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Color;
 import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.lib.mixin.client.accessor.AbstractSelectionListAccessor;
+import io.github.fabricators_of_create.porting_lib.mixin.client.accessor.AbstractSelectionListAccessor;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
@@ -131,7 +131,7 @@ public class FlwSubMenuConfigScreen extends SubMenuConfigScreen {
 		addRenderableWidget(goBack);
 
 		list = new ConfigScreenList(minecraft, listWidth, height - 80, 35, height - 45, 40);
-		list.setLeftPos(this.width / 2 - ((AbstractSelectionListAccessor) list).create$getWidth() / 2);
+		list.setLeftPos(this.width / 2 - ((AbstractSelectionListAccessor) list).port_lib$getWidth() / 2);
 
 		addRenderableWidget(list);
 

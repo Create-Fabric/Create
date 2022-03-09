@@ -20,9 +20,9 @@ import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.animation.InterpolatedChasingValue;
-import com.simibubi.create.lib.transfer.item.IItemHandler;
-import com.simibubi.create.lib.transfer.item.ItemTransferable;
-import com.simibubi.create.lib.util.LazyOptional;
+import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
 import net.fabricmc.api.EnvType;
@@ -179,12 +179,13 @@ public class BeltTunnelTileEntity extends SmartTileEntity implements ItemTransfe
 
 	@Nullable
 	@Override
-	public IItemHandler getItemHandler(@Nullable Direction direction) {
+	public LazyOptional<IItemHandler> getItemHandler(@Nullable Direction direction) {
 		if (!this.cap.isPresent()) {
 			if (AllBlocks.BELT.has(level.getBlockState(worldPosition.below()))) {
 				BlockEntity teBelow = level.getBlockEntity(worldPosition.below());
 				if (teBelow instanceof ItemTransferable transferable) {
-					IItemHandler capBelow = transferable.getItemHandler(Direction.UP);
+					IItemHandler capBelow = transferable.getItemHandler(Direction.UP)
+							.orElse(null);
 					if (capBelow != null) {
 						cap = LazyOptional.of(() -> capBelow)
 								.cast();
@@ -192,6 +193,6 @@ public class BeltTunnelTileEntity extends SmartTileEntity implements ItemTransfe
 				}
 			}
 		}
-		return this.cap.orElse(null);
+		return this.cap.cast();
 	}
 }

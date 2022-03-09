@@ -29,14 +29,14 @@ import com.simibubi.create.foundation.utility.IPartialSafeNBT;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.NBTProcessors;
-import com.simibubi.create.lib.block.CustomRenderBoundingBoxBlockEntity;
-import com.simibubi.create.lib.transfer.TransferUtil;
-import com.simibubi.create.lib.transfer.item.EmptyHandler;
-import com.simibubi.create.lib.transfer.item.IItemHandler;
-import com.simibubi.create.lib.transfer.item.ItemHandlerHelper;
-import com.simibubi.create.lib.util.LazyOptional;
-import com.simibubi.create.lib.util.LevelUtil;
-import com.simibubi.create.lib.util.NBTSerializer;
+import io.github.fabricators_of_create.porting_lib.block.CustomRenderBoundingBoxBlockEntity;
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.item.EmptyHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import io.github.fabricators_of_create.porting_lib.util.LevelUtil;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -220,7 +220,7 @@ public class SchematicannonTileEntity extends SmartTileEntity implements MenuPro
 	@Override
 	public void write(CompoundTag compound, boolean clientPacket) {
 		if (!clientPacket) {
-			compound.put("Inventory", inventory.create$serializeNBT());
+			compound.put("Inventory", inventory.serializeNBT());
 			if (state == State.RUNNING) {
 				compound.putBoolean("Running", true);
 			}
@@ -596,7 +596,7 @@ public class SchematicannonTileEntity extends SmartTileEntity implements MenuPro
 	}
 
 	protected boolean shouldIgnoreBlockState(BlockState state, BlockEntity te) {
-		// Block doesnt have a mapping (Water, lava, etc)
+		// Block doesn't have a mapping (Water, lava, etc)
 		if (state.getBlock() == Blocks.STRUCTURE_VOID)
 			return true;
 
@@ -606,7 +606,7 @@ public class SchematicannonTileEntity extends SmartTileEntity implements MenuPro
 		if (requirement.isInvalid())
 			return false;
 
-		// Block doesnt need to be placed twice (Doors, beds, double plants)
+		// Block doesn't need to be placed twice (Doors, beds, double plants)
 		if (state.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)
 			&& state.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER)
 			return true;

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.lwjgl.glfw.GLFW;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.config.ui.compat.flywheel.FlwConfigScreen;
 import com.simibubi.create.foundation.gui.AllIcons;
@@ -12,8 +14,8 @@ import com.simibubi.create.foundation.gui.Theme;
 import com.simibubi.create.foundation.gui.element.DelegatedStencilElement;
 import com.simibubi.create.foundation.gui.widget.BoxWidget;
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.lib.mixin.client.accessor.AbstractSelectionListAccessor;
-import com.simibubi.create.lib.mixin.client.accessor.AbstractWidgetAccessor;
+import io.github.fabricators_of_create.porting_lib.mixin.client.accessor.AbstractSelectionListAccessor;
+import io.github.fabricators_of_create.porting_lib.mixin.client.accessor.AbstractWidgetAccessor;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
@@ -38,7 +40,7 @@ public class ConfigModListScreen extends ConfigScreen {
 		int listWidth = Math.min(width - 80, 300);
 
 		list = new ConfigScreenList(minecraft, listWidth, height - 60, 15, height - 45, 40);
-		list.setLeftPos(this.width / 2 - ((AbstractSelectionListAccessor) list).create$getWidth() / 2);
+		list.setLeftPos(this.width / 2 - ((AbstractSelectionListAccessor) list).port_lib$getWidth() / 2);
 		addRenderableWidget(list);
 
 		allEntries = new ArrayList<>();
@@ -55,7 +57,7 @@ public class ConfigModListScreen extends ConfigScreen {
 		list.children().addAll(allEntries);
 
 		goBack = new BoxWidget(width / 2 - listWidth / 2 - 30, height / 2 + 65, 20, 20).withPadding(2, 2)
-				.withCallback(this::onClose);
+				.withCallback(() -> ScreenOpener.open(parent));
 		goBack.showingElement(AllIcons.I_CONFIG_BACK.asStencil()
 				.withElementRenderer(BoxWidget.gradientFactory.apply(goBack)));
 		goBack.getToolTip()
@@ -64,16 +66,19 @@ public class ConfigModListScreen extends ConfigScreen {
 
 		search = new HintableTextFieldWidget(font, width / 2 - listWidth / 2, height - 35, listWidth, 20);
 		search.setResponder(this::updateFilter);
-		search.setHint("Search..");
+		search.setHint("Search...");
 		search.moveCursorToStart();
 		addRenderableWidget(search);
-
 	}
 
 	@Override
-	public void onClose() {
-		super.onClose();
-		ScreenOpener.open(parent);
+	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		if (super.keyPressed(keyCode, scanCode, modifiers))
+			return true;
+		if (keyCode == GLFW.GLFW_KEY_BACKSPACE) {
+			ScreenOpener.open(parent);
+		}
+		return false;
 	}
 
 	private void updateFilter(String search) {
@@ -135,7 +140,7 @@ public class ConfigModListScreen extends ConfigScreen {
 
 			button.x = x + width - 108;
 			button.y = y + 10;
-			((AbstractWidgetAccessor) button).create$setHeight(height - 20);
+			((AbstractWidgetAccessor) button).port_lib$setHeight(height - 20);
 			button.render(ms, mouseX, mouseY, partialTicks);
 		}
 

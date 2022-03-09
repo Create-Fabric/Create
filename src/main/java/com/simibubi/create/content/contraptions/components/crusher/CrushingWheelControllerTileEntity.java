@@ -20,14 +20,14 @@ import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.belt.DirectBeltInputBehaviour;
 import com.simibubi.create.foundation.utility.NBTHelper;
 import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.lib.transfer.item.IItemHandler;
-import com.simibubi.create.lib.transfer.item.IItemHandlerModifiable;
-import com.simibubi.create.lib.transfer.item.ItemTransferable;
-import com.simibubi.create.lib.transfer.item.RecipeWrapper;
-import com.simibubi.create.lib.util.EntityHelper;
-import com.simibubi.create.lib.util.ItemStackUtil;
-import com.simibubi.create.lib.util.LazyOptional;
-import com.simibubi.create.lib.util.NBTSerializer;
+import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandlerModifiable;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
+import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
+import io.github.fabricators_of_create.porting_lib.util.EntityHelper;
+import io.github.fabricators_of_create.porting_lib.util.ItemStackUtil;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
 import net.fabricmc.api.EnvType;
@@ -86,7 +86,7 @@ public class CrushingWheelControllerTileEntity extends SmartTileEntity implement
 		if (blockState == null)
 			return false;
 		Direction direction = blockState.getValue(CrushingWheelControllerBlock.FACING);
-		return direction == Direction.DOWN || direction == side;
+		return direction == Direction.DOWN || direction.getOpposite() == side;
 	}
 
 	@Override
@@ -149,22 +149,22 @@ public class CrushingWheelControllerTileEntity extends SmartTileEntity implement
 			inventory.remainingTime = 0;
 
 			// Output Items
-			if (facing.getAxis()
-				.isHorizontal() || facing == Direction.DOWN) {
+			if (facing != Direction.UP) {
+				Direction inputDir = facing.getOpposite();
 				BlockPos nextPos = worldPosition.offset(facing.getAxis() == Axis.X ? 1f * offset : 0f, (-1f),
 					facing.getAxis() == Axis.Z ? 1f * offset : 0f);
 				DirectBeltInputBehaviour behaviour =
 					TileEntityBehaviour.get(level, nextPos, DirectBeltInputBehaviour.TYPE);
 				if (behaviour != null) {
 					boolean changed = false;
-					if (!behaviour.canInsertFromSide(facing))
+					if (!behaviour.canInsertFromSide(inputDir))
 						return;
 					for (int slot = 0; slot < inventory.getSlots(); slot++) {
 						ItemStack stack = inventory.getStackInSlot(slot);
 						if (stack.isEmpty())
 							continue;
-						ItemStack remainder = behaviour.handleInsertion(stack, facing.getOpposite(), false);
-						if (ItemStackUtil.equals(remainder, stack, false))
+						ItemStack remainder = behaviour.handleInsertion(stack, inputDir, false);
+						if (ItemStackUtil.equals(stack, remainder, false))
 							continue;
 						inventory.setStackInSlot(slot, remainder);
 						changed = true;
@@ -360,8 +360,8 @@ public class CrushingWheelControllerTileEntity extends SmartTileEntity implement
 
 	@Nullable
 	@Override
-	public IItemHandler getItemHandler(@Nullable Direction direction) {
-		return handler.orElse(null);
+	public LazyOptional<IItemHandler> getItemHandler(@Nullable Direction direction) {
+		return handler.cast();
 	}
 
 	public void clear() {

@@ -15,8 +15,8 @@ import com.simibubi.create.foundation.config.AllConfigs;
 import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.lib.util.LazyOptional;
-import com.simibubi.create.lib.util.MinecartAndRailUtil;
+import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import io.github.fabricators_of_create.porting_lib.util.MinecartAndRailUtil;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -30,7 +30,7 @@ public class CouplingHandler {
 
 	public static InteractionResult preventEntitiesFromMoutingOccupiedCart(Entity e, Entity mounting) {
 		if (e instanceof AbstractMinecart cart) {
-			LazyOptional<MinecartController> optional = LazyOptional.ofObject(MinecartAndRailUtil.getController(cart));
+			LazyOptional<MinecartController> optional = cart.lazyController();
 			if (!optional.isPresent())
 				return InteractionResult.PASS;
 			if (mounting instanceof AbstractContraptionEntity)

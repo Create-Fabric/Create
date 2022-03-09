@@ -11,8 +11,8 @@ import com.simibubi.create.content.schematics.ItemRequirement;
 import com.simibubi.create.foundation.tileEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.utility.IInteractionChecker;
 import com.simibubi.create.foundation.utility.IPartialSafeNBT;
-import com.simibubi.create.lib.extensions.ChunkUnloadListeningBlockEntity;
 
+import io.github.fabricators_of_create.porting_lib.block.ChunkUnloadListeningBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -116,6 +116,8 @@ public abstract class SmartTileEntity extends CachedRenderBBTileEntity implement
 	/* TODO: Remove this hack once this issue is resolved: https://github.com/MinecraftForge/MinecraftForge/issues/8302
 		Once the PR linked in the issue is accepted, we should use the new method for determining whether setRemoved was
 		called due to a chunk unload or not, and remove this volatile workaround
+
+		here in fabric land, we actually need to reimplement this bug for parity :)
 	 */
 	private boolean unloaded;
 

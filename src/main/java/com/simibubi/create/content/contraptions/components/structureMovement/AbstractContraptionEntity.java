@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import com.simibubi.create.lib.entity.RemovalFromWorldListener;
+import io.github.fabricators_of_create.porting_lib.entity.RemovalFromWorldListener;
 
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.tuple.MutablePair;
@@ -27,9 +27,9 @@ import com.simibubi.create.foundation.collision.Matrix3d;
 import com.simibubi.create.foundation.networking.AllPackets;
 import com.simibubi.create.foundation.utility.AngleHelper;
 import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.lib.entity.ExtraSpawnDataEntity;
-import com.simibubi.create.lib.mixin.common.accessor.EntityAccessor;
-import com.simibubi.create.lib.util.EntityHelper;
+import io.github.fabricators_of_create.porting_lib.entity.ExtraSpawnDataEntity;
+import io.github.fabricators_of_create.porting_lib.mixin.common.accessor.EntityAccessor;
+import io.github.fabricators_of_create.porting_lib.util.EntityHelper;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -556,7 +556,7 @@ public abstract class AbstractContraptionEntity extends Entity implements ExtraS
 		for (Entity entity : passengers) {
 			// setPos has world accessing side-effects when removed == null
 //			String srg = "f_146795_"; // removalReason
-			((EntityAccessor)entity).create$setRemovalReason(RemovalReason.UNLOADED_TO_CHUNK);
+			((EntityAccessor)entity).port_lib$setRemovalReason(RemovalReason.UNLOADED_TO_CHUNK);
 //			ObfuscationReflectionHelper.setPrivateValue(Entity.class, entity, RemovalReason.UNLOADED_TO_CHUNK, srg);
 
 			// Gather passengers into same chunk when saving
@@ -565,7 +565,7 @@ public abstract class AbstractContraptionEntity extends Entity implements ExtraS
 
 			// Super requires all passengers to not be removed in order to write them to the
 			// tag
-			((EntityAccessor)entity).create$setRemovalReason(null);
+			((EntityAccessor)entity).port_lib$setRemovalReason(null);
 //			ObfuscationReflectionHelper.setPrivateValue(Entity.class, entity, null, srg);
 		}
 

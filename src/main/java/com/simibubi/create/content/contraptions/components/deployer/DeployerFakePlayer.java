@@ -94,13 +94,13 @@ public class DeployerFakePlayer extends FakeServerPlayer {
 		return stack;
 	}
 
-	public static int deployerHasEyesOnHisFeet(Entity entity) {
+	public static float deployerHasEyesOnHisFeet(Entity entity, float height) {
 		if (entity instanceof DeployerFakePlayer)
 			return 0;
-		return -1;
+		return height;
 	}
 
-	public static boolean deployerCollectsDropsFromKilledEntities(DamageSource s, Collection<ItemEntity> drops) {
+	public static boolean deployerCollectsDropsFromKilledEntities(LivingEntity target, DamageSource s, Collection<ItemEntity> drops) {
 		if (!(s instanceof EntityDamageSource))
 			return false;
 		EntityDamageSource source = (EntityDamageSource) s;

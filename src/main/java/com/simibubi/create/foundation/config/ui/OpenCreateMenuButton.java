@@ -9,7 +9,7 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.foundation.config.AllConfigs;
 import com.simibubi.create.foundation.gui.CreateMainMenuScreen;
 import com.simibubi.create.foundation.gui.ScreenOpener;
-import com.simibubi.create.lib.mixin.client.accessor.ScreenAccessor;
+import io.github.fabricators_of_create.porting_lib.mixin.client.accessor.ScreenAccessor;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -23,7 +23,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class OpenCreateMenuButton extends Button {
 
-	public static ItemStack icon = AllItems.GOGGLES.asStack();
+	public static final ItemStack ICON = AllItems.GOGGLES.asStack();
 
 	public OpenCreateMenuButton(int x, int y) {
 		super(x, y, 20, 20, TextComponent.EMPTY, OpenCreateMenuButton::click);
@@ -34,7 +34,7 @@ public class OpenCreateMenuButton extends Button {
 		super.render(mstack, mouseX, mouseY, pticks);
 		if (!visible)
 			return;
-		Minecraft.getInstance().getItemRenderer().renderGuiItem(icon, x + 2, y + 2);
+		Minecraft.getInstance().getItemRenderer().renderGuiItem(ICON, x + 2, y + 2);
 	}
 
 	public static void click(Button b) {
@@ -98,7 +98,7 @@ public class OpenCreateMenuButton extends Button {
 				String target = (onLeft ? menu.leftButtons : menu.rightButtons).get(rowIdx - 1);
 
 				int offsetX_ = offsetX;
-				((ScreenAccessor) gui).create$getChildren().stream()
+				((ScreenAccessor) gui).port_lib$getChildren().stream()
 						.filter(w -> w instanceof AbstractWidget)
 						.map(w -> (AbstractWidget) w)
 						.filter(w -> w.getMessage().getString().equals(target))

@@ -20,13 +20,13 @@ import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.tileEntity.behaviour.belt.TransportedItemStackHandlerBehaviour.TransportedResult;
 import com.simibubi.create.foundation.utility.Color;
 import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.lib.transfer.item.ItemHandlerHelper;
-import com.simibubi.create.lib.transfer.item.ItemStackHandler;
-import com.simibubi.create.lib.transfer.item.RecipeWrapper;
-import com.simibubi.create.lib.util.DamageSourceHelper;
-import com.simibubi.create.lib.util.EntityHelper;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
+import io.github.fabricators_of_create.porting_lib.util.DamageSourceHelper;
+import io.github.fabricators_of_create.porting_lib.util.EntityHelper;
 
-import com.simibubi.create.lib.util.NBTSerializer;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -63,9 +63,9 @@ import net.minecraft.world.phys.Vec3;
 
 public class InWorldProcessing {
 
-	private static final DamageSource FIRE_DAMAGE_SOURCE = DamageSourceHelper.create$createFireDamageSource("create.fan_fire").setScalesWithDifficulty();
+	private static final DamageSource FIRE_DAMAGE_SOURCE = DamageSourceHelper.port_lib$createFireDamageSource("create.fan_fire").setScalesWithDifficulty();
 
-	private static final DamageSource LAVA_DAMAGE_SOURCE = DamageSourceHelper.create$createFireDamageSource("create.fan_lava").setScalesWithDifficulty();
+	private static final DamageSource LAVA_DAMAGE_SOURCE = DamageSourceHelper.port_lib$createFireDamageSource("create.fan_lava").setScalesWithDifficulty();
 
 	private static final RecipeWrapper RECIPE_WRAPPER = new RecipeWrapper(new ItemStackHandler(1));
 	private static final SplashingWrapper SPLASHING_WRAPPER = new SplashingWrapper();
@@ -79,13 +79,9 @@ public class InWorldProcessing {
 			if (compound.contains("Processing")) {
 				CompoundTag processing = compound.getCompound("Processing");
 
-				if (Type.valueOf(processing.getString("Type")) != type) {
-					boolean canProcess = type.canProcess(entity.getItem(), entity.level);
-					processing.putString("Type", type.name());
-					if (!canProcess)
-						processing.putInt("Time", -1);
-					return canProcess;
-				} else if (processing.getInt("Time") >= 0)
+				if (Type.valueOf(processing.getString("Type")) != type)
+					return type.canProcess(entity.getItem(), entity.level);
+				else if (processing.getInt("Time") >= 0)
 					return true;
 				else if (processing.getInt("Time") == -1)
 					return false;
@@ -448,12 +444,10 @@ public class InWorldProcessing {
 		},
 		NONE {
 			@Override
-			public void spawnParticlesForProcessing(Level level, Vec3 pos) {
-			}
+			public void spawnParticlesForProcessing(Level level, Vec3 pos) {}
 
 			@Override
-			public void affectEntity(Entity entity, Level level) {
-			}
+			public void affectEntity(Entity entity, Level level) {}
 
 			@Override
 			public boolean canProcess(ItemStack stack, Level level) {

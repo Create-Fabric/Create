@@ -18,9 +18,9 @@ import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.belt.TransportedItemStackHandlerBehaviour;
 import com.simibubi.create.foundation.utility.BlockHelper;
 import com.simibubi.create.foundation.utility.worldWrappers.WrappedWorld;
-import com.simibubi.create.lib.extensions.EntityExtensions;
-import com.simibubi.create.lib.item.UseFirstBehaviorItem;
-import com.simibubi.create.lib.mixin.common.accessor.BucketItemAccessor;
+import io.github.fabricators_of_create.porting_lib.extensions.EntityExtensions;
+import io.github.fabricators_of_create.porting_lib.item.UseFirstBehaviorItem;
+import io.github.fabricators_of_create.porting_lib.mixin.common.accessor.BucketItemAccessor;
 
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
@@ -110,7 +110,7 @@ public class DeployerHandler {
 
 		if (held.getItem() instanceof BucketItem) {
 			BucketItem bucketItem = (BucketItem) held.getItem();
-			Fluid fluid = ((BucketItemAccessor) bucketItem).create$getContent();
+			Fluid fluid = ((BucketItemAccessor) bucketItem).port_lib$getContent();
 			if (fluid != Fluids.EMPTY && world.getFluidState(targetPos)
 				.getType() == fluid)
 				return false;
@@ -154,13 +154,13 @@ public class DeployerHandler {
 			Entity entity = entities.get(world.random.nextInt(entities.size()));
 			List<ItemEntity> capturedDrops = new ArrayList<>();
 			boolean success = false;
-			((EntityExtensions) entity).create$captureDrops(capturedDrops);
+			((EntityExtensions) entity).captureDrops(capturedDrops);
 
 			// Use on entity
 			if (mode == Mode.USE) {
 				InteractionResult cancelResult = UseEntityCallback.EVENT.invoker().interact(player, world, hand, entity, new EntityHitResult(entity));
 				if (cancelResult == InteractionResult.FAIL) {
-					((EntityExtensions) entity).create$captureDrops(null);
+					((EntityExtensions) entity).captureDrops(null);
 					return;
 				}
 				if (cancelResult == null || cancelResult == InteractionResult.PASS) {
@@ -195,7 +195,7 @@ public class DeployerHandler {
 				success = true;
 			}
 
-			((EntityExtensions) entity).create$captureDrops(null);
+			((EntityExtensions) entity).captureDrops(null);
 			capturedDrops.forEach(e -> player.getInventory()
 				.placeItemBackInInventory(e.getItem()));
 			if (success)

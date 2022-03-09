@@ -20,8 +20,8 @@ import com.simibubi.create.foundation.tileEntity.behaviour.fluid.SmartFluidTankB
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
 import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.VecHelper;
-import com.simibubi.create.lib.transfer.TransferUtil;
-import com.simibubi.create.lib.transfer.item.IItemHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -36,8 +36,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -236,10 +238,10 @@ public class MechanicalMixerTileEntity extends BasinOperatingTileEntity {
 
 	@Override
 	protected <C extends Container> boolean matchStaticFilters(Recipe<C> r) {
-		return ((r.getSerializer() == RecipeSerializer.SHAPELESS_RECIPE
-			&& AllConfigs.SERVER.recipes.allowShapelessInMixer.get() && r.getIngredients()
+		return ((r instanceof CraftingRecipe && !(r instanceof ShapedRecipe)
+				 && AllConfigs.SERVER.recipes.allowShapelessInMixer.get() && r.getIngredients()
 				.size() > 1
-			&& !MechanicalPressTileEntity.canCompress(r)) && !AllRecipeTypes.isManualRecipe(r)
+				 && !MechanicalPressTileEntity.canCompress(r)) && !AllRecipeTypes.isManualRecipe(r)
 			|| r.getType() == AllRecipeTypes.MIXING.getType());
 	}
 
