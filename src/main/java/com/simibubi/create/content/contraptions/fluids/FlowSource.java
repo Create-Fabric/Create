@@ -5,17 +5,18 @@ import java.util.function.Predicate;
 
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.utility.BlockFace;
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidStack;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.IFluidHandler;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 public abstract class FlowSource {
 
-	private static final LazyOptional<IFluidHandler> EMPTY = LazyOptional.empty();
+	private static final Storage<FluidVariant> EMPTY = Storage.empty();
 
 	BlockFace location;
 
@@ -24,7 +25,7 @@ public abstract class FlowSource {
 	}
 
 	public FluidStack provideFluid(Predicate<FluidStack> extractionPredicate) {
-		IFluidHandler tank = provideHandler().orElse(null);
+		Storage<FluidVariant> tank = provideHandler();
 		if (tank == null)
 			return FluidStack.EMPTY;
 		FluidStack immediateFluid = tank.drain(1, true);
@@ -54,12 +55,12 @@ public abstract class FlowSource {
 
 	public void whileFlowPresent(Level world, boolean pulling) {}
 
-	public LazyOptional<IFluidHandler> provideHandler() {
+	public Storage<FluidVariant> provideHandler() {
 		return EMPTY;
 	}
 
 	public static class FluidHandler extends FlowSource {
-		LazyOptional<IFluidHandler> fluidHandler;
+		Storage<FluidVariant> fluidHandler;
 
 		public FluidHandler(BlockFace location) {
 			super(location);
@@ -67,7 +68,7 @@ public abstract class FlowSource {
 		}
 
 		public void manageSource(Level world) {
-			if (fluidHandler.isPresent() && world.getGameTime() % 20 != 0)
+			if (fluidHandler != EMPTY && world.getGameTime() % 20 != 0)
 				return;
 			BlockEntity tileEntity = world.getBlockEntity(location.getConnectedPos());
 			if (tileEntity != null)

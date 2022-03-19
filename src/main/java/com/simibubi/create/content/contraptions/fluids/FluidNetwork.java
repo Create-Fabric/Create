@@ -19,11 +19,12 @@ import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.utility.BlockFace;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Pair;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidStack;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.IFluidHandler;
+import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 import io.github.fabricators_of_create.porting_lib.util.LevelUtil;
 
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -35,8 +36,8 @@ public class FluidNetwork {
 	Level world;
 	BlockFace start;
 
-	Supplier<LazyOptional<IFluidHandler>> sourceSupplier;
-	LazyOptional<IFluidHandler> source;
+	Supplier<Storage<FluidVariant>> sourceSupplier;
+	Storage<FluidVariant> source;
 	int transferSpeed;
 
 	int pauseBeforePropagation;
@@ -44,14 +45,14 @@ public class FluidNetwork {
 	Set<Pair<BlockFace, PipeConnection>> frontier;
 	Set<BlockPos> visited;
 	FluidStack fluid;
-	List<Pair<BlockFace, LazyOptional<IFluidHandler>>> targets;
+	List<Pair<BlockFace, Storage<FluidVariant>>> targets;
 	Map<BlockPos, WeakReference<FluidTransportBehaviour>> cache;
 
-	public FluidNetwork(Level world, BlockFace location, Supplier<LazyOptional<IFluidHandler>> sourceSupplier) {
+	public FluidNetwork(Level world, BlockFace location, Supplier<Storage<FluidVariant>> sourceSupplier) {
 		this.world = world;
 		this.start = location;
 		this.sourceSupplier = sourceSupplier;
-		this.source = LazyOptional.empty();
+		this.source = Storage.empty();
 		this.fluid = FluidStack.EMPTY;
 		this.frontier = new HashSet<>();
 		this.visited = new HashSet<>();

@@ -13,12 +13,11 @@ import com.simibubi.create.content.contraptions.processing.EmptyingByBasin;
 import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
 import com.simibubi.create.foundation.utility.Pair;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidStack;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.IFluidHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.IFluidHandlerItem;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
+import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
@@ -120,28 +119,34 @@ public class FluidHelper {
 			return false;
 
 		Pair<FluidStack, ItemStack> emptyingResult = EmptyingByBasin.emptyItem(worldIn, heldItem, true);
-		LazyOptional<IFluidHandler> capability = TransferUtil.getFluidHandler(te);
-		IFluidHandler tank = capability.orElse(null);
+
+		Storage<FluidVariant> tank = TransferUtil.getFluidStorage(te);
 		FluidStack fluidStack = emptyingResult.getFirst();
 
-		if (tank == null || fluidStack.getAmount() != tank.fill(fluidStack, true))
+		if (tank == null)
 			return false;
 		if (worldIn.isClientSide)
 			return true;
 
-		ItemStack copyOfHeld = heldItem.copy();
-		emptyingResult = EmptyingByBasin.emptyItem(worldIn, copyOfHeld, false);
-		tank.fill(fluidStack, false);
+		try (Transaction t = TransferUtil.getTransaction()) {
+			long inserted = tank.insert(fluidStack.getType(), fluidStack.getAmount(), t);
+			if (inserted != fluidStack.getAmount())
+				return false;
 
-		if (!player.isCreative() && !(te instanceof CreativeFluidTankTileEntity)) {
-			if (copyOfHeld.isEmpty())
-				player.setItemInHand(handIn, emptyingResult.getSecond());
-			else {
-				player.setItemInHand(handIn, copyOfHeld);
-				player.getInventory().placeItemBackInInventory(emptyingResult.getSecond());
+			ItemStack copyOfHeld = heldItem.copy();
+			emptyingResult = EmptyingByBasin.emptyItem(worldIn, copyOfHeld, false);
+			t.commit();
+
+			if (!player.isCreative() && !(te instanceof CreativeFluidTankTileEntity)) {
+				if (copyOfHeld.isEmpty())
+					player.setItemInHand(handIn, emptyingResult.getSecond());
+				else {
+					player.setItemInHand(handIn, copyOfHeld);
+					player.getInventory().placeItemBackInInventory(emptyingResult.getSecond());
+				}
 			}
+			return true;
 		}
-		return true;
 	}
 
 	public static boolean tryFillItemFromTE(Level world, Player player, InteractionHand handIn, ItemStack heldItem,
@@ -149,37 +154,38 @@ public class FluidHelper {
 		if (!GenericItemFilling.canItemBeFilled(world, heldItem))
 			return false;
 
-		LazyOptional<IFluidHandler> capability = TransferUtil.getFluidHandler(te);
-		IFluidHandler tank = capability.orElse(null);
+		Storage<FluidVariant> tank = TransferUtil.getFluidStorage(te);
 
 		if (tank == null)
 			return false;
 
-		for (int i = 0; i < tank.getTanks(); i++) {
-			FluidStack fluid = tank.getFluidInTank(i);
-			if (fluid.isEmpty())
-				continue;
-			long requiredAmountForItem = GenericItemFilling.getRequiredAmountForItem(world, heldItem, fluid.copy());
-			if (requiredAmountForItem == -1)
-				continue;
-			if (requiredAmountForItem > fluid.getAmount())
-				continue;
+		try (Transaction t = TransferUtil.getTransaction()) {
+			for (FluidStack fluid : TransferUtil.getAllFluids(tank)) {
+				if (fluid.isEmpty())
+					continue;
+				long requiredAmountForItem = GenericItemFilling.getRequiredAmountForItem(world, heldItem, fluid.copy());
+				if (requiredAmountForItem == -1)
+					continue;
+				if (requiredAmountForItem > fluid.getAmount())
+					continue;
 
-			if (world.isClientSide)
+				if (world.isClientSide)
+					return true;
+
+				if (player.isCreative() || te instanceof CreativeFluidTankTileEntity)
+					heldItem = heldItem.copy();
+				ItemStack out = GenericItemFilling.fillItem(world, requiredAmountForItem, heldItem, fluid.copy());
+
+				FluidStack copy = fluid.copy();
+				copy.setAmount(requiredAmountForItem);
+				tank.extract(copy.getType(), copy.getAmount(), t);
+				t.commit();
+
+				if (!player.isCreative())
+					player.getInventory().placeItemBackInInventory(out);
+				te.notifyUpdate();
 				return true;
-
-			if (player.isCreative() || te instanceof CreativeFluidTankTileEntity)
-				heldItem = heldItem.copy();
-			ItemStack out = GenericItemFilling.fillItem(world, requiredAmountForItem, heldItem, fluid.copy());
-
-			FluidStack copy = fluid.copy();
-			copy.setAmount(requiredAmountForItem);
-			tank.drain(copy, false);
-
-			if (!player.isCreative())
-				player.getInventory().placeItemBackInInventory(out);
-			te.notifyUpdate();
-			return true;
+			}
 		}
 
 		return false;

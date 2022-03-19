@@ -3,8 +3,12 @@ package com.simibubi.create.content.contraptions.processing;
 import java.util.function.Consumer;
 
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.util.ItemStackUtil;
 
+import io.github.fabricators_of_create.porting_lib.util.TransferUtil;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
@@ -31,8 +35,12 @@ public class ProcessingInventory extends ItemStackHandler {
 	}
 
 	public void clear() {
-		for (int i = 0; i < getSlots(); i++)
-			setStackInSlot(i, ItemStack.EMPTY);
+		try (Transaction t = TransferUtil.getTransaction()) {
+			for (StorageView<ItemVariant> view : iterable(t)) {
+				view.extract(view.getResource(), Long.MAX_VALUE, t);
+			}
+			t.commit();
+		}
 		remainingTime = 0;
 		recipeDuration = 0;
 		appliedRecipe = false;
@@ -46,11 +54,11 @@ public class ProcessingInventory extends ItemStackHandler {
 	}
 
 	@Override
-	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-		ItemStack insertItem = super.insertItem(slot, stack, simulate);
-		if (slot == 0 && !ItemStackUtil.equals(insertItem, stack, true))
-			callback.accept(getStackInSlot(slot));
-		return insertItem;
+	public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+		long inserted = super.insert(resource, maxAmount, transaction);
+		if (inserted != 0)
+			callback.accept(resource.toStack((int) inserted));
+		return inserted;
 	}
 
 	@Override
@@ -73,12 +81,12 @@ public class ProcessingInventory extends ItemStackHandler {
 	}
 
 	@Override
-	public ItemStack extractItem(int slot, int amount, boolean simulate) {
-		return ItemStack.EMPTY;
+	public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+		return 0;
 	}
 
 	@Override
-	public boolean isItemValid(int slot, ItemStack stack) {
+	public boolean isItemValid(int slot, ItemVariant resource) {
 		return slot == 0 && isEmpty();
 	}
 

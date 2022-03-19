@@ -2,7 +2,7 @@ package com.simibubi.create.foundation.fluid;
 
 import java.util.function.Consumer;
 
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidStack;
+import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank;
 
 public class SmartFluidTank extends FluidTank {

@@ -6,13 +6,15 @@ import com.simibubi.create.content.contraptions.processing.ProcessingInventory;
 import com.simibubi.create.content.logistics.block.inventories.BottomlessItemHandler;
 import com.simibubi.create.content.logistics.block.vault.ItemVaultTileEntity;
 import com.simibubi.create.foundation.utility.NBTHelper;
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandlerModifiable;
+
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
+import io.github.fabricators_of_create.porting_lib.util.TransferUtil;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.ContainerHelper;
@@ -48,8 +50,7 @@ public class MountedStorage {
 		if (te instanceof ItemVaultTileEntity)
 			return true;
 
-		LazyOptional<IItemHandler> capability = TransferUtil.getItemHandler(te);
-		IItemHandler handler = capability.orElse(null);
+		Storage<ItemVariant> handler = ItemStorage.SIDED.find(te.getLevel(), te.getBlockPos(), te.getBlockState(), te, Direction.UP);
 		return handler instanceof ItemStackHandler && !(handler instanceof ProcessingInventory);
 	}
 
@@ -71,15 +72,13 @@ public class MountedStorage {
 			handler = new ItemStackHandler(((ChestBlockEntity) te).getContainerSize());
 			NonNullList<ItemStack> items = NonNullList.withSize(handler.getSlots(), ItemStack.EMPTY);
 			ContainerHelper.loadAllItems(tag, items);
-			for (int i = 0; i < items.size(); i++)
-				handler.setStackInSlot(i, items.get(i));
+			handler.stacks = items.toArray(ItemStack[]::new);
 			valid = true;
 			return;
 		}
 
-		IItemHandler teHandler = TransferUtil.getItemHandler(te)
-			.orElse(dummyHandler);
-		if (teHandler == dummyHandler)
+		Storage<ItemVariant> teHandler = ItemStorage.SIDED.find(te.getLevel(), te.getBlockPos(), te.getBlockState(), te, Direction.UP);
+		if (teHandler == null)
 			return;
 
 		// multiblock vaults need to provide individual invs
@@ -140,7 +139,7 @@ if (te instanceof ChestBlockEntity) {
 			inv.setStackInSlot(slot, handler.getStackInSlot(slot));
 	}
 
-	public IItemHandlerModifiable getItemHandler() {
+	public Storage<ItemVariant> getItemHandler() {
 		return handler;
 	}
 
