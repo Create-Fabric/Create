@@ -7,6 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,8 +27,6 @@ import com.simibubi.create.foundation.tileEntity.behaviour.inventory.InvManipula
 import com.simibubi.create.foundation.utility.BlockFace;
 import com.simibubi.create.foundation.utility.Pointing;
 import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 
 import net.minecraft.core.BlockPos;
@@ -43,7 +44,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-public class MechanicalCrafterTileEntity extends KineticTileEntity implements ItemTransferable {
+public class MechanicalCrafterTileEntity extends KineticTileEntity {
 
 	enum Phase {
 		IDLE, ACCEPTING, ASSEMBLING, EXPORTING, WAITING, CRAFTING, INSERTING;
@@ -57,8 +58,8 @@ public class MechanicalCrafterTileEntity extends KineticTileEntity implements It
 			super(1, te, 1, false);
 			this.te = te;
 			forbidExtraction();
-			whenContentsChanged(slot -> {
-				if (getItem(slot).isEmpty())
+			whenContentsChanged(() -> {
+				if (handler.stacks[0].isEmpty()) // fabric: only has one slot, this is safe
 					return;
 				if (te.phase == Phase.IDLE)
 					te.checkCompletedRecipe(false);
@@ -66,17 +67,21 @@ public class MechanicalCrafterTileEntity extends KineticTileEntity implements It
 		}
 
 		@Override
-		public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+		public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
 			if (te.phase != Phase.IDLE)
-				return stack;
+				return 0;
 			if (te.covered)
-				return stack;
-			ItemStack insertItem = super.insertItem(slot, stack, simulate);
-			if (insertItem.getCount() != stack.getCount() && !simulate)
-				te.getLevel()
-					.playSound(null, te.getBlockPos(), SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, .25f,
-						.5f);
-			return insertItem;
+				return 0;
+			long extracted = handler.extract(resource, maxAmount, transaction);
+			if (extracted != 0)
+				transaction.addOuterCloseCallback(r -> {
+					if (r.wasCommitted())
+						te.getLevel()
+							.playSound(null, te.getBlockPos(), SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, .25f,
+									.5f);
+				});
+
+			return extracted;
 		}
 
 	}

@@ -2,12 +2,10 @@ package com.simibubi.create.content.contraptions.processing;
 
 import java.util.function.Consumer;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
-import io.github.fabricators_of_create.porting_lib.util.TransferUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -35,12 +33,7 @@ public class ProcessingInventory extends ItemStackHandler {
 	}
 
 	public void clear() {
-		try (Transaction t = TransferUtil.getTransaction()) {
-			for (StorageView<ItemVariant> view : iterable(t)) {
-				view.extract(view.getResource(), Long.MAX_VALUE, t);
-			}
-			t.commit();
-		}
+		TransferUtil.clearStorage(this);
 		remainingTime = 0;
 		recipeDuration = 0;
 		appliedRecipe = false;

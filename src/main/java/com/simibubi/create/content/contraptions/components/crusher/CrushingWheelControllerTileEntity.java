@@ -2,9 +2,13 @@ package com.simibubi.create.content.contraptions.components.crusher;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
+import com.simibubi.create.content.contraptions.processing.ProcessingRecipe;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 
@@ -65,7 +69,7 @@ public class CrushingWheelControllerTileEntity extends SmartTileEntity {
 		inventory = new ProcessingInventory(this::itemInserted) {
 
 			@Override
-			public boolean isItemValid(int slot, ItemStack stack) {
+			public boolean isItemValid(int slot, ItemVariant stack) {
 				return super.isItemValid(slot, stack) && processingEntity == null;
 			}
 

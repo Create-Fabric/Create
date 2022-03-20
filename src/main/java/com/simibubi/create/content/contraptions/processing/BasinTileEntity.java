@@ -7,7 +7,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -38,14 +46,7 @@ import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTransferable;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.IFluidHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.CombinedInvWrapper;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandlerModifiable;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
@@ -66,7 +67,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-public class BasinTileEntity extends SmartTileEntity implements IHaveGoggleInformation, FluidTransferable, ItemTransferable {
+public class BasinTileEntity extends SmartTileEntity implements IHaveGoggleInformation {
 
 	private boolean areFluidsMoving;
 	LerpedFloat ingredientRotationSpeed;
@@ -82,8 +83,8 @@ public class BasinTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 	private Couple<SmartInventory> invs;
 	private Couple<SmartFluidTankBehaviour> tanks;
 
-	protected LazyOptional<IItemHandlerModifiable> itemCapability;
-	protected LazyOptional<IFluidHandler> fluidCapability;
+	protected Storage<ItemVariant> itemCapability;
+	protected Storage<FluidVariant> fluidCapability;
 
 	List<Direction> disabledSpoutputs;
 	Direction preferredSpoutput;
@@ -97,11 +98,11 @@ public class BasinTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 	public BasinTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 		inputInventory = new BasinInventory(9, this);
-		inputInventory.whenContentsChanged($ -> contentsChanged = true);
+		inputInventory.whenContentsChanged(() -> contentsChanged = true);
 		outputInventory = new BasinInventory(9, this).forbidInsertion()
 			.withMaxStackSize(64);
 		areFluidsMoving = false;
-		itemCapability = LazyOptional.of(() -> new CombinedInvWrapper(inputInventory, outputInventory));
+		itemCapability = new CombinedStorage<>(List.of(inputInventory, outputInventory));
 		contentsChanged = true;
 		ingredientRotation = LerpedFloat.angular()
 			.startWithValue(0);

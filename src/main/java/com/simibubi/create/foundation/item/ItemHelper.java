@@ -7,11 +7,20 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.simibubi.create.foundation.config.AllConfigs;
 import com.simibubi.create.foundation.utility.Pair;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 
 import net.minecraft.core.BlockPos;
@@ -24,9 +33,13 @@ import net.minecraft.world.level.Level;
 
 public class ItemHelper {
 
-	public static void dropContents(Level world, BlockPos pos, IItemHandler inv) {
-		for (int slot = 0; slot < inv.getSlots(); slot++)
-			Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), inv.getStackInSlot(slot));
+	public static void dropContents(Level world, BlockPos pos, Storage<ItemVariant> inv) {
+		try (Transaction t = TransferUtil.getTransaction()) {
+			for (StorageView<ItemVariant> view : inv.iterable(t)) {
+				ItemStack stack = view.getResource().toStack((int) view.getAmount());
+				Containers.dropItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
+			}
+		}
 	}
 
 	public static List<ItemStack> multipliedOutput(ItemStack in, ItemStack out) {
@@ -66,23 +79,24 @@ public class ItemHelper {
 		return true;
 	}
 
-	public static int calcRedstoneFromInventory(@Nullable IItemHandler inv) {
+	public static int calcRedstoneFromInventory(@Nullable Storage<ItemVariant> inv) {
 		if (inv == null)
 			return 0;
 		int i = 0;
 		float f = 0.0F;
-		int totalSlots = inv.getSlots();
+		int totalSlots = 0;
 
-		for (int j = 0; j < inv.getSlots(); ++j) {
-			int slotLimit = inv.getSlotLimit(j);
-			if (slotLimit == 0) {
-				totalSlots--;
-				continue;
-			}
-			ItemStack itemstack = inv.getStackInSlot(j);
-			if (!itemstack.isEmpty()) {
-				f += (float) itemstack.getCount() / (float) Math.min(slotLimit, itemstack.getMaxStackSize());
-				++i;
+		try (Transaction t = TransferUtil.getTransaction()) {
+			for (StorageView<ItemVariant> view : inv.iterable(t)) {
+				long slotLimit = view.getCapacity();
+				if (slotLimit == 0) {
+					continue;
+				}
+				totalSlots++;
+				if (!view.isResourceBlank()) {
+					f += (float) view.getAmount() / (float) Math.min(slotLimit, view.getResource().getItem().getMaxStackSize());
+					++i;
+				}
 			}
 		}
 
