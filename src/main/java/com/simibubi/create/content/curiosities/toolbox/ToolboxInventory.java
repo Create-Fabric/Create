@@ -12,6 +12,7 @@ import com.simibubi.create.foundation.utility.NBTHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.BlockItem;
@@ -90,7 +91,8 @@ public class ToolboxInventory extends ItemStackHandler {
 	}
 
 	@Override
-	public boolean isItemValid(int slot, ItemStack stack) {
+	public boolean isItemValid(int slot, ItemVariant var) {
+		ItemStack stack = var.toStack();
 		if (AllItemTags.TOOLBOXES.matches(stack))
 			return false;
 		if (stack.getItem() instanceof BlockItem) {
@@ -106,7 +108,7 @@ public class ToolboxInventory extends ItemStackHandler {
 		if (limitedMode && filter.isEmpty())
 			return false;
 		if (filter.isEmpty() || ToolboxInventory.canItemsShareCompartment(filter, stack))
-			return super.isItemValid(slot, stack);
+			return super.isItemValid(slot, var);
 		return false;
 	}
 

@@ -7,6 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.simibubi.create.content.contraptions.relays.belt.BeltTileEntity;
+
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,9 +29,6 @@ import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.animation.InterpolatedChasingValue;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
 import net.fabricmc.api.EnvType;
@@ -35,7 +41,6 @@ import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -45,7 +50,7 @@ public class BeltTunnelTileEntity extends SmartTileEntity implements ItemTransfe
 	public Map<Direction, InterpolatedChasingValue> flaps;
 	public Set<Direction> sides;
 
-	protected LazyOptional<IItemHandler> cap = LazyOptional.empty();
+	protected BlockApiCache<Storage<ItemVariant>, Direction> belowStorageCache = null;
 	protected List<Pair<Direction, Boolean>> flapsToSend;
 
 	public BeltTunnelTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -53,12 +58,12 @@ public class BeltTunnelTileEntity extends SmartTileEntity implements ItemTransfe
 		flaps = new EnumMap<>(Direction.class);
 		sides = new HashSet<>();
 		flapsToSend = new LinkedList<>();
+		if (level instanceof ServerLevel server) belowStorageCache = BlockApiCache.create(ItemStorage.SIDED, server, pos.below());
 	}
 
 	@Override
 	public void setRemoved() {
 		super.setRemoved();
-		cap.invalidate();
 	}
 
 	@Override
@@ -177,22 +182,11 @@ public class BeltTunnelTileEntity extends SmartTileEntity implements ItemTransfe
 	@Override
 	public void addBehaviours(List<TileEntityBehaviour> behaviours) {}
 
-	@Nullable
 	@Override
-	public LazyOptional<IItemHandler> getItemHandler(@Nullable Direction direction) {
-		if (!this.cap.isPresent()) {
-			if (AllBlocks.BELT.has(level.getBlockState(worldPosition.below()))) {
-				BlockEntity teBelow = level.getBlockEntity(worldPosition.below());
-				if (teBelow instanceof ItemTransferable transferable) {
-					IItemHandler capBelow = transferable.getItemHandler(Direction.UP)
-							.orElse(null);
-					if (capBelow != null) {
-						cap = LazyOptional.of(() -> capBelow)
-								.cast();
-					}
-				}
-			}
+	public Storage<ItemVariant> getStorage(@Nullable Direction face) {
+		if (belowStorageCache != null && belowStorageCache.getBlockEntity() instanceof BeltTileEntity) {
+			return belowStorageCache.find(Direction.UP);
 		}
-		return this.cap.cast();
+		return null;
 	}
 }

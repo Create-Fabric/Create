@@ -67,7 +67,7 @@ public class ItemHelper {
 			stacks.add(stack);
 	}
 
-	public static boolean isSameInventory(IItemHandler h1, IItemHandler h2) {
+	public static boolean isSameInventory(Storage<ItemVariant> h1, Storage<ItemVariant> h2) {
 		if (h1 == null || h2 == null)
 			return false;
 		if (h1.getSlots() != h2.getSlots())
@@ -161,16 +161,16 @@ public class ItemHelper {
 		EXACTLY, UPTO
 	}
 
-	public static ItemStack extract(IItemHandler inv, Predicate<ItemStack> test, boolean simulate) {
+	public static ItemStack extract(Storage<ItemVariant> inv, Predicate<ItemStack> test, boolean simulate) {
 		return extract(inv, test, ExtractionCountMode.UPTO, AllConfigs.SERVER.logistics.defaultExtractionLimit.get(),
 			simulate);
 	}
 
-	public static ItemStack extract(IItemHandler inv, Predicate<ItemStack> test, int exactAmount, boolean simulate) {
+	public static ItemStack extract(Storage<ItemVariant> inv, Predicate<ItemStack> test, int exactAmount, boolean simulate) {
 		return extract(inv, test, ExtractionCountMode.EXACTLY, exactAmount, simulate);
 	}
 
-	public static ItemStack extract(IItemHandler inv, Predicate<ItemStack> test, ExtractionCountMode mode, int amount,
+	public static ItemStack extract(Storage<ItemVariant> inv, Predicate<ItemStack> test, ExtractionCountMode mode, int amount,
 		boolean simulate) {
 		ItemStack extracting = ItemStack.EMPTY;
 		boolean amountRequired = mode == ExtractionCountMode.EXACTLY;
@@ -179,55 +179,60 @@ public class ItemHelper {
 		boolean potentialOtherMatch = false;
 		int maxExtractionCount = amount;
 
-		Extraction: do {
-			extracting = ItemStack.EMPTY;
+		try (Transaction t = TransferUtil.getTransaction()) {
+			Extraction: do {
+				extracting = ItemStack.EMPTY;
 
-			for (int slot = 0; slot < inv.getSlots(); slot++) {
-				int amountToExtractFromThisSlot =
-					Math.min(maxExtractionCount - extracting.getCount(), inv.getStackInSlot(slot)
-						.getMaxStackSize());
-				ItemStack stack = inv.extractItem(slot, amountToExtractFromThisSlot, true);
+				for (StorageView<ItemVariant> view : inv.iterable(t)) {
+					int amountToExtractFromThisSlot =
+							Math.min(maxExtractionCount - extracting.getCount(), view.getResource().getItem()
+									.getMaxStackSize());
+					long extracted = view.extract(view.getResource(), amountToExtractFromThisSlot, t);
+					ItemStack stack = view.getResource().toStack((int) view.getAmount());
+					if (extracted == 0)
+						continue;
+					if (!test.test(stack))
+						continue;
+					if (!extracting.isEmpty() && !canItemStackAmountsStack(stack, extracting)) {
+						potentialOtherMatch = true;
+						continue;
+					}
 
-				if (stack.isEmpty())
-					continue;
-				if (!test.test(stack))
-					continue;
-				if (!extracting.isEmpty() && !canItemStackAmountsStack(stack, extracting)) {
-					potentialOtherMatch = true;
-					continue;
-				}
+					if (extracting.isEmpty())
+						extracting = stack.copy();
+					else
+						extracting.grow(stack.getCount());
 
-				if (extracting.isEmpty())
-					extracting = stack.copy();
-				else
-					extracting.grow(stack.getCount());
+//					if (!simulate && hasEnoughItems)
+//						inv.extractItem(slot, stack.getCount(), false);
 
-				if (!simulate && hasEnoughItems)
-					inv.extractItem(slot, stack.getCount(), false);
-
-				if (extracting.getCount() >= maxExtractionCount) {
-					if (checkHasEnoughItems) {
-						hasEnoughItems = true;
-						checkHasEnoughItems = false;
-						continue Extraction;
-					} else {
-						break Extraction;
+					if (extracting.getCount() >= maxExtractionCount) {
+						if (checkHasEnoughItems) {
+							hasEnoughItems = true;
+							checkHasEnoughItems = false;
+							continue Extraction;
+						} else {
+							break Extraction;
+						}
 					}
 				}
-			}
 
-			if (!extracting.isEmpty() && !hasEnoughItems && potentialOtherMatch) {
-				ItemStack blackListed = extracting.copy();
-				test = test.and(i -> !ItemHandlerHelper.canItemStacksStack(i, blackListed));
-				continue;
-			}
+				if (!extracting.isEmpty() && !hasEnoughItems && potentialOtherMatch) {
+					ItemStack blackListed = extracting.copy();
+					test = test.and(i -> !ItemHandlerHelper.canItemStacksStack(i, blackListed));
+					continue;
+				}
 
-			if (checkHasEnoughItems)
-				checkHasEnoughItems = false;
-			else
-				break Extraction;
+				if (checkHasEnoughItems)
+					checkHasEnoughItems = false;
+				else
+					break Extraction;
 
-		} while (true);
+			} while (true);
+
+			if (!simulate)
+				t.commit();
+		}
 
 		if (amountRequired && extracting.getCount() < amount)
 			return ItemStack.EMPTY;
@@ -235,7 +240,7 @@ public class ItemHelper {
 		return extracting;
 	}
 
-	public static ItemStack extract(IItemHandler inv, Predicate<ItemStack> test,
+	public static ItemStack extract(Storage<ItemVariant> inv, Predicate<ItemStack> test,
 		Function<ItemStack, Integer> amountFunction, boolean simulate) {
 		ItemStack extracting = ItemStack.EMPTY;
 		int maxExtractionCount = AllConfigs.SERVER.logistics.defaultExtractionLimit.get();
@@ -276,7 +281,7 @@ public class ItemHelper {
 		return ItemHandlerHelper.canItemStacksStack(a, b) && a.getCount() + b.getCount() <= a.getMaxStackSize();
 	}
 
-	public static ItemStack findFirstMatch(IItemHandler inv, Predicate<ItemStack> test) {
+	public static ItemStack findFirstMatch(Storage<ItemVariant> inv, Predicate<ItemStack> test) {
 		int slot = findFirstMatchingSlotIndex(inv, test);
 		if (slot == -1)
 			return ItemStack.EMPTY;
@@ -284,7 +289,7 @@ public class ItemHelper {
 			return inv.getStackInSlot(slot);
 	}
 
-	public static int findFirstMatchingSlotIndex(IItemHandler inv, Predicate<ItemStack> test) {
+	public static int findFirstMatchingSlotIndex(Storage<ItemVariant> inv, Predicate<ItemStack> test) {
 		for (int slot = 0; slot < inv.getSlots(); slot++) {
 			ItemStack toTest = inv.getStackInSlot(slot);
 			if (test.test(toTest))

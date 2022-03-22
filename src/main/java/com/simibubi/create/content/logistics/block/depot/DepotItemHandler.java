@@ -1,23 +1,24 @@
 package com.simibubi.create.content.logistics.block.depot;
 
 import com.simibubi.create.content.contraptions.relays.belt.transport.TransportedItemStack;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import net.minecraft.world.item.ItemStack;
 
-public class DepotItemHandler implements IItemHandler {
+public class DepotItemHandler extends ItemStackHandler {
 
 	private static final int MAIN_SLOT = 0;
 	private DepotBehaviour te;
 
 	public DepotItemHandler(DepotBehaviour te) {
+		super(9);
 		this.te = te;
 	}
 
-	@Override
-	public int getSlots() {
-		return 9;
-	}
+//	@Override
+//	public int getSlots() {
+//		return 9;
+//	}
 
 	@Override
 	public ItemStack getStackInSlot(int slot) {

@@ -9,8 +9,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.tileEntity.behaviour.filtering.FilteringBehaviour;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 
 import net.minecraft.core.BlockPos;
@@ -19,7 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-public class CreativeCrateTileEntity extends CrateTileEntity implements ItemTransferable {
+public class CreativeCrateTileEntity extends CrateTileEntity {
 
 	public CreativeCrateTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
@@ -28,7 +26,7 @@ public class CreativeCrateTileEntity extends CrateTileEntity implements ItemTran
 	}
 
 	FilteringBehaviour filtering;
-	LazyOptional<IItemHandler> itemHandler;
+	LazyOptional<BottomlessItemHandler> itemHandler;
 	private BottomlessItemHandler inv;
 
 	@Override

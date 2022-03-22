@@ -22,11 +22,15 @@ import com.simibubi.create.foundation.tileEntity.behaviour.belt.TransportedItemS
 import com.simibubi.create.foundation.tileEntity.behaviour.belt.TransportedItemStackHandlerBehaviour.TransportedResult;
 import com.simibubi.create.foundation.utility.NBTHelper;
 import com.simibubi.create.foundation.utility.VecHelper;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import io.github.fabricators_of_create.porting_lib.util.ItemStackUtil;
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -46,7 +50,6 @@ public class DepotBehaviour extends TileEntityBehaviour {
 	List<TransportedItemStack> incoming;
 	ItemStackHandler processingOutputBuffer;
 	DepotItemHandler itemHandler;
-	LazyOptional<DepotItemHandler> lazyItemHandler;
 	TransportedItemStackHandlerBehaviour transportedHandler;
 	Supplier<Integer> maxStackSize;
 	Supplier<Boolean> canAcceptItems;
@@ -60,7 +63,6 @@ public class DepotBehaviour extends TileEntityBehaviour {
 		canFunnelsPullFrom = $ -> true;
 		incoming = new ArrayList<>();
 		itemHandler = new DepotItemHandler(this);
-		lazyItemHandler = LazyOptional.of(() -> itemHandler);
 		processingOutputBuffer = new ItemStackHandler(8) {
 			protected void onContentsChanged(int slot) {
 				te.notifyUpdate();
@@ -184,8 +186,7 @@ public class DepotBehaviour extends TileEntityBehaviour {
 
 	@Override
 	public void remove() {
-		if (lazyItemHandler != null)
-			lazyItemHandler.invalidate();
+		itemHandler = null;
 	}
 
 	@Override
@@ -355,9 +356,14 @@ public class DepotBehaviour extends TileEntityBehaviour {
 				setCenteredHeldItem(added);
 				continue;
 			}
-			ItemStack remainder = ItemHandlerHelper.insertItemStacked(processingOutputBuffer, added.stack, false);
-			Vec3 vec = VecHelper.getCenterOf(tileEntity.getBlockPos());
-			Containers.dropItemStack(tileEntity.getLevel(), vec.x, vec.y + .5f, vec.z, remainder);
+			try (Transaction t = TransferUtil.getTransaction()) {
+				long inserted = processingOutputBuffer.insert(ItemVariant.of(added.stack), added.stack.getCount(), t);
+				t.commit();
+				ItemStack remainder = added.stack.copy();
+				remainder.setCount((int) (added.stack.getCount() - inserted));
+				Vec3 vec = VecHelper.getCenterOf(tileEntity.getBlockPos());
+				Containers.dropItemStack(tileEntity.getLevel(), vec.x, vec.y + .5f, vec.z, remainder);
+			}
 		}
 
 		if (dirty)

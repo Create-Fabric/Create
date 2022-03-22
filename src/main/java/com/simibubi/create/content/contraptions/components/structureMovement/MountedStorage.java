@@ -7,13 +7,16 @@ import com.simibubi.create.content.logistics.block.inventories.BottomlessItemHan
 import com.simibubi.create.content.logistics.block.vault.ItemVaultTileEntity;
 import com.simibubi.create.foundation.utility.NBTHelper;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
-import io.github.fabricators_of_create.porting_lib.util.TransferUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -23,6 +26,8 @@ import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
+
+import java.util.List;
 
 public class MountedStorage {
 
@@ -50,7 +55,7 @@ public class MountedStorage {
 		if (te instanceof ItemVaultTileEntity)
 			return true;
 
-		Storage<ItemVariant> handler = ItemStorage.SIDED.find(te.getLevel(), te.getBlockPos(), te.getBlockState(), te, Direction.UP);
+		Storage<ItemVariant> handler = TransferUtil.getItemStorage(te);
 		return handler instanceof ItemStackHandler && !(handler instanceof ProcessingInventory);
 	}
 
@@ -77,7 +82,7 @@ public class MountedStorage {
 			return;
 		}
 
-		Storage<ItemVariant> teHandler = ItemStorage.SIDED.find(te.getLevel(), te.getBlockPos(), te.getBlockState(), te, Direction.UP);
+		Storage<ItemVariant> teHandler = TransferUtil.getItemStorage(te);
 		if (teHandler == null)
 			return;
 
@@ -96,17 +101,17 @@ public class MountedStorage {
 		}
 
 		// serialization not accessible -> fill into a serializable handler
-		if (teHandler instanceof IItemHandlerModifiable) {
-			IItemHandlerModifiable inv = (IItemHandlerModifiable) teHandler;
-			handler = new ItemStackHandler(teHandler.getSlots());
-			for (int slot = 0; slot < handler.getSlots(); slot++) {
-				handler.setStackInSlot(slot, inv.getStackInSlot(slot));
-				inv.setStackInSlot(slot, ItemStack.EMPTY);
+		if (teHandler.supportsExtraction() && teHandler.supportsInsertion()) {
+			try (Transaction t = TransferUtil.getTransaction()) {
+				List<ItemStack> stacks = TransferUtil.getAllItems(teHandler);
+				if (TransferUtil.clearStorage(teHandler)) {
+					handler = new ItemStackHandler(stacks.toArray(ItemStack[]::new));
+					t.commit();
+					valid = true;
+					return;
+				}
 			}
-			valid = true;
-			return;
 		}
-
 	}
 
 	public void addStorageToWorld(BlockEntity te) {
@@ -129,14 +134,8 @@ if (te instanceof ChestBlockEntity) {
 			return;
 		}
 
-		LazyOptional<IItemHandler> capability = TransferUtil.getItemHandler(te);
-		IItemHandler teHandler = capability.orElse(null);
-		if (!(teHandler instanceof IItemHandlerModifiable))
-			return;
-
-		IItemHandlerModifiable inv = (IItemHandlerModifiable) teHandler;
-		for (int slot = 0; slot < Math.min(inv.getSlots(), handler.getSlots()); slot++)
-			inv.setStackInSlot(slot, handler.getStackInSlot(slot));
+		Storage<ItemVariant> teHandler = TransferUtil.getItemStorage(te);
+		StorageUtil.move(handler, teHandler, v -> true, Long.MAX_VALUE, null);
 	}
 
 	public Storage<ItemVariant> getItemHandler() {
