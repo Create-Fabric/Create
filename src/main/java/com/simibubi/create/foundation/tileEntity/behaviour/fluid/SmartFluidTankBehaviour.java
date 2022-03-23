@@ -2,6 +2,10 @@ package com.simibubi.create.foundation.tileEntity.behaviour.fluid;
 
 import java.util.function.Consumer;
 
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
@@ -191,7 +195,7 @@ public class SmartFluidTankBehaviour extends TileEntityBehaviour {
 
 	public class InternalFluidHandler extends CombinedTankWrapper {
 
-		public InternalFluidHandler(IFluidHandler[] handlers, boolean enforceVariety) {
+		public InternalFluidHandler(Storage<FluidVariant>[] handlers, boolean enforceVariety) {
 			super(handlers);
 			if (enforceVariety)
 				enforceVariety();

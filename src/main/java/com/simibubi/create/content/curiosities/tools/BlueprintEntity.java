@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import net.fabricmc.fabric.api.transfer.v1.item.PlayerInventoryStorage;
+
 import org.apache.commons.lang3.Validate;
 
 import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
@@ -22,8 +24,6 @@ import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.IInteractionChecker;
 import com.simibubi.create.foundation.utility.VecHelper;
 import io.github.fabricators_of_create.porting_lib.entity.ExtraSpawnDataEntity;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandlerModifiable;
-import io.github.fabricators_of_create.porting_lib.transfer.item.InvWrapper;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import io.github.fabricators_of_create.porting_lib.util.EntityHelper;
 import io.github.fabricators_of_create.porting_lib.util.NetworkUtil;
@@ -357,7 +357,8 @@ public class BlueprintEntity extends HangingEntity
 		if (!holdingWrench && !level.isClientSide && !items.getStackInSlot(9)
 			.isEmpty()) {
 
-			IItemHandlerModifiable playerInv = new InvWrapper(player.getInventory());
+
+			PlayerInventoryStorage playerInv = PlayerInventoryStorage.of(player);
 			boolean firstPass = true;
 			int amountCrafted = 0;
 			//ForgeHooks.setCraftingPlayer(player);

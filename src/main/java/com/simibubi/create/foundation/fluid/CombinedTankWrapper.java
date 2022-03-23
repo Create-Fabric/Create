@@ -14,22 +14,10 @@ import java.util.List;
  * for items)
  */
 public class CombinedTankWrapper extends CombinedStorage<FluidVariant, Storage<FluidVariant>> {
-
-//	protected final Storage<FluidVariant>[] itemHandler;
-//	protected final int[] baseIndex;
-//	protected final int tankCount;
 	protected boolean enforceVariety;
 
 	public CombinedTankWrapper(Storage<FluidVariant>... fluidHandlers) {
 		super(List.of(fluidHandlers));
-//		this.itemHandler = fluidHandlers;
-//		this.baseIndex = new int[fluidHandlers.length];
-//		int index = 0;
-//		for (int i = 0; i < fluidHandlers.length; i++) {
-//			index += fluidHandlers[i].getTanks();
-//			baseIndex[i] = index;
-//		}
-//		this.tankCount = index;
 	}
 
 	public CombinedTankWrapper enforceVariety() {
@@ -96,74 +84,11 @@ public class CombinedTankWrapper extends CombinedStorage<FluidVariant, Storage<F
 				resource.shrink(filledIntoCurrent);
 				filled += filledIntoCurrent;
 
-				if (resource.isEmpty() || fittingHandlerFound || (enforceVariety && filledIntoCurrent != 0))
+				if (resource.isEmpty() || fittingHandlerFound || enforceVariety && filledIntoCurrent != 0)
 					break Outer;
 			}
 		}
 
 		return filled;
 	}
-
-//	@Override
-//	public FluidStack drain(FluidStack resource, boolean sim) {
-//		if (resource.isEmpty())
-//			return resource;
-//
-//		FluidStack drained = FluidStack.EMPTY;
-//		resource = resource.copy();
-//
-//		for (IFluidHandler iFluidHandler : itemHandler) {
-//			FluidStack drainedFromCurrent = iFluidHandler.drain(resource, sim);
-//			long amount = drainedFromCurrent.getAmount();
-//			resource.shrink(amount);
-//
-//			if (!drainedFromCurrent.isEmpty() && (drained.isEmpty() || drainedFromCurrent.isFluidEqual(drained)))
-//				drained = new FluidStack(drainedFromCurrent.getType(), amount + drained.getAmount(),
-//					drainedFromCurrent.getTag());
-//			if (resource.isEmpty())
-//				break;
-//		}
-//
-//		return drained;
-//	}
-
-//	@Override
-//	public FluidStack drain(long maxDrain, boolean sim) {
-//		FluidStack drained = FluidStack.EMPTY;
-//
-//		for (IFluidHandler iFluidHandler : itemHandler) {
-//			FluidStack drainedFromCurrent = iFluidHandler.drain(maxDrain, sim);
-//			long amount = drainedFromCurrent.getAmount();
-//			maxDrain -= amount;
-//
-//			if (!drainedFromCurrent.isEmpty() && (drained.isEmpty() || drainedFromCurrent.isFluidEqual(drained)))
-//				drained = new FluidStack(drainedFromCurrent.getType(), amount + drained.getAmount(),
-//					drainedFromCurrent.getTag());
-//			if (maxDrain == 0)
-//				break;
-//		}
-//
-//		return drained;
-//	}
-
-//	protected int getIndexForSlot(int slot) {
-//		if (slot < 0)
-//			return -1;
-//		for (int i = 0; i < baseIndex.length; i++)
-//			if (slot - baseIndex[i] < 0)
-//				return i;
-//		return -1;
-//	}
-
-//	protected IFluidHandler getHandlerFromIndex(int index) {
-//		if (index < 0 || index >= itemHandler.length)
-//			return (IFluidHandler) EmptyHandler.INSTANCE;
-//		return itemHandler[index];
-//	}
-
-//	protected int getSlotFromIndex(int slot, int index) {
-//		if (index <= 0 || index >= baseIndex.length)
-//			return slot;
-//		return slot - baseIndex[index - 1];
-//	}
 }

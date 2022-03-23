@@ -1,10 +1,15 @@
 package com.simibubi.create.content.contraptions.components.actors;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+
+import net.fabricmc.fabric.impl.lookup.block.ServerWorldCache;
+
+import net.minecraft.core.Direction;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -15,39 +20,40 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class PortableItemInterfaceTileEntity extends PortableStorageInterfaceTileEntity {
+public class PortableItemInterfaceTileEntity extends PortableStorageInterfaceTileEntity implements ItemTransferable {
 
-	protected InterfaceItemHandler capability = new InterfaceItemHandler(Storage.empty());
+	protected InterfaceItemHandler capability;
 
 	public PortableItemInterfaceTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
+		capability = createEmptyHandler();
 	}
 
 	@Override
 	public void startTransferringTo(Contraption contraption, float distance) {
-//		LazyOptional<IItemHandlerModifiable> oldCap = capability;
-//		InterfaceItemHandler handler = ((InterfaceItemHandler) capability.orElse(null));
 		capability.setWrapped(contraption.inventory);
-//		oldCap.invalidate();
 		super.startTransferringTo(contraption, distance);
 	}
 
 	@Override
 	protected void stopTransferring() {
-//		LazyOptional<IItemHandlerModifiable> oldCap = capability;
-//		InterfaceItemHandler handler = ((InterfaceItemHandler) capability.orElse(null));
 		capability.setWrapped(Storage.empty());
-//		oldCap.invalidate();
 		super.stopTransferring();
 	}
 
 	private InterfaceItemHandler createEmptyHandler() {
-		return capability;
+		return new InterfaceItemHandler(Storage.empty());
 	}
 
 	@Override
 	protected void invalidateCapability() {
 		capability.setWrapped(Storage.empty());
+	}
+
+	@Nullable
+	@Override
+	public Storage<ItemVariant> getItemStorage(@Nullable Direction face) {
+		return capability;
 	}
 
 	class InterfaceItemHandler extends ItemHandlerWrapper {

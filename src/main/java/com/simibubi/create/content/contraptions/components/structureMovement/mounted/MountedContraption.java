@@ -19,8 +19,6 @@ import com.simibubi.create.content.contraptions.components.structureMovement.mou
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.NBTHelper;
 import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandlerModifiable;
-import io.github.fabricators_of_create.porting_lib.transfer.item.InvWrapper;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

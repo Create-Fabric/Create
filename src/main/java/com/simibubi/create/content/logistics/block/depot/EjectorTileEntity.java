@@ -573,7 +573,7 @@ public class EjectorTileEntity extends KineticTileEntity implements ItemTransfer
 	}
 
 	@Override
-	public Storage<ItemVariant> getStorage(@Nullable Direction face) {
+	public Storage<ItemVariant> getItemStorage(@Nullable Direction face) {
 		return depotBehaviour.itemHandler;
 	}
 

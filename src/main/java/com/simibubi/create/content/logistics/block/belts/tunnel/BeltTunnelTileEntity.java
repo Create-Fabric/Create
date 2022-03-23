@@ -183,7 +183,7 @@ public class BeltTunnelTileEntity extends SmartTileEntity implements ItemTransfe
 	public void addBehaviours(List<TileEntityBehaviour> behaviours) {}
 
 	@Override
-	public Storage<ItemVariant> getStorage(@Nullable Direction face) {
+	public Storage<ItemVariant> getItemStorage(@Nullable Direction face) {
 		if (belowStorageCache != null && belowStorageCache.getBlockEntity() instanceof BeltTileEntity) {
 			return belowStorageCache.find(Direction.UP);
 		}

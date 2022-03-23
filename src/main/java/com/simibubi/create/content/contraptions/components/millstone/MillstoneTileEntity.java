@@ -3,6 +3,13 @@ package com.simibubi.create.content.contraptions.components.millstone;
 import java.util.List;
 import java.util.Optional;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllRecipeTypes;
@@ -12,8 +19,6 @@ import com.simibubi.create.foundation.sound.SoundScapes.AmbienceGroup;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.belt.DirectBeltInputBehaviour;
 import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.fabricators_of_create.porting_lib.transfer.item.CombinedInvWrapper;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
@@ -38,7 +43,7 @@ public class MillstoneTileEntity extends KineticTileEntity implements ItemTransf
 
 	public ItemStackHandler inputInv;
 	public ItemStackHandler outputInv;
-	public LazyOptional<IItemHandler> capability;
+	public MillstoneInventoryHandler capability;
 	public int timer;
 	private MillingRecipe lastRecipe;
 
@@ -46,7 +51,7 @@ public class MillstoneTileEntity extends KineticTileEntity implements ItemTransf
 		super(type, pos, state);
 		inputInv = new ItemStackHandler(1);
 		outputInv = new ItemStackHandler(9);
-		capability = LazyOptional.of(MillstoneInventoryHandler::new);
+		capability = new MillstoneInventoryHandler();
 	}
 
 	@Override
@@ -118,7 +123,6 @@ public class MillstoneTileEntity extends KineticTileEntity implements ItemTransf
 	@Override
 	public void setRemoved() {
 		super.setRemoved();
-		capability.invalidate();
 	}
 
 	private void process() {
@@ -178,8 +182,8 @@ public class MillstoneTileEntity extends KineticTileEntity implements ItemTransf
 
 	@Nullable
 	@Override
-	public LazyOptional<IItemHandler> getItemHandler(@Nullable Direction direction) {
-		return capability.cast();
+	public Storage<ItemVariant> getItemStorage(@Nullable Direction direction) {
+		return capability;
 	}
 
 	private boolean canProcess(ItemStack stack) {
@@ -193,10 +197,10 @@ public class MillstoneTileEntity extends KineticTileEntity implements ItemTransf
 			.isPresent();
 	}
 
-	private class MillstoneInventoryHandler extends CombinedInvWrapper {
+	private class MillstoneInventoryHandler extends CombinedStorage<ItemVariant, ItemStackHandler> {
 
 		public MillstoneInventoryHandler() {
-			super(inputInv, outputInv);
+			super(List.of(inputInv, outputInv));
 		}
 
 		@Override

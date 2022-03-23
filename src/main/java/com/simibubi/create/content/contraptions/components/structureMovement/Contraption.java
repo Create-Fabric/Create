@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -745,12 +747,12 @@ public abstract class Contraption {
 				mfs.assignTileEntity(tank);
 			});
 
-		IItemHandlerModifiable[] handlers = new IItemHandlerModifiable[storage.size()];
+		Storage<ItemVariant>[] handlers = new Storage[storage.size()];
 		int index = 0;
 		for (MountedStorage mountedStorage : storage.values())
 			handlers[index++] = mountedStorage.getItemHandler();
 
-		IFluidHandler[] fluidHandlers = new IFluidHandler[fluidStorage.size()];
+		Storage<FluidVariant>[] fluidHandlers = new Storage[fluidStorage.size()];
 		index = 0;
 		for (MountedFluidStorage mountedStorage : fluidStorage.values())
 			fluidHandlers[index++] = mountedStorage.getFluidHandler();
@@ -1106,12 +1108,8 @@ public abstract class Contraption {
 					Block.UPDATE_MOVE_BY_PISTON | Block.UPDATE_ALL, 512);
 		}
 
-		for (int i = 0; i < inventory.getSlots(); i++) {
-			if (!inventory.isSlotExternal(i))
-				inventory.setStackInSlot(i, ItemStack.EMPTY);
-		}
-		for (int i = 0; i < fluidInventory.getTanks(); i++)
-			fluidInventory.drain(fluidInventory.getFluidInTank(i), false);
+		TransferUtil.clearStorage(inventory);
+		TransferUtil.clearStorage(fluidInventory);
 
 		for (Pair<BlockPos, Direction> pair : superglue) {
 			BlockPos targetPos = transform.apply(pair.getKey());

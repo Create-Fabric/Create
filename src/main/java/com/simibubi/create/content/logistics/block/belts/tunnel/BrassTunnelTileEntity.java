@@ -703,7 +703,7 @@ public class BrassTunnelTileEntity extends BeltTunnelTileEntity implements IHave
 	}
 
 	@Override
-	public Storage<ItemVariant> getStorage(@Nullable Direction face) {
+	public Storage<ItemVariant> getItemStorage(@Nullable Direction face) {
 		return tunnelCapability;
 	}
 
