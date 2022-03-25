@@ -21,10 +21,11 @@ import com.simibubi.create.foundation.utility.AnimationTickHolder;
 import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.VecHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.particles.ItemParticleOption;
@@ -215,8 +216,7 @@ public class MechanicalMixerTileEntity extends BasinOperatingTileEntity {
 		Optional<BasinTileEntity> basin = getBasin();
 		if (!basin.isPresent())
 			return matchingRecipes;
-		IItemHandler availableItems = TransferUtil.getItemHandler(basin.get())
-			.orElse(null);
+		Storage<ItemVariant> availableItems = TransferUtil.getItemStorage(basin.get());
 		if (availableItems == null)
 			return matchingRecipes;
 

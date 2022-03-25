@@ -6,6 +6,10 @@ import java.util.Map;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation;
@@ -23,8 +27,6 @@ import com.simibubi.create.foundation.utility.VecHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTransferable;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.IFluidHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
@@ -46,14 +48,14 @@ public class ItemDrainTileEntity extends SmartTileEntity implements IHaveGoggleI
 	SmartFluidTankBehaviour internalTank;
 	TransportedItemStack heldItem;
 	protected int processingTicks;
-	Map<Direction, LazyOptional<ItemDrainItemHandler>> itemHandlers;
+	Map<Direction, ItemDrainItemHandler> itemHandlers;
 
 	public ItemDrainTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 		itemHandlers = new IdentityHashMap<>();
 		for (Direction d : Iterate.horizontalDirections) {
 			ItemDrainItemHandler itemDrainItemHandler = new ItemDrainItemHandler(this, d);
-			itemHandlers.put(d, LazyOptional.of(() -> itemDrainItemHandler));
+			itemHandlers.put(d, itemDrainItemHandler);
 		}
 	}
 
@@ -258,8 +260,6 @@ public class ItemDrainTileEntity extends SmartTileEntity implements IHaveGoggleI
 	@Override
 	public void setRemoved() {
 		super.setRemoved();
-		for (LazyOptional<ItemDrainItemHandler> lazyOptional : itemHandlers.values())
-			lazyOptional.invalidate();
 	}
 
 	public void setHeldItem(TransportedItemStack heldItem, Direction insertedFrom) {
@@ -286,24 +286,24 @@ public class ItemDrainTileEntity extends SmartTileEntity implements IHaveGoggleI
 
 	@Nullable
 	@Override
-	public LazyOptional<IFluidHandler> getFluidHandler(@Nullable Direction direction) {
-		if (direction != Direction.UP) {
-			return internalTank.getCapability().cast();
+	public Storage<FluidVariant> getFluidStorage(@Nullable Direction face) {
+		if (face != Direction.UP) {
+			return internalTank.getCapability();
 		}
 		return null;
 	}
 
 	@Nullable
 	@Override
-	public LazyOptional<IItemHandler> getItemHandler(@Nullable Direction direction) {
-		if (direction != null && direction.getAxis().isHorizontal()) {
-			return itemHandlers.get(direction).cast();
+	public Storage<ItemVariant> getItemStorage(@Nullable Direction face) {
+		if (face != null && face.getAxis().isHorizontal()) {
+			return itemHandlers.get(face);
 		}
 		return null;
 	}
 
 	@Override
 	public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-		return containedFluidTooltip(tooltip, isPlayerSneaking, TransferUtil.getFluidHandler(this));
+		return containedFluidTooltip(tooltip, isPlayerSneaking, getFluidStorage(null));
 	}
 }

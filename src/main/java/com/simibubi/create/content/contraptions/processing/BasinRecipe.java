@@ -19,9 +19,14 @@ import com.simibubi.create.foundation.tileEntity.behaviour.fluid.SmartFluidTankB
 import com.simibubi.create.foundation.utility.Iterate;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.util.FluidStack;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.IFluidHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
 
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -57,10 +62,8 @@ public class BasinRecipe extends ProcessingRecipe<SmartInventory> {
 
 	private static boolean apply(BasinTileEntity basin, Recipe<?> recipe, boolean test) {
 		boolean isBasinRecipe = recipe instanceof BasinRecipe;
-		IItemHandler availableItems = TransferUtil.getItemHandler(basin)
-			.orElse(null);
-		IFluidHandler availableFluids = TransferUtil.getFluidHandler(basin)
-			.orElse(null);
+		Storage<ItemVariant> availableItems = basin.getItemStorage(null);
+		Storage<FluidVariant> availableFluids = basin.getFluidStorage(null);
 
 		if (availableItems == null || availableFluids == null)
 			return false;
@@ -93,19 +96,20 @@ public class BasinRecipe extends ProcessingRecipe<SmartInventory> {
 
 				for (int slot = 0; slot < availableItems.getSlots(); slot++) {
 					if (simulate && availableItems.getStackInSlot(slot)
-						.getCount() <= extractedItemsFromSlot[slot])
+							.getCount() <= extractedItemsFromSlot[slot])
 						continue;
 					ItemStack extracted = availableItems.extractItem(slot, 1, true);
 					if (!ingredient.test(extracted))
 						continue;
 					// Catalyst items are never consumed
-					if (extracted.getItem().hasCraftingRemainingItem() && extracted.getItem().getCraftingRemainingItem()
-							.equals(extracted.getItem()))
+					if (extracted.hasContainerItem() && extracted.getContainerItem()
+							.sameItem(extracted))
 						continue Ingredients;
 					if (!simulate)
 						availableItems.extractItem(slot, 1, false);
-					else if (extracted.getItem().hasCraftingRemainingItem())
-						recipeOutputItems.add(extracted.getItem().getCraftingRemainingItem().getDefaultInstance());
+					else if (extracted.hasContainerItem())
+						recipeOutputItems.add(extracted.getContainerItem()
+								.copy());
 					extractedItemsFromSlot[slot]++;
 					continue Ingredients;
 				}
@@ -115,9 +119,9 @@ public class BasinRecipe extends ProcessingRecipe<SmartInventory> {
 			}
 
 			boolean fluidsAffected = false;
-			FluidIngredients: for (int i = 0; i < fluidIngredients.size(); i++) {
+FluidIngredients: for (int i = 0; i < fluidIngredients.size(); i++) {
 				FluidIngredient fluidIngredient = fluidIngredients.get(i);
-				long amountRequired = fluidIngredient.getRequiredAmount();
+				int amountRequired = fluidIngredient.getRequiredAmount();
 
 				for (int tank = 0; tank < availableFluids.getTanks(); tank++) {
 					FluidStack fluidStack = availableFluids.getFluidInTank(tank);
@@ -125,7 +129,7 @@ public class BasinRecipe extends ProcessingRecipe<SmartInventory> {
 						continue;
 					if (!fluidIngredient.test(fluidStack))
 						continue;
-					long drainedAmount = Math.min(amountRequired, fluidStack.getAmount());
+					int drainedAmount = Math.min(amountRequired, fluidStack.getAmount());
 					if (!simulate) {
 						fluidStack.shrink(drainedAmount);
 						fluidsAffected = true;
@@ -143,9 +147,9 @@ public class BasinRecipe extends ProcessingRecipe<SmartInventory> {
 
 			if (fluidsAffected) {
 				basin.getBehaviour(SmartFluidTankBehaviour.INPUT)
-					.forEach(TankSegment::onFluidStackChanged);
+						.forEach(TankSegment::onFluidStackChanged);
 				basin.getBehaviour(SmartFluidTankBehaviour.OUTPUT)
-					.forEach(TankSegment::onFluidStackChanged);
+						.forEach(TankSegment::onFluidStackChanged);
 			}
 
 			if (simulate) {

@@ -2,6 +2,9 @@ package com.simibubi.create.content.logistics.block.inventories;
 
 import java.util.List;
 
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.jozufozu.flywheel.util.transform.TransformStack;
@@ -22,11 +25,9 @@ public class CreativeCrateTileEntity extends CrateTileEntity {
 	public CreativeCrateTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 		inv = new BottomlessItemHandler(filtering::getFilter);
-		itemHandler = LazyOptional.of(() -> inv);
 	}
 
 	FilteringBehaviour filtering;
-	LazyOptional<BottomlessItemHandler> itemHandler;
 	private BottomlessItemHandler inv;
 
 	@Override
@@ -37,13 +38,12 @@ public class CreativeCrateTileEntity extends CrateTileEntity {
 	@Override
 	public void setRemoved() {
 		super.setRemoved();
-		if (itemHandler != null)
-			itemHandler.invalidate();
 	}
 
+	@Nullable
 	@Override
-	public LazyOptional<IItemHandler> getItemHandler(@Nullable Direction direction) {
-		return itemHandler.cast();
+	public Storage<ItemVariant> getItemStorage(@Nullable Direction face) {
+		return inv;
 	}
 
 	public FilteringBehaviour createFilter() {

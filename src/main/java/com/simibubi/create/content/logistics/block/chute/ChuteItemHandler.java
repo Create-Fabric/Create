@@ -1,53 +1,49 @@
 package com.simibubi.create.content.logistics.block.chute;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 
-import net.minecraft.world.item.ItemStack;
-
-public class ChuteItemHandler implements IItemHandler {
+public class ChuteItemHandler extends SingleVariantStorage<ItemVariant> {
 
 	private ChuteTileEntity te;
 
 	public ChuteItemHandler(ChuteTileEntity te) {
 		this.te = te;
+		update();
+	}
+
+	private void update() {
+		this.variant = ItemVariant.of(te.item);
+		this.amount = te.item.getCount();
 	}
 
 	@Override
-	public int getSlots() {
-		return 1;
+	public long insert(ItemVariant insertedVariant, long maxAmount, TransactionContext transaction) {
+		if (!te.canAcceptItem(insertedVariant.toStack()))
+			return 0;
+		return super.insert(insertedVariant, maxAmount, transaction);
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int slot) {
-		return te.item;
+	protected void onFinalCommit() {
+		te.setItem(variant.toStack((int) amount));
 	}
 
 	@Override
-	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-		if (!te.canAcceptItem(stack))
-			return stack;
-		if (!simulate)
-			te.setItem(stack);
-		return ItemStack.EMPTY;
+	public void updateSnapshots(TransactionContext transaction) {
+		update();
+		super.updateSnapshots(transaction);
+		te.snapshotParticipant.updateSnapshots(transaction);
 	}
 
 	@Override
-	public ItemStack extractItem(int slot, int amount, boolean simulate) {
-		ItemStack remainder = te.item.copy();
-		ItemStack split = remainder.split(amount);
-		if (!simulate)
-			te.setItem(remainder);
-		return split;
+	protected long getCapacity(ItemVariant variant) {
+		return Math.min(64, variant.getItem().getMaxStackSize());
 	}
 
 	@Override
-	public int getSlotLimit(int slot) {
-		return Math.min(64, getStackInSlot(slot).getMaxStackSize());
+	protected ItemVariant getBlankVariant() {
+		return ItemVariant.blank();
 	}
-
-	@Override
-	public boolean isItemValid(int slot, ItemStack stack) {
-		return true;
-	}
-
 }

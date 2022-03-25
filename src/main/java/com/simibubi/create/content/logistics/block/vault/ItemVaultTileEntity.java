@@ -10,6 +10,7 @@ import com.simibubi.create.foundation.tileEntity.IMultiTileContainer;
 import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -26,7 +27,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class ItemVaultTileEntity extends SmartTileEntity implements IMultiTileContainer {
+public class ItemVaultTileEntity extends SmartTileEntity implements IMultiTileContainer, ItemTransferable {
 
 	protected Storage<ItemVariant> itemCapability;
 
@@ -222,9 +223,9 @@ public class ItemVaultTileEntity extends SmartTileEntity implements IMultiTileCo
 
 	@Nullable
 	@Override
-	public LazyOptional<IItemHandler> getItemHandler(@Nullable Direction direction) {
+	public Storage<ItemVariant> getItemStorage(@Nullable Direction face) {
 		initCapability();
-		return itemCapability.cast();
+		return itemCapability;
 	}
 
 	private void initCapability() {

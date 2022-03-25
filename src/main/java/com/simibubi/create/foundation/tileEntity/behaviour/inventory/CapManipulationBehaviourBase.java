@@ -119,10 +119,8 @@ public abstract class CapManipulationBehaviourBase<T, S extends CapManipulationB
 			return;
 		Class<T> capability = capability();
 		targetCapability = bypassSided
-				? (LazyOptional<T>) TransferUtil.getStorage(invTE, null, capability)
-				: (LazyOptional<T>) TransferUtil.getStorage(invTE, targetBlockFace.getFace(), capability);																										// we can't support it.
-//		if (targetCapability != null)
-//			targetCapability.addListener(this::onHandlerInvalidated);
+				? TransferUtil.getStorage(invTE, null, capability)
+				: TransferUtil.getStorage(invTE, targetBlockFace.getFace(), capability);
 	}
 
 	@FunctionalInterface

@@ -10,6 +10,11 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
+
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllBlocks;
@@ -43,7 +48,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public class ToolboxTileEntity extends SmartTileEntity implements MenuProvider, Nameable {
+public class ToolboxTileEntity extends SmartTileEntity implements MenuProvider, Nameable, ItemTransferable {
 
 	public LerpedFloat lid = LerpedFloat.linear()
 		.startWithValue(0);
@@ -53,7 +58,6 @@ public class ToolboxTileEntity extends SmartTileEntity implements MenuProvider, 
 
 	UUID uniqueId;
 	ToolboxInventory inventory;
-	LazyOptional<IItemHandler> inventoryProvider;
 	ResetableLazy<DyeColor> colorProvider;
 	protected int openCount;
 
@@ -65,7 +69,6 @@ public class ToolboxTileEntity extends SmartTileEntity implements MenuProvider, 
 		super(type, pos, state);
 		connectedPlayers = new HashMap<>();
 		inventory = new ToolboxInventory(this);
-		inventoryProvider = LazyOptional.of(() -> inventory);
 		colorProvider = ResetableLazy.of(() -> {
 			BlockState blockState = getBlockState();
 			if (blockState != null && blockState.getBlock() instanceof ToolboxBlock)
@@ -277,8 +280,8 @@ public class ToolboxTileEntity extends SmartTileEntity implements MenuProvider, 
 
 	@Nullable
 	@Override
-	public LazyOptional<IItemHandler> getItemHandler(@Nullable Direction direction) {
-		return inventoryProvider.cast();
+	public Storage<ItemVariant> getItemStorage(@Nullable Direction face) {
+		return inventory;
 	}
 
 	@Override

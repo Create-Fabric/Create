@@ -157,9 +157,9 @@ public abstract class AbstractChuteBlock extends Block implements IWrenchable, I
 		if (pos.below()
 			.equals(neighbourPos))
 			withTileEntityDo(world, pos, ChuteTileEntity::blockBelowChanged);
-		else if (pos.above()
-			.equals(neighbourPos))
-			withTileEntityDo(world, pos, chute -> chute.capAbove = LazyOptional.empty());
+//		else if (pos.above()
+//			.equals(neighbourPos))
+//			withTileEntityDo(world, pos, chute -> chute.capAbove = LazyOptional.empty());
 	}
 
 	public abstract BlockState updateChuteState(BlockState state, BlockState above, BlockGetter world, BlockPos pos);

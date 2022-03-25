@@ -7,7 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -44,7 +46,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-public class MechanicalCrafterTileEntity extends KineticTileEntity {
+public class MechanicalCrafterTileEntity extends KineticTileEntity implements ItemTransferable {
 
 	enum Phase {
 		IDLE, ACCEPTING, ASSEMBLING, EXPORTING, WAITING, CRAFTING, INSERTING;
@@ -89,7 +91,6 @@ public class MechanicalCrafterTileEntity extends KineticTileEntity {
 	protected Inventory inventory;
 	protected GroupedItems groupedItems = new GroupedItems();
 	protected ConnectedInput input = new ConnectedInput();
-	protected LazyOptional<IItemHandler> invSupplier = LazyOptional.of(() -> input.getItemHandler(level, worldPosition));
 	protected boolean reRender;
 	protected Phase phase;
 	protected int countDown;
@@ -210,7 +211,6 @@ public class MechanicalCrafterTileEntity extends KineticTileEntity {
 
 	@Override
 	public void setRemoved() {
-		invSupplier.invalidate();
 		super.setRemoved();
 	}
 
@@ -513,15 +513,13 @@ public class MechanicalCrafterTileEntity extends KineticTileEntity {
 
 	@Nullable
 	@Override
-	public LazyOptional<IItemHandler> getItemHandler(@Nullable Direction direction) {
-		return invSupplier.cast();
+	public Storage<ItemVariant> getItemStorage(@Nullable Direction face) {
+		return input.getItemHandler(level, worldPosition);
 	}
 
 	public void connectivityChanged() {
 		reRender = true;
 		sendData();
-		invSupplier.invalidate();
-		invSupplier = LazyOptional.of(() -> input.getItemHandler(level, worldPosition));
 	}
 
 	public Inventory getInventory() {

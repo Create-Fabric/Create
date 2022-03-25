@@ -31,13 +31,20 @@ import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.foundation.utility.animation.InterpolatedValue;
 import io.github.fabricators_of_create.porting_lib.block.CustomRenderBoundingBoxBlockEntity;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.item.IItemHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
 import io.github.fabricators_of_create.porting_lib.util.ItemStackUtil;
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -47,6 +54,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -74,7 +82,6 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 	ItemStack item;
 	InterpolatedValue itemPosition;
 	ChuteItemHandler itemHandler;
-	LazyOptional<IItemHandler> lazyHandler;
 	boolean canPickUpItems;
 
 	float bottomPullDistance;
@@ -84,18 +91,43 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 	int airCurrentUpdateCooldown;
 	int entitySearchCooldown;
 
-	LazyOptional<IItemHandler> capAbove;
-	LazyOptional<IItemHandler> capBelow;
+	BlockApiCache<Storage<ItemVariant>, Direction> capAboveCache;
+	BlockApiCache<Storage<ItemVariant>, Direction> capBelowCache;
+	Storage<ItemVariant> capAbove;
+	Storage<ItemVariant> capBelow;
+
+	final SnapshotParticipant<ChuteData> snapshotParticipant = new SnapshotParticipant<>() {
+		@Override
+		protected ChuteData createSnapshot() {
+			return new ChuteData(item.copy(), itemPosition.lastValue, itemPosition.value);
+		}
+
+		@Override
+		protected void readSnapshot(ChuteData snapshot) {
+			item = snapshot.stack;
+			itemPosition.lastValue = snapshot.lastPos;
+			itemPosition.value = snapshot.value;
+		}
+
+		@Override
+		protected void onFinalCommit() {
+			notifyUpdate();
+		}
+	};
+
+	private record ChuteData(ItemStack stack, float lastPos, float value) {
+	}
 
 	public ChuteTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 		item = ItemStack.EMPTY;
 		itemPosition = new InterpolatedValue();
 		itemHandler = new ChuteItemHandler(this);
-		lazyHandler = LazyOptional.of(() -> itemHandler);
 		canPickUpItems = false;
-		capAbove = LazyOptional.empty();
-		capBelow = LazyOptional.empty();
+		if (level instanceof ServerLevel server) {
+			capAboveCache = BlockApiCache.create(ItemStorage.SIDED, server, getBlockPos().above());
+			capBelowCache = BlockApiCache.create(ItemStorage.SIDED, server, getBlockPos().below());
+		}
 		bottomPullDistance = 0;
 		//		airCurrent = new AirCurrent(this);
 		updateAirFlow = true;
@@ -157,27 +189,29 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 
 		float nextOffset = itemPosition.value + itemMotion;
 
-		if (itemMotion < 0) {
-			if (nextOffset < .5f) {
-				if (!handleDownwardOutput(true))
-					nextOffset = .5f;
-				else if (nextOffset < 0) {
-					handleDownwardOutput(clientSide);
-					nextOffset = itemPosition.value;
+		try (Transaction t = TransferUtil.getTransaction()) {
+			if (itemMotion < 0) {
+				if (nextOffset < .5f) {
+					if (!handleDownwardOutput(t))
+						nextOffset = .5f;
+					else if (nextOffset < 0) {
+						nextOffset = itemPosition.value;
+					}
+				}
+			} else if (itemMotion > 0) {
+				if (nextOffset > .5f) {
+					if (!handleUpwardOutput(t))
+						nextOffset = .5f;
+					else if (nextOffset > 1) {
+						nextOffset = itemPosition.value;
+					}
 				}
 			}
-		} else if (itemMotion > 0) {
-			if (nextOffset > .5f) {
-				if (!handleUpwardOutput(true))
-					nextOffset = .5f;
-				else if (nextOffset > 1) {
-					handleUpwardOutput(clientSide);
-					nextOffset = itemPosition.value;
-				}
-			}
-		}
 
-		itemPosition.set(nextOffset);
+			itemPosition.set(nextOffset);
+			if (!clientSide)
+				t.commit();
+		}
 	}
 
 	private void updateAirFlow(float itemSpeed) {
@@ -277,7 +311,6 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 
 	public void blockBelowChanged() {
 		updateAirFlow = true;
-		capBelow = LazyOptional.empty();
 	}
 
 	private void spawnParticles(float itemMotion) {
@@ -325,18 +358,18 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 	}
 
 	private void handleInputFromAbove() {
-		if (!capAbove.isPresent())
+		if (capAbove == null)
 			capAbove = grabCapability(Direction.UP);
-		handleInput(capAbove.orElse(null), 1);
+		handleInput(capAbove, 1);
 	}
 
 	private void handleInputFromBelow() {
-		if (!capBelow.isPresent())
+		if (capBelow == null)
 			capBelow = grabCapability(Direction.DOWN);
-		handleInput(capBelow.orElse(null), 0);
+		handleInput(capBelow, 0);
 	}
 
-	private void handleInput(IItemHandler inv, float startLocation) {
+	private void handleInput(Storage<ItemVariant> inv, float startLocation) {
 		if (inv == null)
 			return;
 		Predicate<ItemStack> canAccept = this::canAcceptItem;
@@ -350,22 +383,24 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 		}
 	}
 
-	private boolean handleDownwardOutput(boolean simulate) {
+	private boolean handleDownwardOutput(TransactionContext ctx) {
 		BlockState blockState = getBlockState();
 		ChuteTileEntity targetChute = getTargetChute(blockState);
 		Direction direction = AbstractChuteBlock.getChuteFacing(blockState);
 
 		if (level == null || direction == null || !this.canOutputItems())
 			return false;
-		if (!capBelow.isPresent())
+		if (capBelow == null)
 			capBelow = grabCapability(Direction.DOWN);
-		if (capBelow.isPresent()) {
+		if (capBelow != null) {
 			if (level.isClientSide && !isVirtual())
 				return false;
-			ItemStack remainder = ItemHandlerHelper.insertItemStacked(capBelow.orElse(null), item, simulate);
+			long inserted = capBelow.insert(ItemVariant.of(item), item.getCount(), ctx);
 			ItemStack held = getItem();
-			if (!simulate)
-				setItem(remainder, itemPosition.get(0));
+			ItemStack remainder = item.copy();
+			remainder.shrink((int) inserted);
+			snapshotParticipant.updateSnapshots(ctx);
+			setItem(remainder, itemPosition.get(0));
 			if (remainder.getCount() != held.getCount())
 				return true;
 			if (direction == Direction.DOWN)
@@ -374,7 +409,8 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 
 		if (targetChute != null) {
 			boolean canInsert = targetChute.canAcceptItem(item);
-			if (!simulate && canInsert) {
+			if (canInsert) {
+				targetChute.snapshotParticipant.updateSnapshots(ctx);
 				targetChute.setItem(item, direction == Direction.DOWN ? 1 : .51f);
 				setItem(ItemStack.EMPTY);
 			}
@@ -391,36 +427,36 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 		if (Block.canSupportRigidBlock(level, worldPosition.below()))
 			return false;
 
-		if (!simulate) {
-			Vec3 dropVec = VecHelper.getCenterOf(worldPosition)
+		snapshotParticipant.updateSnapshots(ctx);
+		setItem(ItemStack.EMPTY);
+		Vec3 dropVec = VecHelper.getCenterOf(worldPosition)
 				.add(0, -12 / 16f, 0);
+		TransactionCallback.onSuccess(ctx, () -> {
 			ItemEntity dropped = new ItemEntity(level, dropVec.x, dropVec.y, dropVec.z, item.copy());
 			dropped.setDefaultPickUpDelay();
 			dropped.setDeltaMovement(0, -.25f, 0);
 			level.addFreshEntity(dropped);
-			setItem(ItemStack.EMPTY);
-		}
+		});
 
 		return true;
 	}
 
-	private boolean handleUpwardOutput(boolean simulate) {
+	private boolean handleUpwardOutput(TransactionContext ctx) {
 		BlockState stateAbove = level.getBlockState(worldPosition.above());
 
 		if (level == null || !this.canOutputItems())
 			return false;
 
 		if (AbstractChuteBlock.isOpenChute(getBlockState())) {
-			if (!capAbove.isPresent())
+			if (capAbove == null)
 				capAbove = grabCapability(Direction.UP);
-			if (capAbove.isPresent()) {
+			if (capAbove != null) {
 				if (level.isClientSide && !isVirtual() && !ChuteBlock.isChute(stateAbove))
 					return false;
 				int countBefore = item.getCount();
-				ItemStack remainder = ItemHandlerHelper.insertItemStacked(capAbove.orElse(null), item, simulate);
-				if (!simulate)
-					item = remainder;
-				return countBefore != remainder.getCount();
+				long inserted = capAbove.insert(ItemVariant.of(item), countBefore, ctx);
+				item.shrink((int) inserted);
+				return countBefore != item.getCount();
 			}
 		}
 
@@ -438,10 +474,9 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 		}
 
 		if (bestOutput != null) {
-			if (!simulate) {
-				bestOutput.setItem(item, 0);
-				setItem(ItemStack.EMPTY);
-			}
+			bestOutput.snapshotParticipant.updateSnapshots(ctx);
+			bestOutput.setItem(item, 0);
+			setItem(ItemStack.EMPTY);
 			return true;
 		}
 
@@ -452,15 +487,17 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 		if (!inputChutes.isEmpty())
 			return false;
 
-		if (!simulate) {
-			Vec3 dropVec = VecHelper.getCenterOf(worldPosition)
+
+		snapshotParticipant.updateSnapshots(ctx);
+		setItem(ItemStack.EMPTY);
+		Vec3 dropVec = VecHelper.getCenterOf(worldPosition)
 				.add(0, 8 / 16f, 0);
+		TransactionCallback.onSuccess(ctx, () -> {
 			ItemEntity dropped = new ItemEntity(level, dropVec.x, dropVec.y, dropVec.z, item.copy());
 			dropped.setDefaultPickUpDelay();
 			dropped.setDeltaMovement(0, getItemMotion() * 2, 0);
 			level.addFreshEntity(dropped);
-			setItem(ItemStack.EMPTY);
-		}
+		});
 		return true;
 	}
 
@@ -484,18 +521,18 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 		return true;
 	}
 
-	private LazyOptional<IItemHandler> grabCapability(Direction side) {
-		BlockPos pos = this.worldPosition.relative(side);
+	private Storage<ItemVariant> grabCapability(Direction side) {
 		if (level == null)
-			return LazyOptional.empty();
-		BlockEntity te = level.getBlockEntity(pos);
+			return null;
+		BlockApiCache<Storage<ItemVariant>, Direction> cache = side == Direction.UP ? capAboveCache : capBelowCache;
+		BlockEntity te = cache.getBlockEntity();
 		if (te == null)
-			return LazyOptional.empty();
+			return null;
 		if (te instanceof ChuteTileEntity) {
 			if (side != Direction.DOWN || !(te instanceof SmartChuteTileEntity) || getItemMotion() > 0)
-				return LazyOptional.empty();
+				return null;
 		}
-		return TransferUtil.getItemHandler(te, side.getOpposite());
+		return cache.find(side.getOpposite());
 	}
 
 	public void setItem(ItemStack stack) {
@@ -505,15 +542,11 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 	public void setItem(ItemStack stack, float insertionPos) {
 		item = stack;
 		itemPosition.lastValue = itemPosition.value = insertionPos;
-		if (!level.isClientSide)
-			notifyUpdate();
 	}
 
 	@Override
 	public void setRemoved() {
 		super.setRemoved();
-		if (lazyHandler != null)
-			lazyHandler.invalidate();
 	}
 
 	@Override
@@ -728,8 +761,8 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 
 	@Nullable
 	@Override
-	public LazyOptional<IItemHandler> getItemHandler(@Nullable Direction direction) {
-		return lazyHandler.cast();
+	public Storage<ItemVariant> getItemStorage(@Nullable Direction face) {
+		return itemHandler;
 	}
 
 	public ItemStack getItem() {

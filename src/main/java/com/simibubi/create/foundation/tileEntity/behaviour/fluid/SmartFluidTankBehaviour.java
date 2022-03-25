@@ -17,7 +17,6 @@ import com.simibubi.create.foundation.utility.NBTHelper;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat;
 import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
 import io.github.fabricators_of_create.porting_lib.util.FluidStack;
-import io.github.fabricators_of_create.porting_lib.transfer.fluid.IFluidHandler;
 import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 
 import net.minecraft.nbt.CompoundTag;
@@ -35,7 +34,7 @@ public class SmartFluidTankBehaviour extends TileEntityBehaviour {
 	protected int syncCooldown;
 	protected boolean queuedSync;
 	protected TankSegment[] tanks;
-	protected LazyOptional<? extends IFluidHandler> capability;
+	protected InternalFluidHandler capability;
 	protected boolean extractionAllowed;
 	protected boolean insertionAllowed;
 	protected Runnable fluidUpdateCallback;
@@ -53,13 +52,13 @@ public class SmartFluidTankBehaviour extends TileEntityBehaviour {
 		extractionAllowed = true;
 		behaviourType = type;
 		this.tanks = new TankSegment[tanks];
-		IFluidHandler[] handlers = new IFluidHandler[tanks];
+		Storage<FluidVariant>[] handlers = new Storage[tanks];
 		for (int i = 0; i < tanks; i++) {
 			TankSegment tankSegment = new TankSegment(tankCapacity);
 			this.tanks[i] = tankSegment;
 			handlers[i] = tankSegment.tank;
 		}
-		capability = LazyOptional.of(() -> new InternalFluidHandler(handlers, enforceVariety));
+		capability = new InternalFluidHandler(handlers, enforceVariety);
 		fluidUpdateCallback = () -> {
 		};
 	}
@@ -142,7 +141,6 @@ public class SmartFluidTankBehaviour extends TileEntityBehaviour {
 	@Override
 	public void remove() {
 		super.remove();
-		capability.invalidate();
 	}
 
 	public SmartFluidTank getPrimaryHandler() {
@@ -169,7 +167,7 @@ public class SmartFluidTankBehaviour extends TileEntityBehaviour {
 			action.accept(tankSegment);
 	}
 
-	public LazyOptional<? extends IFluidHandler> getCapability() {
+	public Storage<FluidVariant> getCapability() {
 		return capability;
 	}
 

@@ -25,25 +25,4 @@ public class SmartFluidTank extends FluidTank {
 		super.setFluid(stack);
 		updateCallback.accept(stack);
 	}
-
-//	@Override
-//	public long fill(FluidStack resource, boolean sim) {
-//		long val = super.fill(resource, sim);
-//		onContentsChanged();
-//		return val;
-//	}
-//
-//	@Override
-//	public FluidStack drain(long amount, boolean sim) {
-//		FluidStack val = super.drain(amount, sim);
-//		onContentsChanged();
-//		return val;
-//	}
-//
-//	@Override
-//	public FluidStack drain(FluidStack resource, boolean sim) {
-//		FluidStack val = super.drain(resource, sim);
-//		onContentsChanged();
-//		return val;
-//	}
 }
