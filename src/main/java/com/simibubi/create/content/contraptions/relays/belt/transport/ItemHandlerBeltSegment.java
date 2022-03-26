@@ -95,11 +95,11 @@ public class ItemHandlerBeltSegment extends SnapshotParticipant<TransportedItemS
 
 	@Override
 	protected void readSnapshot(TransportedItemStack snapshot) {
-		this.stack = snapshot;
+		this.stack = snapshot == TransportedItemStack.EMPTY ? null : snapshot;
 	}
 
 	@Override
 	protected TransportedItemStack createSnapshot() {
-		return stack != null ? stack.copy() : null;
+		return stack != null ? stack.copy() : TransportedItemStack.EMPTY;
 	}
 }

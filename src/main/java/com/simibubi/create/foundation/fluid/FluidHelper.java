@@ -191,79 +191,79 @@ public class FluidHelper {
 		return false;
 	}
 
-	@Nullable
-	public static FluidExchange exchange(IFluidHandler fluidTank, IFluidHandlerItem fluidItem, FluidExchange preferred,
-										 int maxAmount) {
-		return exchange(fluidTank, fluidItem, preferred, true, maxAmount);
-	}
-
-	@Nullable
-	public static FluidExchange exchangeAll(IFluidHandler fluidTank, IFluidHandlerItem fluidItem,
-		FluidExchange preferred) {
-		return exchange(fluidTank, fluidItem, preferred, false, Integer.MAX_VALUE);
-	}
-
-	@Nullable
-	private static FluidExchange exchange(IFluidHandler fluidTank, IFluidHandlerItem fluidItem, FluidExchange preferred,
-		boolean singleOp, int maxTransferAmountPerTank) {
-
-		// Locks in the transfer direction of this operation
-		FluidExchange lockedExchange = null;
-
-		for (int tankSlot = 0; tankSlot < fluidTank.getTanks(); tankSlot++) {
-			for (int slot = 0; slot < fluidItem.getTanks(); slot++) {
-
-				FluidStack fluidInTank = fluidTank.getFluidInTank(tankSlot);
-				long tankCapacity = fluidTank.getTankCapacity(tankSlot) - fluidInTank.getAmount();
-				boolean tankEmpty = fluidInTank.isEmpty();
-
-				FluidStack fluidInItem = fluidItem.getFluidInTank(tankSlot);
-				long itemCapacity = fluidItem.getTankCapacity(tankSlot) - fluidInItem.getAmount();
-				boolean itemEmpty = fluidInItem.isEmpty();
-
-				boolean undecided = lockedExchange == null;
-				boolean canMoveToTank = (undecided || lockedExchange == FluidExchange.ITEM_TO_TANK) && tankCapacity > 0;
-				boolean canMoveToItem = (undecided || lockedExchange == FluidExchange.TANK_TO_ITEM) && itemCapacity > 0;
-
-				// Incompatible Liquids
-				if (!tankEmpty && !itemEmpty && !fluidInItem.isFluidEqual(fluidInTank))
-					continue;
-
-				// Transfer liquid to tank
-				if (((tankEmpty || itemCapacity <= 0) && canMoveToTank)
-					|| undecided && preferred == FluidExchange.ITEM_TO_TANK) {
-
-					long amount = fluidTank.fill(
-						fluidItem.drain(Math.min(maxTransferAmountPerTank, tankCapacity), false),
-						false);
-					if (amount > 0) {
-						lockedExchange = FluidExchange.ITEM_TO_TANK;
-						if (singleOp)
-							return lockedExchange;
-						continue;
-					}
-				}
-
-				// Transfer liquid from tank
-				if (((itemEmpty || tankCapacity <= 0) && canMoveToItem)
-					|| undecided && preferred == FluidExchange.TANK_TO_ITEM) {
-
-					long amount = fluidItem.fill(
-						fluidTank.drain(Math.min(maxTransferAmountPerTank, itemCapacity), false),
-						false);
-					if (amount > 0) {
-						lockedExchange = FluidExchange.TANK_TO_ITEM;
-						if (singleOp)
-							return lockedExchange;
-						continue;
-					}
-
-				}
-
-			}
-		}
-
-		return null;
-	}
+//	@Nullable
+//	public static FluidExchange exchange(IFluidHandler fluidTank, IFluidHandlerItem fluidItem, FluidExchange preferred,
+//										 int maxAmount) {
+//		return exchange(fluidTank, fluidItem, preferred, true, maxAmount);
+//	}
+//
+//	@Nullable
+//	public static FluidExchange exchangeAll(IFluidHandler fluidTank, IFluidHandlerItem fluidItem,
+//		FluidExchange preferred) {
+//		return exchange(fluidTank, fluidItem, preferred, false, Integer.MAX_VALUE);
+//	}
+//
+//	@Nullable
+//	private static FluidExchange exchange(IFluidHandler fluidTank, IFluidHandlerItem fluidItem, FluidExchange preferred,
+//		boolean singleOp, int maxTransferAmountPerTank) {
+//
+//		// Locks in the transfer direction of this operation
+//		FluidExchange lockedExchange = null;
+//
+//		for (int tankSlot = 0; tankSlot < fluidTank.getTanks(); tankSlot++) {
+//			for (int slot = 0; slot < fluidItem.getTanks(); slot++) {
+//
+//				FluidStack fluidInTank = fluidTank.getFluidInTank(tankSlot);
+//				long tankCapacity = fluidTank.getTankCapacity(tankSlot) - fluidInTank.getAmount();
+//				boolean tankEmpty = fluidInTank.isEmpty();
+//
+//				FluidStack fluidInItem = fluidItem.getFluidInTank(tankSlot);
+//				long itemCapacity = fluidItem.getTankCapacity(tankSlot) - fluidInItem.getAmount();
+//				boolean itemEmpty = fluidInItem.isEmpty();
+//
+//				boolean undecided = lockedExchange == null;
+//				boolean canMoveToTank = (undecided || lockedExchange == FluidExchange.ITEM_TO_TANK) && tankCapacity > 0;
+//				boolean canMoveToItem = (undecided || lockedExchange == FluidExchange.TANK_TO_ITEM) && itemCapacity > 0;
+//
+//				// Incompatible Liquids
+//				if (!tankEmpty && !itemEmpty && !fluidInItem.isFluidEqual(fluidInTank))
+//					continue;
+//
+//				// Transfer liquid to tank
+//				if (((tankEmpty || itemCapacity <= 0) && canMoveToTank)
+//					|| undecided && preferred == FluidExchange.ITEM_TO_TANK) {
+//
+//					long amount = fluidTank.fill(
+//						fluidItem.drain(Math.min(maxTransferAmountPerTank, tankCapacity), false),
+//						false);
+//					if (amount > 0) {
+//						lockedExchange = FluidExchange.ITEM_TO_TANK;
+//						if (singleOp)
+//							return lockedExchange;
+//						continue;
+//					}
+//				}
+//
+//				// Transfer liquid from tank
+//				if (((itemEmpty || tankCapacity <= 0) && canMoveToItem)
+//					|| undecided && preferred == FluidExchange.TANK_TO_ITEM) {
+//
+//					long amount = fluidItem.fill(
+//						fluidTank.drain(Math.min(maxTransferAmountPerTank, itemCapacity), false),
+//						false);
+//					if (amount > 0) {
+//						lockedExchange = FluidExchange.TANK_TO_ITEM;
+//						if (singleOp)
+//							return lockedExchange;
+//						continue;
+//					}
+//
+//				}
+//
+//			}
+//		}
+//
+//		return null;
+//	}
 
 }

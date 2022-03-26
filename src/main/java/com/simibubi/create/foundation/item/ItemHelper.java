@@ -67,17 +67,17 @@ public class ItemHelper {
 			stacks.add(stack);
 	}
 
-	public static boolean isSameInventory(Storage<ItemVariant> h1, Storage<ItemVariant> h2) {
-		if (h1 == null || h2 == null)
-			return false;
-		if (h1.getSlots() != h2.getSlots())
-			return false;
-		for (int slot = 0; slot < h1.getSlots(); slot++) {
-			if (h1.getStackInSlot(slot) != h2.getStackInSlot(slot))
-				return false;
-		}
-		return true;
-	}
+//	public static boolean isSameInventory(Storage<ItemVariant> h1, Storage<ItemVariant> h2) {
+//		if (h1 == null || h2 == null)
+//			return false;
+//		if (h1.getSlots() != h2.getSlots())
+//			return false;
+//		for (int slot = 0; slot < h1.getSlots(); slot++) {
+//			if (h1.getStackInSlot(slot) != h2.getStackInSlot(slot))
+//				return false;
+//		}
+//		return true;
+//	}
 
 	public static int calcRedstoneFromInventory(@Nullable Storage<ItemVariant> inv) {
 		if (inv == null)

@@ -15,17 +15,6 @@ public class BrassTunnelItemHandler extends ItemStackHandler {
 		stacks[0] = te.stackToDistribute;
 	}
 
-//	@Override
-//	public int getSlots() {
-//		return 1;
-//	}
-
-//	@Override
-//	public ItemStack getStackInSlot(int slot) {
-//		return te.stackToDistribute;
-//	}
-
-
 	@Override
 	public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
 		if (!te.hasDistributionBehaviour()) {

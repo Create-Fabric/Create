@@ -17,6 +17,7 @@ import com.simibubi.create.foundation.utility.Lang;
 import dev.cafeteria.fakeplayerapi.server.FakeServerPlayer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.BlockPos;
@@ -144,7 +145,7 @@ public class BlazeBurnerBlock extends Block implements ITE<BlazeBurnerTileEntity
 	}
 
 	public static InteractionResultHolder<ItemStack> tryInsert(BlockState state, Level world, BlockPos pos,
-		ItemStack stack, boolean doNotConsume, boolean forceOverflow, boolean simulate) {
+		ItemStack stack, boolean doNotConsume, boolean forceOverflow, TransactionContext ctx) {
 		if (!state.hasBlockEntity())
 			return InteractionResultHolder.fail(ItemStack.EMPTY);
 

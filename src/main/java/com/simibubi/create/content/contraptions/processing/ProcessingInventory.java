@@ -3,6 +3,7 @@ package com.simibubi.create.content.contraptions.processing;
 import java.util.function.Consumer;
 
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -50,7 +51,7 @@ public class ProcessingInventory extends ItemStackHandler {
 	public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
 		long inserted = super.insert(resource, maxAmount, transaction);
 		if (inserted != 0)
-			callback.accept(resource.toStack((int) inserted));
+			TransactionCallback.onSuccess(transaction, () -> callback.accept(resource.toStack((int) inserted)));
 		return inserted;
 	}
 

@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import com.simibubi.create.content.contraptions.processing.ProcessingRecipe;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
 import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -53,14 +54,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public class CrushingWheelControllerTileEntity extends SmartTileEntity {
+public class CrushingWheelControllerTileEntity extends SmartTileEntity implements ItemTransferable {
 
 	public Entity processingEntity;
 	private UUID entityUUID;
 	protected boolean searchForEntity;
 
 	public ProcessingInventory inventory;
-	protected LazyOptional<Storage<ItemVariant>> handler = LazyOptional.of(() -> inventory);
 	private RecipeWrapper wrapper;
 	public float crushingspeed;
 
@@ -361,8 +361,8 @@ public class CrushingWheelControllerTileEntity extends SmartTileEntity {
 
 	@Nullable
 	@Override
-	public LazyOptional<IItemHandler> getItemHandler(@Nullable Direction direction) {
-		return handler.cast();
+	public Storage<ItemVariant> getItemStorage(@Nullable Direction face) {
+		return inventory;
 	}
 
 	public void clear() {

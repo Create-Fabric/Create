@@ -10,6 +10,8 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation;
@@ -49,6 +51,23 @@ public class ItemDrainTileEntity extends SmartTileEntity implements IHaveGoggleI
 	TransportedItemStack heldItem;
 	protected int processingTicks;
 	Map<Direction, ItemDrainItemHandler> itemHandlers;
+
+	SnapshotParticipant<TransportedItemStack> snapshotParticipant = new SnapshotParticipant<>() {
+		@Override
+		protected TransportedItemStack createSnapshot() {
+			return heldItem == null ? TransportedItemStack.EMPTY : heldItem.copy();
+		}
+
+		@Override
+		protected void readSnapshot(TransportedItemStack snapshot) {
+			heldItem = snapshot == TransportedItemStack.EMPTY ? null : snapshot;
+		}
+
+		@Override
+		protected void onFinalCommit() {
+			notifyUpdate();
+		}
+	};
 
 	public ItemDrainTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);

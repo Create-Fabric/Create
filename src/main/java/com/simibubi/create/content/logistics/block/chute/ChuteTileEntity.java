@@ -91,10 +91,8 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 	int airCurrentUpdateCooldown;
 	int entitySearchCooldown;
 
-	BlockApiCache<Storage<ItemVariant>, Direction> capAboveCache;
-	BlockApiCache<Storage<ItemVariant>, Direction> capBelowCache;
-	Storage<ItemVariant> capAbove;
-	Storage<ItemVariant> capBelow;
+	BlockApiCache<Storage<ItemVariant>, Direction> capAbove;
+	BlockApiCache<Storage<ItemVariant>, Direction> capBelow;
 
 	final SnapshotParticipant<ChuteData> snapshotParticipant = new SnapshotParticipant<>() {
 		@Override
@@ -125,8 +123,8 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 		itemHandler = new ChuteItemHandler(this);
 		canPickUpItems = false;
 		if (level instanceof ServerLevel server) {
-			capAboveCache = BlockApiCache.create(ItemStorage.SIDED, server, getBlockPos().above());
-			capBelowCache = BlockApiCache.create(ItemStorage.SIDED, server, getBlockPos().below());
+			capAbove = BlockApiCache.create(ItemStorage.SIDED, server, getBlockPos().above());
+			capBelow = BlockApiCache.create(ItemStorage.SIDED, server, getBlockPos().below());
 		}
 		bottomPullDistance = 0;
 		//		airCurrent = new AirCurrent(this);
@@ -358,15 +356,13 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 	}
 
 	private void handleInputFromAbove() {
-		if (capAbove == null)
-			capAbove = grabCapability(Direction.UP);
-		handleInput(capAbove, 1);
+		Storage<ItemVariant> storage = grabCapability(Direction.UP);
+		handleInput(storage, 1);
 	}
 
 	private void handleInputFromBelow() {
-		if (capBelow == null)
-			capBelow = grabCapability(Direction.DOWN);
-		handleInput(capBelow, 0);
+		Storage<ItemVariant> storage = grabCapability(Direction.DOWN);
+		handleInput(storage, 0);
 	}
 
 	private void handleInput(Storage<ItemVariant> inv, float startLocation) {
@@ -390,12 +386,11 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 
 		if (level == null || direction == null || !this.canOutputItems())
 			return false;
-		if (capBelow == null)
-			capBelow = grabCapability(Direction.DOWN);
-		if (capBelow != null) {
+		Storage<ItemVariant> storageBelow = grabCapability(Direction.DOWN);
+		if (storageBelow != null) {
 			if (level.isClientSide && !isVirtual())
 				return false;
-			long inserted = capBelow.insert(ItemVariant.of(item), item.getCount(), ctx);
+			long inserted = storageBelow.insert(ItemVariant.of(item), item.getCount(), ctx);
 			ItemStack held = getItem();
 			ItemStack remainder = item.copy();
 			remainder.shrink((int) inserted);
@@ -448,13 +443,12 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 			return false;
 
 		if (AbstractChuteBlock.isOpenChute(getBlockState())) {
-			if (capAbove == null)
-				capAbove = grabCapability(Direction.UP);
-			if (capAbove != null) {
+			Storage<ItemVariant> storageAbove = grabCapability(Direction.UP);
+			if (storageAbove != null) {
 				if (level.isClientSide && !isVirtual() && !ChuteBlock.isChute(stateAbove))
 					return false;
 				int countBefore = item.getCount();
-				long inserted = capAbove.insert(ItemVariant.of(item), countBefore, ctx);
+				long inserted = storageAbove.insert(ItemVariant.of(item), countBefore, ctx);
 				item.shrink((int) inserted);
 				return countBefore != item.getCount();
 			}
@@ -524,7 +518,7 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 	private Storage<ItemVariant> grabCapability(Direction side) {
 		if (level == null)
 			return null;
-		BlockApiCache<Storage<ItemVariant>, Direction> cache = side == Direction.UP ? capAboveCache : capBelowCache;
+		BlockApiCache<Storage<ItemVariant>, Direction> cache = side == Direction.UP ? capAbove : capBelow;
 		BlockEntity te = cache.getBlockEntity();
 		if (te == null)
 			return null;

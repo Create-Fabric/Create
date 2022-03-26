@@ -17,6 +17,7 @@ import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.VecHelper;
 import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -32,6 +33,8 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
+
+import javax.annotation.Nullable;
 
 public abstract class FluidManipulationBehaviour extends TileEntityBehaviour {
 
@@ -96,7 +99,7 @@ public abstract class FluidManipulationBehaviour extends TileEntityBehaviour {
 		return AllConfigs.SERVER.fluids.fillInfinite.get();
 	}
 
-	public void reset() {
+	public void reset(@Nullable TransactionContext ctx) {
 		if (affectedArea != null)
 			scheduleUpdatesInAffectedArea();
 		affectedArea = null;
