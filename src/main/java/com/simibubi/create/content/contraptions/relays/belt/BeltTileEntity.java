@@ -532,7 +532,7 @@ public class BeltTileEntity extends KineticTileEntity implements ItemTransferabl
 	}
 
 	public void invalidateItemHandler() {
-		TransferUtil.invalidateCaches(this);
+		itemHandler = null;
 	}
 
 	public boolean shouldRenderNormally() {

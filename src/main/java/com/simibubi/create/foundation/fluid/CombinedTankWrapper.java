@@ -5,6 +5,7 @@ import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 
 import java.util.List;
@@ -57,34 +58,27 @@ public class CombinedTankWrapper extends CombinedStorage<FluidVariant, Storage<F
 
 	@Override
 	public long insert(FluidVariant resource, long maxAmount, TransactionContext transaction) {
-		return super.insert(resource, maxAmount, transaction);
-	}
-
-	@Override
-	public long fill(FluidStack resource, boolean sim) {
-		if (resource.isEmpty())
+		if (resource.isBlank())
 			return 0;
 
 		int filled = 0;
-		resource = resource.copy();
 
 		boolean fittingHandlerFound = false;
 		Outer: for (boolean searchPass : Iterate.trueAndFalse) {
-			for (IFluidHandler iFluidHandler : itemHandler) {
-
-				for (int i = 0; i < iFluidHandler.getTanks(); i++)
-					if (searchPass && iFluidHandler.getFluidInTank(i)
-						.isFluidEqual(resource))
+			for (Storage<FluidVariant> iFluidHandler : parts) {
+				try (Transaction nested = transaction.openNested()) {
+					if (searchPass && iFluidHandler.extract(resource, 1, nested) == 1) {
 						fittingHandlerFound = true;
-
+					}
+				}
 				if (searchPass && !fittingHandlerFound)
 					continue;
 
-				long filledIntoCurrent = iFluidHandler.fill(resource, sim);
-				resource.shrink(filledIntoCurrent);
+				long filledIntoCurrent = iFluidHandler.insert(resource, maxAmount, transaction);
+				maxAmount -= filledIntoCurrent;
 				filled += filledIntoCurrent;
 
-				if (resource.isEmpty() || fittingHandlerFound || enforceVariety && filledIntoCurrent != 0)
+				if (maxAmount == 0 || fittingHandlerFound || enforceVariety && filledIntoCurrent != 0)
 					break Outer;
 			}
 		}

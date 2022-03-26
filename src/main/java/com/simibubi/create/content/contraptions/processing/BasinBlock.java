@@ -103,7 +103,7 @@ public class BasinBlock extends Block implements ITE<BasinTileEntity>, IWrenchab
 				if (heldItem.getItem()
 					.equals(Items.SPONGE)) {
 					Storage<FluidVariant> storage = TransferUtil.getFluidStorage(te);
-					if (storage != null && !TransferUtil.extractAny(storage, Long.MAX_VALUE).isEmpty()) {
+					if (storage != null && !TransferUtil.extractAnyFluid(storage, Long.MAX_VALUE).isEmpty()) {
 						return InteractionResult.SUCCESS;
 					}
 				}

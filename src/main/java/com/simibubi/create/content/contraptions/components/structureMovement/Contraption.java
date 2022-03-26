@@ -1342,11 +1342,11 @@ public abstract class Contraption {
 			this(false, itemHandler);
 		}
 
-//		public boolean isSlotExternal(int slot) {
-//			if (isExternal)
-//				return true;
-//			IItemHandlerModifiable handler = getHandlerFromIndex(getIndexForSlot(slot));
-//			return handler instanceof ContraptionInvWrapper && ((ContraptionInvWrapper) handler).isSlotExternal(slot);
-//		}
+		public boolean isSlotExternal(int slot) {
+			if (isExternal)
+				return true;
+			IItemHandlerModifiable handler = getHandlerFromIndex(getIndexForSlot(slot));
+			return handler instanceof ContraptionInvWrapper && ((ContraptionInvWrapper) handler).isSlotExternal(slot);
+		}
 	}
 }

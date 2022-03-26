@@ -103,8 +103,6 @@ public class FluidTankTileEntity extends SmartTileEntity implements IHaveGoggleI
 			updateConnectivity();
 		if (fluidLevel != null)
 			fluidLevel.tick();
-		if (isController() && !level.isClientSide)
-			FluidTileDataHandler.sendDataToClients((ServerLevel) level, this);
 	}
 
 	@Override
@@ -306,7 +304,6 @@ public class FluidTankTileEntity extends SmartTileEntity implements IHaveGoggleI
 	private void refreshCapability() {
 		tankInventory = isController() ? tankInventory
 				: getControllerTE() != null ? getControllerTE().tankInventory : new FluidTank(0);
-		TransferUtil.invalidateCaches(this);
 	}
 
 	@Override
