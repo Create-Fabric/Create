@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 
 import org.jetbrains.annotations.Nullable;
@@ -243,33 +244,34 @@ public class ItemDrainTileEntity extends SmartTileEntity implements IHaveGoggleI
 		Pair<FluidStack, ItemStack> emptyItem = EmptyingByBasin.emptyItem(level, heldItem.stack, true);
 		FluidStack fluidFromItem = emptyItem.getFirst();
 
-		if (processingTicks > 5) {
-			internalTank.allowInsertion();
-			if (internalTank.getPrimaryHandler()
-				.fill(fluidFromItem, true) != fluidFromItem.getAmount()) {
+		try (Transaction t = TransferUtil.getTransaction()) {
+			if (processingTicks > 5) {
+				internalTank.allowInsertion();
+				if (internalTank.getPrimaryHandler()
+						.insert(fluidFromItem.getType(), fluidFromItem.getAmount(), t) != 0) {
+					internalTank.forbidInsertion();
+					processingTicks = FILLING_TIME;
+					return true;
+				}
 				internalTank.forbidInsertion();
-				processingTicks = FILLING_TIME;
 				return true;
 			}
+
+			emptyItem = EmptyingByBasin.emptyItem(level, heldItem.stack.copy(), false);
+			AllTriggers.triggerForNearbyPlayers(AllTriggers.ITEM_DRAIN, level, worldPosition, 5);
+
+			// Process finished
+			ItemStack out = emptyItem.getSecond();
+			if (!out.isEmpty())
+				heldItem.stack = out;
+			else
+				heldItem = null;
+			internalTank.allowInsertion();
+			t.commit();
 			internalTank.forbidInsertion();
+			notifyUpdate();
 			return true;
 		}
-
-		emptyItem = EmptyingByBasin.emptyItem(level, heldItem.stack.copy(), false);
-		AllTriggers.triggerForNearbyPlayers(AllTriggers.ITEM_DRAIN, level, worldPosition, 5);
-
-		// Process finished
-		ItemStack out = emptyItem.getSecond();
-		if (!out.isEmpty())
-			heldItem.stack = out;
-		else
-			heldItem = null;
-		internalTank.allowInsertion();
-		internalTank.getPrimaryHandler()
-			.fill(fluidFromItem, false);
-		internalTank.forbidInsertion();
-		notifyUpdate();
-		return true;
 	}
 
 	private float itemMovementPerTick() {

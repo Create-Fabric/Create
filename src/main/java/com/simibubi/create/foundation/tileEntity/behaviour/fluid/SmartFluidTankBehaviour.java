@@ -6,6 +6,8 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
@@ -197,6 +199,11 @@ public class SmartFluidTankBehaviour extends TileEntityBehaviour {
 			super(handlers);
 			if (enforceVariety)
 				enforceVariety();
+		}
+
+		@Override
+		public long insert(FluidVariant resource, long maxAmount, TransactionContext transaction) {
+			return super.insert(resource, maxAmount, transaction);
 		}
 
 		@Override

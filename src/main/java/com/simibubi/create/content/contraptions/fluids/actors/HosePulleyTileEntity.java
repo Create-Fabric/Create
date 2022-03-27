@@ -90,8 +90,8 @@ public class HosePulleyTileEntity extends KineticTileEntity implements FluidTran
 				isMoving = false;
 			}
 			if (isMoving) {
-				drainer.reset();
-				filler.reset();
+				drainer.reset(null);
+				filler.reset(null);
 			}
 		}
 
@@ -137,8 +137,8 @@ public class HosePulleyTileEntity extends KineticTileEntity implements FluidTran
 			.getMaterial()
 			.isReplaceable()) {
 			isMoving = true;
-			drainer.reset();
-			filler.reset();
+			drainer.reset(null);
+			filler.reset(null);
 			return;
 		}
 

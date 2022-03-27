@@ -3,6 +3,8 @@ package com.simibubi.create.content.logistics.block.depot;
 import com.simibubi.create.content.contraptions.relays.belt.transport.TransportedItemStack;
 
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.world.item.ItemStack;
 
 public class DepotItemHandler extends ItemStackHandler {
@@ -23,6 +25,19 @@ public class DepotItemHandler extends ItemStackHandler {
 	@Override
 	public ItemStack getStackInSlot(int slot) {
 		return slot == MAIN_SLOT ? te.getHeldItemStack() : te.processingOutputBuffer.getStackInSlot(slot - 1);
+	}
+
+	@Override
+	public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
+		if (!te.getHeldItemStack()
+				.isEmpty() && !te.canMergeItems())
+			return 0;
+		if (!te.isOutputEmpty() && !te.canMergeItems())
+			return 0;
+		te.snapshotParticipant.updateSnapshots(transaction);
+		int maxInsert = (int) Math.min(maxAmount, resource.getItem().getMaxStackSize());
+		ItemStack remainder = te.insert(new TransportedItemStack(resource.toStack(maxInsert)), transaction);
+		return maxInsert - remainder.getCount();
 	}
 
 	@Override
@@ -66,7 +81,7 @@ public class DepotItemHandler extends ItemStackHandler {
 	}
 
 	@Override
-	public boolean isItemValid(int slot, ItemStack stack) {
+	public boolean isItemValid(int slot, ItemVariant stack) {
 		return slot == MAIN_SLOT;
 	}
 

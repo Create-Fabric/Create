@@ -111,7 +111,7 @@ public abstract class FluidManipulationBehaviour extends TileEntityBehaviour {
 
 	@Override
 	public void destroy() {
-		reset();
+		reset(null);
 		super.destroy();
 	}
 

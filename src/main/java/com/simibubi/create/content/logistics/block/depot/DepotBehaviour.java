@@ -24,6 +24,7 @@ import com.simibubi.create.foundation.utility.NBTHelper;
 import com.simibubi.create.foundation.utility.VecHelper;
 
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import io.github.fabricators_of_create.porting_lib.util.ItemStackUtil;
@@ -31,6 +32,8 @@ import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -55,6 +58,22 @@ public class DepotBehaviour extends TileEntityBehaviour {
 	Supplier<Boolean> canAcceptItems;
 	Predicate<Direction> canFunnelsPullFrom;
 	boolean allowMerge;
+
+	SnapshotParticipant<Data> snapshotParticipant = new SnapshotParticipant<>() {
+		@Override
+		protected Data createSnapshot() {
+			return new Data(new ArrayList<>(incoming), heldItem.copy());
+		}
+
+		@Override
+		protected void readSnapshot(Data snapshot) {
+			incoming = snapshot.incoming;
+			heldItem = snapshot.held;
+		}
+	};
+
+	record Data(List<TransportedItemStack> incoming, TransportedItemStack held) {
+	}
 
 	public DepotBehaviour(SmartTileEntity te) {
 		super(te);
@@ -243,7 +262,7 @@ public class DepotBehaviour extends TileEntityBehaviour {
 		return (fromGetter == 0 ? 64 : fromGetter) - cumulativeStackSize;
 	}
 
-	public ItemStack insert(TransportedItemStack heldItem, boolean simulate) {
+	public ItemStack insert(TransportedItemStack heldItem, TransactionContext ctx) {
 		if (!canAcceptItems.get())
 			return heldItem.stack;
 
@@ -258,35 +277,29 @@ public class DepotBehaviour extends TileEntityBehaviour {
 			ItemStack returned = ItemStack.EMPTY;
 			if (remainingSpace < inserted.getCount()) {
 				returned = ItemHandlerHelper.copyStackWithSize(heldItem.stack, inserted.getCount() - remainingSpace);
-				if (!simulate) {
-					TransportedItemStack copy = heldItem.copy();
-					copy.stack.setCount(remainingSpace);
-					if (this.heldItem != null)
-						incoming.add(copy);
-					else
-						this.heldItem = copy;
-				}
+				TransportedItemStack copy = heldItem.copy();
+				copy.stack.setCount(remainingSpace);
+				if (this.heldItem != null)
+					incoming.add(copy);
+				else
+					this.heldItem = copy;
 			} else {
-				if (!simulate) {
-					if (this.heldItem != null)
-						incoming.add(heldItem);
-					else
-						this.heldItem = heldItem;
-				}
+				if (this.heldItem != null)
+					incoming.add(heldItem);
+				else
+					this.heldItem = heldItem;
 			}
 			return returned;
 		}
 
-		if (!simulate) {
-			if (this.isEmpty()) {
-				if (heldItem.insertedFrom.getAxis()
+		if (this.isEmpty()) {
+			if (heldItem.insertedFrom.getAxis()
 					.isHorizontal())
-					AllSoundEvents.DEPOT_SLIDE.playOnServer(getWorld(), getPos());
-				else
-					AllSoundEvents.DEPOT_PLOP.playOnServer(getWorld(), getPos());
-			}
-			this.heldItem = heldItem;
+				TransactionCallback.onSuccess(ctx, () -> AllSoundEvents.DEPOT_SLIDE.playOnServer(getWorld(), getPos()));
+			else
+				TransactionCallback.onSuccess(ctx, () -> AllSoundEvents.DEPOT_PLOP.playOnServer(getWorld(), getPos()));
 		}
+		this.heldItem = heldItem;
 		return ItemStack.EMPTY;
 	}
 
@@ -325,11 +338,16 @@ public class DepotBehaviour extends TileEntityBehaviour {
 		transportedStack.insertedFrom = side;
 		transportedStack.prevSideOffset = transportedStack.sideOffset;
 		transportedStack.prevBeltPosition = transportedStack.beltPosition;
-		ItemStack remainder = insert(transportedStack, simulate);
-		if (remainder.getCount() != size)
-			tileEntity.notifyUpdate();
+		try (Transaction t = TransferUtil.getTransaction()) {
+			snapshotParticipant.updateSnapshots(t);
+			ItemStack remainder = insert(transportedStack, t);
+			if (remainder.getCount() != size)
+				tileEntity.notifyUpdate();
+			if (!simulate)
+				t.commit();
 
-		return remainder;
+			return remainder;
+		}
 	}
 
 	private void applyToAllItems(float maxDistanceFromCentre,

@@ -7,6 +7,11 @@ import java.util.Queue;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.simibubi.create.AllBlocks;
@@ -159,7 +164,7 @@ public class MountedContraption extends Contraption {
 	public void addExtraInventories(Entity cart) {
 		if (!(cart instanceof Container))
 			return;
-		IItemHandlerModifiable handlerFromInv = new ContraptionInvWrapper(true, new InvWrapper((Container) cart));
+		Storage<ItemVariant> handlerFromInv = new ContraptionInvWrapper(true, InventoryStorage.of((Container) cart, null));
 		inventory = new ContraptionInvWrapper(handlerFromInv, inventory);
 	}
 

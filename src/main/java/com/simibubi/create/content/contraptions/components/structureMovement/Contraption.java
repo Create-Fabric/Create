@@ -1108,7 +1108,8 @@ public abstract class Contraption {
 					Block.UPDATE_MOVE_BY_PISTON | Block.UPDATE_ALL, 512);
 		}
 
-		TransferUtil.clearStorage(inventory);
+
+		clearInternal(inventory);
 		TransferUtil.clearStorage(fluidInventory);
 
 		for (Pair<BlockPos, Direction> pair : superglue) {
@@ -1119,6 +1120,14 @@ public abstract class Contraption {
 			if (entity.onValidSurface()) {
 				if (!world.isClientSide)
 					world.addFreshEntity(entity);
+			}
+		}
+	}
+
+	private void clearInternal(ContraptionInvWrapper inv) {
+		for (Storage<ItemVariant> storage : inv.parts) {
+			if (!(storage instanceof ContraptionInvWrapper wrapper) || !wrapper.isExternal) {
+				TransferUtil.clearStorage(storage);
 			}
 		}
 	}
@@ -1340,13 +1349,6 @@ public abstract class Contraption {
 
 		public ContraptionInvWrapper(Storage<ItemVariant>... itemHandler) {
 			this(false, itemHandler);
-		}
-
-		public boolean isSlotExternal(int slot) {
-			if (isExternal)
-				return true;
-			IItemHandlerModifiable handler = getHandlerFromIndex(getIndexForSlot(slot));
-			return handler instanceof ContraptionInvWrapper && ((ContraptionInvWrapper) handler).isSlotExternal(slot);
 		}
 	}
 }
