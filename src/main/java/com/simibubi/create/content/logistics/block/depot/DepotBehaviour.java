@@ -62,13 +62,18 @@ public class DepotBehaviour extends TileEntityBehaviour {
 	SnapshotParticipant<Data> snapshotParticipant = new SnapshotParticipant<>() {
 		@Override
 		protected Data createSnapshot() {
-			return new Data(new ArrayList<>(incoming), heldItem.copy());
+			return new Data(new ArrayList<>(incoming), heldItem == null ? null : heldItem.copy());
 		}
 
 		@Override
 		protected void readSnapshot(Data snapshot) {
 			incoming = snapshot.incoming;
 			heldItem = snapshot.held;
+		}
+
+		@Override
+		protected void onFinalCommit() {
+			tileEntity.notifyUpdate();
 		}
 	};
 

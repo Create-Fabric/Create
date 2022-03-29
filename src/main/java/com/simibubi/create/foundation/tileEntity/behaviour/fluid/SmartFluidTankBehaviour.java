@@ -203,34 +203,21 @@ public class SmartFluidTankBehaviour extends TileEntityBehaviour {
 
 		@Override
 		public long insert(FluidVariant resource, long maxAmount, TransactionContext transaction) {
+			if (!insertionAllowed)
+				return 0;
 			return super.insert(resource, maxAmount, transaction);
 		}
 
+		public long forceFill(FluidStack resource, TransactionContext ctx) {
+			return super.insert(resource.getType(), resource.getAmount(), ctx);
+		}
+
 		@Override
-		public long fill(FluidStack resource, boolean sim) {
-			if (!insertionAllowed)
+		public long extract(FluidVariant resource, long maxAmount, TransactionContext transaction) {
+			if (!extractionAllowed)
 				return 0;
-			return super.fill(resource, sim);
+			return super.extract(resource, maxAmount, transaction);
 		}
-
-		public long forceFill(FluidStack resource, boolean sim) {
-			return super.fill(resource, sim);
-		}
-
-		@Override
-		public FluidStack drain(FluidStack resource, boolean sim) {
-			if (!extractionAllowed)
-				return FluidStack.EMPTY;
-			return super.drain(resource, sim);
-		}
-
-		@Override
-		public FluidStack drain(long maxDrain, boolean sim) {
-			if (!extractionAllowed)
-				return FluidStack.EMPTY;
-			return super.drain(maxDrain, sim);
-		}
-
 	}
 
 	public class TankSegment {

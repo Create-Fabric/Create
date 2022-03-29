@@ -1,13 +1,22 @@
 package com.simibubi.create.content.curiosities.tools;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.PlayerInventoryStorage;
+
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
+
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 
 import org.apache.commons.lang3.Validate;
 
@@ -365,74 +374,70 @@ public class BlueprintEntity extends HangingEntity
 			Optional<CraftingRecipe> recipe = Optional.empty();
 
 			do {
-				Map<Integer, ItemStack> stacksTaken = new HashMap<>();
-				Map<Integer, ItemStack> craftingGrid = new HashMap<>();
-				boolean success = true;
+				try (Transaction t = TransferUtil.getTransaction()) {
+					Map<Integer, ItemStack> craftingGrid = new HashMap<>();
+					boolean success = true;
 
-				Search: for (int i = 0; i < 9; i++) {
-					ItemStack requestedItem = items.getStackInSlot(i);
-					if (requestedItem.isEmpty()) {
-						craftingGrid.put(i, ItemStack.EMPTY);
-						continue;
-					}
-
-					for (int slot = 0; slot < playerInv.getSlots(); slot++) {
-						if (!FilterItem.test(level, playerInv.getStackInSlot(slot), requestedItem))
+					Search:
+					for (int i = 0; i < 9; i++) {
+						ItemStack requestedItem = items.getStackInSlot(i);
+						if (requestedItem.isEmpty()) {
+							craftingGrid.put(i, ItemStack.EMPTY);
 							continue;
-						ItemStack currentItem = playerInv.extractItem(slot, 1, false);
-						if (stacksTaken.containsKey(slot))
-							stacksTaken.get(slot)
-								.grow(1);
-						else
-							stacksTaken.put(slot, currentItem.copy());
-						craftingGrid.put(i, currentItem);
-						continue Search;
+						}
+
+						ResourceAmount<ItemVariant> resource = StorageUtil.findExtractableContent(
+								playerInv, v -> FilterItem.test(level, v.toStack(), requestedItem), t);
+						if (resource != null) {
+							playerInv.extract(resource.resource(), 1, t);
+							craftingGrid.put(i, resource.resource().toStack());
+							continue Search;
+						}
+
+						success = false;
+						break;
 					}
 
-					success = false;
-					break;
-				}
+					if (success) {
+						CraftingContainer craftingInventory = new BlueprintCraftingInventory(craftingGrid);
 
-				if (success) {
-					CraftingContainer craftingInventory = new BlueprintCraftingInventory(craftingGrid);
+						if (!recipe.isPresent())
+							recipe = level.getRecipeManager()
+									.getRecipeFor(RecipeType.CRAFTING, craftingInventory, level);
+						ItemStack result = recipe.filter(r -> r.matches(craftingInventory, level))
+								.map(r -> r.assemble(craftingInventory))
+								.orElse(ItemStack.EMPTY);
 
-					if (!recipe.isPresent())
-						recipe = level.getRecipeManager()
-							.getRecipeFor(RecipeType.CRAFTING, craftingInventory, level);
-					ItemStack result = recipe.filter(r -> r.matches(craftingInventory, level))
-						.map(r -> r.assemble(craftingInventory))
-						.orElse(ItemStack.EMPTY);
-
-					if (result.isEmpty()) {
-						success = false;
-					} else if (result.getCount() + amountCrafted > 64) {
-						success = false;
-					} else {
-						amountCrafted += result.getCount();
-						result.onCraftedBy(player.level, player, 1);
+						if (result.isEmpty()) {
+							success = false;
+						} else if (result.getCount() + amountCrafted > 64) {
+							success = false;
+						} else {
+							amountCrafted += result.getCount();
+							result.onCraftedBy(player.level, player, 1);
 //						ForgeEventFactory.firePlayerCraftingEvent(player, result, craftingInventory);
-						NonNullList<ItemStack> nonnulllist = level.getRecipeManager()
-							.getRemainingItemsFor(RecipeType.CRAFTING, craftingInventory, level);
+							NonNullList<ItemStack> nonnulllist = level.getRecipeManager()
+									.getRemainingItemsFor(RecipeType.CRAFTING, craftingInventory, level);
 
-						if (firstPass)
-							level.playSound(null, player.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS,
-								.2f, 1f + Create.RANDOM.nextFloat());
-						player.getInventory()
-							.placeItemBackInInventory(result);
-						for (ItemStack itemStack : nonnulllist)
+							if (firstPass)
+								level.playSound(null, player.blockPosition(), SoundEvents.ITEM_PICKUP, SoundSource.PLAYERS,
+										.2f, 1f + Create.RANDOM.nextFloat());
 							player.getInventory()
-								.placeItemBackInInventory(itemStack);
-						firstPass = false;
+									.placeItemBackInInventory(result);
+							for (ItemStack itemStack : nonnulllist)
+								player.getInventory()
+										.placeItemBackInInventory(itemStack);
+							firstPass = false;
+						}
 					}
-				}
 
-				if (!success) {
-					for (Entry<Integer, ItemStack> entry : stacksTaken.entrySet())
-						playerInv.insertItem(entry.getKey(), entry.getValue(), false);
-					break;
+					if (!success) {
+						t.abort();
+						break;
+					} else t.commit();
 				}
-
 			} while (player.isShiftKeyDown());
+
 //			ForgeHooks.setCraftingPlayer(null);
 			return InteractionResult.SUCCESS;
 		}

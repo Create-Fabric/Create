@@ -291,13 +291,4 @@ public class ItemHelper {
 //		else
 //			return inv.getStackInSlot(slot);
 //	}
-
-	public static int findFirstMatchingSlotIndex(Storage<ItemVariant> inv, Predicate<ItemStack> test) {
-		for (int slot = 0; slot < inv.getSlots(); slot++) {
-			ItemStack toTest = inv.getStackInSlot(slot);
-			if (test.test(toTest))
-				return slot;
-		}
-		return -1;
-	}
 }

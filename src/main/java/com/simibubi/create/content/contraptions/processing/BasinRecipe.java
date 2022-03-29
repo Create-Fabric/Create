@@ -18,6 +18,7 @@ import com.simibubi.create.foundation.tileEntity.behaviour.fluid.SmartFluidTankB
 import com.simibubi.create.foundation.tileEntity.behaviour.fluid.SmartFluidTankBehaviour.TankSegment;
 import com.simibubi.create.foundation.utility.Iterate;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -83,88 +84,60 @@ public class BasinRecipe extends ProcessingRecipe<SmartInventory> {
 		List<FluidIngredient> fluidIngredients =
 			isBasinRecipe ? ((BasinRecipe) recipe).getFluidIngredients() : Collections.emptyList();
 
-		for (boolean simulate : Iterate.trueAndFalse) {
-
-			if (!simulate && test)
-				return true;
-
-			int[] extractedItemsFromSlot = new int[availableItems.getSlots()];
-			int[] extractedFluidsFromTank = new int[availableFluids.getTanks()];
-
-			Ingredients: for (int i = 0; i < ingredients.size(); i++) {
-				Ingredient ingredient = ingredients.get(i);
-
-				for (int slot = 0; slot < availableItems.getSlots(); slot++) {
-					if (simulate && availableItems.getStackInSlot(slot)
-							.getCount() <= extractedItemsFromSlot[slot])
-						continue;
-					ItemStack extracted = availableItems.extractItem(slot, 1, true);
-					if (!ingredient.test(extracted))
-						continue;
+		try (Transaction t = TransferUtil.getTransaction()) {
+			Ingredients: for (Ingredient ingredient : ingredients) {
+				for (StorageView<ItemVariant> view : availableItems.iterable(t)) {
+					if (view.isResourceBlank()) continue;
+					ItemVariant var = view.getResource();
+					ItemStack stack = var.toStack();
+					if (!ingredient.test(stack)) continue;
 					// Catalyst items are never consumed
-					if (extracted.hasContainerItem() && extracted.getContainerItem()
-							.sameItem(extracted))
+					if (stack.getItem().getCraftingRemainingItem() == stack.getItem())
 						continue Ingredients;
-					if (!simulate)
-						availableItems.extractItem(slot, 1, false);
-					else if (extracted.hasContainerItem())
-						recipeOutputItems.add(extracted.getContainerItem()
-								.copy());
-					extractedItemsFromSlot[slot]++;
-					continue Ingredients;
+					if (view.extract(var, 1, t) == 1) {
+						if (stack.getItem().hasCraftingRemainingItem())
+							recipeOutputItems.add(stack);
+						continue Ingredients;
+					}
 				}
-
 				// something wasn't found
 				return false;
 			}
 
 			boolean fluidsAffected = false;
-FluidIngredients: for (int i = 0; i < fluidIngredients.size(); i++) {
-				FluidIngredient fluidIngredient = fluidIngredients.get(i);
-				int amountRequired = fluidIngredient.getRequiredAmount();
-
-				for (int tank = 0; tank < availableFluids.getTanks(); tank++) {
-					FluidStack fluidStack = availableFluids.getFluidInTank(tank);
-					if (simulate && fluidStack.getAmount() <= extractedFluidsFromTank[tank])
-						continue;
-					if (!fluidIngredient.test(fluidStack))
-						continue;
-					int drainedAmount = Math.min(amountRequired, fluidStack.getAmount());
-					if (!simulate) {
-						fluidStack.shrink(drainedAmount);
+			FluidIngredients: for (FluidIngredient fluidIngredient : fluidIngredients) {
+			long amountRequired = fluidIngredient.getRequiredAmount();
+				for (StorageView<FluidVariant> view : availableFluids.iterable(t)) {
+					if (view.isResourceBlank()) continue;
+					FluidStack fluidStack = new FluidStack(view);
+					if (!fluidIngredient.test(fluidStack)) continue;
+					long drainedAmount = Math.min(amountRequired, fluidStack.getAmount());
+					if (view.extract(fluidStack.getType(), drainedAmount, t) == drainedAmount) {
 						fluidsAffected = true;
+						amountRequired -= drainedAmount;
+						if (amountRequired != 0) continue;
+						continue FluidIngredients;
 					}
-					amountRequired -= drainedAmount;
-					if (amountRequired != 0)
-						continue;
-					extractedFluidsFromTank[tank] += drainedAmount;
-					continue FluidIngredients;
 				}
-
 				// something wasn't found
 				return false;
 			}
 
 			if (fluidsAffected) {
-				basin.getBehaviour(SmartFluidTankBehaviour.INPUT)
-						.forEach(TankSegment::onFluidStackChanged);
-				basin.getBehaviour(SmartFluidTankBehaviour.OUTPUT)
-						.forEach(TankSegment::onFluidStackChanged);
+				TransactionCallback.onSuccess(t, () -> {
+					basin.getBehaviour(SmartFluidTankBehaviour.INPUT)
+							.forEach(TankSegment::onFluidStackChanged);
+					basin.getBehaviour(SmartFluidTankBehaviour.OUTPUT)
+							.forEach(TankSegment::onFluidStackChanged);
+				});
 			}
 
-			if (simulate) {
-				if (recipe instanceof BasinRecipe) {
-					recipeOutputItems.addAll(((BasinRecipe) recipe).rollResults());
-					recipeOutputFluids.addAll(((BasinRecipe) recipe).getFluidResults());
-				} else
-					recipeOutputItems.add(recipe.getResultItem());
-			}
-
-			if (!basin.acceptOutputs(recipeOutputItems, recipeOutputFluids, simulate))
+			if (!basin.acceptOutputs(recipeOutputItems, recipeOutputFluids, t))
 				return false;
-		}
 
-		return true;
+			if (!test) t.commit();
+			return true;
+		}
 	}
 
 	public static BasinRecipe convertShapeless(Recipe<?> recipe) {

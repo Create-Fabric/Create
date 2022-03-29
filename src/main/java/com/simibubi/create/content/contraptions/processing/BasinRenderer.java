@@ -1,5 +1,6 @@
 package com.simibubi.create.content.contraptions.processing;
 
+import java.util.List;
 import java.util.Random;
 
 import com.jozufozu.flywheel.util.transform.TransformStack;
@@ -12,11 +13,14 @@ import com.simibubi.create.foundation.utility.AngleHelper;
 import com.simibubi.create.foundation.utility.AnimationTickHolder;
 import com.simibubi.create.foundation.utility.IntAttached;
 import com.simibubi.create.foundation.utility.VecHelper;
+
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
@@ -56,19 +60,14 @@ public class BasinRenderer extends SmartTileEntityRenderer<BasinTileEntity> {
 		Storage<ItemVariant> inv = basin.itemCapability;
 		if (inv != null) {
 			int itemCount = 0;
-			for (int slot = 0; slot < inv.getSlots(); slot++)
-				if (!inv.getStackInSlot(slot)
-						.isEmpty())
-					itemCount++;
+			List<ItemStack> stacks = TransferUtil.getAllItems(inv);
+			itemCount = stacks.size();
 
 			if (itemCount == 1)
 				baseVector = new Vec3(0, level, 0);
 
 			float anglePartition = 360f / itemCount;
-			for (int slot = 0; slot < inv.getSlots(); slot++) {
-				ItemStack stack = inv.getStackInSlot(slot);
-				if (stack.isEmpty())
-					continue;
+			for (ItemStack stack : stacks) {
 
 				ms.pushPose();
 

@@ -83,8 +83,7 @@ public class FluidTankScenes {
 		scene.idle(5);
 		FluidStack content = new FluidStack(AllFluids.CHOCOLATE.get()
 			.getSource(), FluidConstants.BUCKET * 16);
-		scene.world.modifyTileEntity(tankPos, FluidTankTileEntity.class, te -> te.getTankInventory()
-			.fill(content, false));
+		scene.world.modifyTileEntity(tankPos, FluidTankTileEntity.class, te -> TransferUtil.insertFluid(te.getTankInventory(), content));
 		scene.idle(25);
 
 		scene.world.moveSection(tankLink, util.vector.of(0, 0, 1), 10);
@@ -105,13 +104,11 @@ public class FluidTankScenes {
 		scene.world.multiplyKineticSpeed(pumpCogs, -1);
 		scene.world.propagatePipeChange(pumpPos);
 		scene.effects.rotationDirectionIndicator(pumpPos);
-		scene.world.modifyTileEntity(util.grid.at(2, 0, 5), FluidTankTileEntity.class, te -> te.getTankInventory()
-			.fill(content, false));
+		scene.world.modifyTileEntity(util.grid.at(2, 0, 5), FluidTankTileEntity.class, te -> TransferUtil.insertFluid(te.getTankInventory(), content));
 		scene.idle(20);
 
 		for (int i = 0; i < 4; i++) {
-			scene.world.modifyTileEntity(tankPos, FluidTankTileEntity.class, te -> te.getTankInventory()
-				.drain(FluidConstants.BUCKET * 2, false));
+			scene.world.modifyTileEntity(tankPos, FluidTankTileEntity.class, te -> TransferUtil.extractAnyFluid(te.getTankInventory(), FluidConstants.BUCKET * 2));
 			scene.idle(5);
 		}
 
@@ -127,8 +124,7 @@ public class FluidTankScenes {
 		scene.world.propagatePipeChange(pumpPos);
 		scene.effects.rotationDirectionIndicator(pumpPos);
 		for (int i = 0; i < 4; i++) {
-			scene.world.modifyTileEntity(tankPos, FluidTankTileEntity.class, te -> te.getTankInventory()
-				.fill(FluidHelper.copyStackWithAmount(content, FluidConstants.BUCKET * 2), false));
+			scene.world.modifyTileEntity(tankPos, FluidTankTileEntity.class, te -> TransferUtil.insert(te.getTankInventory(), content.getType(), FluidConstants.BUCKET * 2));
 			scene.idle(5);
 		}
 		scene.idle(40);
@@ -171,8 +167,7 @@ public class FluidTankScenes {
 			.pointAt(util.vector.blockSurface(util.grid.at(2, 2, 2), Direction.WEST));
 		scene.idle(80);
 		scene.world.modifyTileEntity(util.grid.at(4, 3, 0), SpoutTileEntity.class,
-			te -> TransferUtil.getFluidHandler(te)
-				.ifPresent(ifh -> ifh.fill(content, false)));
+			te -> TransferUtil.insertFluid(te.getFluidStorage(null), content));
 
 		scene.world.moveSection(tankLink, util.vector.of(0, 0, 1), 7);
 		scene.world.multiplyKineticSpeed(spoutstuff, -1);
