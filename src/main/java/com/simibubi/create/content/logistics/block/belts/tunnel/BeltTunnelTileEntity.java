@@ -9,6 +9,7 @@ import java.util.Set;
 
 import com.simibubi.create.content.contraptions.relays.belt.BeltTileEntity;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -50,7 +51,7 @@ public class BeltTunnelTileEntity extends SmartTileEntity implements ItemTransfe
 	public Map<Direction, InterpolatedChasingValue> flaps;
 	public Set<Direction> sides;
 
-	protected BlockApiCache<Storage<ItemVariant>, Direction> belowStorageCache = null;
+	protected BlockApiCache<Storage<ItemVariant>, Direction> belowStorageCache;
 	protected List<Pair<Direction, Boolean>> flapsToSend;
 
 	public BeltTunnelTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -58,7 +59,7 @@ public class BeltTunnelTileEntity extends SmartTileEntity implements ItemTransfe
 		flaps = new EnumMap<>(Direction.class);
 		sides = new HashSet<>();
 		flapsToSend = new LinkedList<>();
-		if (level instanceof ServerLevel server) belowStorageCache = BlockApiCache.create(ItemStorage.SIDED, server, pos.below());
+		belowStorageCache = TransferUtil.getItemCache(level, pos.below());
 	}
 
 	@Override

@@ -82,7 +82,7 @@ public class BrassTunnelTileEntity extends BeltTunnelTileEntity implements IHave
 	private Set<BrassTunnelTileEntity> syncSet;
 
 	protected ScrollOptionBehaviour<SelectionMode> selectionMode;
-	private BlockApiCache<Storage<ItemVariant>, Direction> beltCapabilityCache;
+	private final BlockApiCache<Storage<ItemVariant>, Direction> beltCapabilityCache;
 	private BrassTunnelItemHandler tunnelCapability;
 
 	public BrassTunnelTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -90,9 +90,7 @@ public class BrassTunnelTileEntity extends BeltTunnelTileEntity implements IHave
 		distributionTargets = Couple.create(ArrayList::new);
 		syncSet = new HashSet<>();
 		stackToDistribute = ItemStack.EMPTY;
-		if (level instanceof ServerLevel server) {
-			beltCapabilityCache = BlockApiCache.create(ItemStorage.SIDED, server, pos.below());
-		}
+		beltCapabilityCache = TransferUtil.getItemCache(level, pos.below());
 		tunnelCapability = new BrassTunnelItemHandler(this);
 		previousOutputIndex = 0;
 		syncedOutputActive = false;

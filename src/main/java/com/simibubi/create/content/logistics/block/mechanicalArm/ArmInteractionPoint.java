@@ -1,12 +1,15 @@
 package com.simibubi.create.content.logistics.block.mechanicalArm;
 
 import java.util.HashMap;
+import java.util.IdentityHashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
 import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -14,6 +17,8 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+
+import net.minecraft.server.level.ServerLevel;
 
 import org.apache.commons.lang3.mutable.MutableBoolean;
 
@@ -83,7 +88,7 @@ public abstract class ArmInteractionPoint {
 	protected BlockState state;
 	protected Mode mode;
 
-	protected BlockApiCache<Storage<ItemVariant>, Direction> handlerCache;
+	protected Map<Level, BlockApiCache<Storage<ItemVariant>, Direction>> handlerCaches = new IdentityHashMap<>();
 	protected ArmAngleTarget cachedAngles;
 
 	protected static final HashMap<ArmInteractionPoint, Supplier<ArmInteractionPoint>> POINTS = new HashMap<>();
@@ -157,7 +162,12 @@ public abstract class ArmInteractionPoint {
 
 	@Nullable
 	protected Storage<ItemVariant> getHandler(Level world) {
-		return handlerCache.find(Direction.UP);
+		BlockApiCache<Storage<ItemVariant>, Direction> cache = getHandlerCache(world);
+		return cache == null ? null : cache.find(Direction.UP);
+	}
+
+	protected BlockApiCache<Storage<ItemVariant>, Direction> getHandlerCache(Level level) {
+		return handlerCaches.computeIfAbsent(level, $ -> TransferUtil.getItemCache(level, pos));
 	}
 
 	protected ItemStack insert(Level world, ItemStack stack, TransactionContext ctx) {

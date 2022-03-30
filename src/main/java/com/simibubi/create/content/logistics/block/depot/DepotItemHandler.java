@@ -93,8 +93,8 @@ public class DepotItemHandler implements Storage<ItemVariant> {
 		private final ItemStack stack;
 
 		public MainSlotStorageView() {
-			ItemStack stack = te.heldItem.stack;
-			this.stack = stack == null ? ItemStack.EMPTY : stack;
+			TransportedItemStack stack = te.heldItem;
+			this.stack = stack == null ? ItemStack.EMPTY : stack.stack;
 			update();
 		}
 

@@ -122,10 +122,8 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 		itemPosition = new InterpolatedValue();
 		itemHandler = new ChuteItemHandler(this);
 		canPickUpItems = false;
-		if (level instanceof ServerLevel server) {
-			capAbove = BlockApiCache.create(ItemStorage.SIDED, server, getBlockPos().above());
-			capBelow = BlockApiCache.create(ItemStorage.SIDED, server, getBlockPos().below());
-		}
+		capAbove = TransferUtil.getItemCache(level, pos.above());
+		capBelow = TransferUtil.getItemCache(level, pos.below());
 		bottomPullDistance = 0;
 		//		airCurrent = new AirCurrent(this);
 		updateAirFlow = true;
