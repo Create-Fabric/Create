@@ -156,7 +156,7 @@ public class FluidTankConnectivityHandler {
 		BlockPos origin = te.getBlockPos();
 		Storage<FluidVariant> capability = te.getFluidStorage(null);
 		FluidTank teTank = (FluidTank) capability;
-		FluidStack fluid = TransferUtil.getFirstFluid(teTank);
+		FluidStack fluid = TransferUtil.firstOrEmpty(teTank);
 
 		Search:
 

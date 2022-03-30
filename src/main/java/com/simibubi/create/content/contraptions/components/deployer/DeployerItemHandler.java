@@ -156,8 +156,8 @@ public class DeployerItemHandler extends SnapshotParticipant<ItemStack> implemen
 		}
 
 		private void update() {
-//			this.stack = getHeld();
-//			this.var = ItemVariant.of(stack);
+			this.stack = getHeld();
+			this.var = ItemVariant.of(stack);
 		}
 
 		@Override

@@ -55,7 +55,7 @@ public class FluidNetwork {
 		this.world = world;
 		this.start = location;
 		this.sourceSupplier = sourceSupplier;
-		this.source = Storage.empty();
+		this.source = null;
 		this.fluid = FluidStack.EMPTY;
 		this.frontier = new HashSet<>();
 		this.visited = new HashSet<>();
@@ -235,6 +235,7 @@ public class FluidNetwork {
 
 			flowSpeed -= transfer.getAmount();
 			transfer = FluidStack.EMPTY;
+			t.commit();
 		}
 	}
 

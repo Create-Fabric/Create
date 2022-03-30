@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -74,16 +75,12 @@ public class MechanicalCrafterTileEntity extends KineticTileEntity implements It
 				return 0;
 			if (te.covered)
 				return 0;
-			long extracted = handler.extract(resource, maxAmount, transaction);
-			if (extracted != 0)
-				transaction.addOuterCloseCallback(r -> {
-					if (r.wasCommitted())
-						te.getLevel()
-							.playSound(null, te.getBlockPos(), SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, .25f,
-									.5f);
-				});
-
-			return extracted;
+			long inserted = handler.insert(resource, maxAmount, transaction);
+			if (inserted != 0)
+				TransactionCallback.onSuccess(transaction, () -> te.getLevel()
+						.playSound(null, te.getBlockPos(), SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, .25f,
+								.5f));
+			return inserted;
 		}
 
 	}

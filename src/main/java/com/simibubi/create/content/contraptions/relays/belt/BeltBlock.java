@@ -213,7 +213,7 @@ public class BeltBlock extends HorizontalKineticBlock implements ITE<BeltTileEnt
 				return;
 			withTileEntityDo(worldIn, pos, te -> {
 				ItemEntity itemEntity = (ItemEntity) entityIn;
-				Storage<ItemVariant> handler = ItemStorage.SIDED.find(worldIn, pos, state, te, null); // TODO TRANSFER DIRECTIONS
+				Storage<ItemVariant> handler = te.getItemStorage(null);
 				if (handler == null)
 					return;
 				ItemStack inEntity = itemEntity.getItem();
@@ -222,6 +222,7 @@ public class BeltBlock extends HorizontalKineticBlock implements ITE<BeltTileEnt
 					if (inEntity.getCount() == inserted) {
 						itemEntity.discard();
 					}
+					t.commit();
 				}
 			});
 			return;
