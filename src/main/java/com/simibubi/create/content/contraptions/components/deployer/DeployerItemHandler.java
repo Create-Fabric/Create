@@ -11,6 +11,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Iterator;
+import java.util.ListIterator;
 
 public class DeployerItemHandler extends SnapshotParticipant<ItemStack> implements Storage<ItemVariant> {
 
@@ -124,6 +125,7 @@ public class DeployerItemHandler extends SnapshotParticipant<ItemStack> implemen
 	public class DeployerItemHandlerIterator implements Iterator<StorageView<ItemVariant>> {
 		private int index = 0;
 		private boolean open = true;
+		private boolean hand = false;
 
 		public DeployerItemHandlerIterator(TransactionContext ctx) {
 			ctx.addCloseCallback((t, r) -> open = false);
@@ -131,15 +133,17 @@ public class DeployerItemHandler extends SnapshotParticipant<ItemStack> implemen
 
 		@Override
 		public boolean hasNext() {
-			return open && index < te.overflowItems.size() + 1;
+			return open && (index < te.overflowItems.size() || hand);
 		}
 
 		@Override
 		public StorageView<ItemVariant> next() {
-			if (index >= te.overflowItems.size()) {
+			if (index < te.overflowItems.size()) {
+				return new DeployerSlotView(index++);
+			} else {
+				hand = false;
 				return new DeployerHeldSlotView();
 			}
-			return new DeployerSlotView(index++);
 		}
 	}
 
@@ -152,8 +156,8 @@ public class DeployerItemHandler extends SnapshotParticipant<ItemStack> implemen
 		}
 
 		private void update() {
-			this.stack = getHeld();
-			this.var = ItemVariant.of(stack);
+//			this.stack = getHeld();
+//			this.var = ItemVariant.of(stack);
 		}
 
 		@Override
@@ -191,7 +195,7 @@ public class DeployerItemHandler extends SnapshotParticipant<ItemStack> implemen
 
 		@Override
 		public boolean isResourceBlank() {
-			return stack.isEmpty();
+			return stack == null || stack.isEmpty();
 		}
 
 		@Override

@@ -247,8 +247,9 @@ public class ItemDrainTileEntity extends SmartTileEntity implements IHaveGoggleI
 		try (Transaction t = TransferUtil.getTransaction()) {
 			if (processingTicks > 5) {
 				internalTank.allowInsertion();
-				if (internalTank.getPrimaryHandler()
-						.insert(fluidFromItem.getType(), fluidFromItem.getAmount(), t) != 0) {
+				if (fluidFromItem.isEmpty() ||
+						internalTank.getPrimaryHandler()
+						.insert(fluidFromItem.getType(), fluidFromItem.getAmount(), t) != fluidFromItem.getAmount()) {
 					internalTank.forbidInsertion();
 					processingTicks = FILLING_TIME;
 					return true;
