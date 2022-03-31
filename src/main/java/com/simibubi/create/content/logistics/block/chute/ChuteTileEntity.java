@@ -515,6 +515,8 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 		item = stack;
 		itemPosition.lastValue = itemPosition.value = insertionPos;
 		itemHandler.update();
+		if (!level.isClientSide)
+			notifyUpdate();
 	}
 
 	@Override
