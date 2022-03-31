@@ -13,7 +13,7 @@ public class ChuteItemHandler extends SingleVariantStorage<ItemVariant> {
 		update();
 	}
 
-	private void update() {
+	public void update() {
 		this.variant = ItemVariant.of(te.item);
 		this.amount = te.item.getCount();
 	}
@@ -28,13 +28,6 @@ public class ChuteItemHandler extends SingleVariantStorage<ItemVariant> {
 	@Override
 	protected void onFinalCommit() {
 		te.setItem(variant.toStack((int) amount));
-	}
-
-	@Override
-	public void updateSnapshots(TransactionContext transaction) {
-		update();
-		super.updateSnapshots(transaction);
-		te.snapshotParticipant.updateSnapshots(transaction);
 	}
 
 	@Override

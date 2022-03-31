@@ -186,6 +186,7 @@ public class FluidTankTileEntity extends SmartTileEntity implements IHaveGoggleI
 		FluidTankTileEntity controllerTE = getControllerTE();
 		if (controllerTE == null || !controllerTE.window)
 			actualLuminosity = 0;
+		refreshBlockState();
 		BlockState state = getBlockState();
 		if (state.getValue(FluidTankBlock.LIGHT_LEVEL) != actualLuminosity) {
 			level.setBlock(worldPosition, state.setValue(FluidTankBlock.LIGHT_LEVEL, actualLuminosity), 22);

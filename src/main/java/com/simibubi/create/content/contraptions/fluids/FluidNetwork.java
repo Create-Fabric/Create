@@ -194,20 +194,22 @@ public class FluidNetwork {
 				return;
 
 			FluidStack transfer = FluidStack.EMPTY;
-			long extracted = handler.extract(fluid.getType(), flowSpeed, t);
-			if (extracted != 0) transfer = new FluidStack(fluid.getType(), extracted);
+			long transferredAmount = 0;
+			try (Transaction test = t.openNested()) {
+				long extracted = handler.extract(fluid.getType(), flowSpeed, test);
+				if (extracted != 0) transfer = new FluidStack(fluid.getType(), extracted);
 
-			if (transfer.isEmpty())
-				return;
-			flowSpeed = transfer.getAmount();
-
+				if (transfer.isEmpty())
+					return;
+				flowSpeed = transfer.getAmount();
+			}
 			List<Pair<BlockFace, Storage<FluidVariant>>> availableOutputs = new ArrayList<>(targets);
 			while (!availableOutputs.isEmpty() && transfer.getAmount() > 0) {
 				long dividedTransfer = transfer.getAmount() / availableOutputs.size();
 				long remainder = transfer.getAmount() % availableOutputs.size();
 
 				for (Iterator<Pair<BlockFace, Storage<FluidVariant>>> iterator =
-					availableOutputs.iterator(); iterator.hasNext();) {
+					 availableOutputs.iterator(); iterator.hasNext();) {
 					Pair<BlockFace, Storage<FluidVariant>> pair = iterator.next();
 					long toTransfer = dividedTransfer;
 					if (remainder > 0) {
@@ -227,6 +229,7 @@ public class FluidNetwork {
 					divided.setAmount(toTransfer);
 					long fill = targetHandler.insert(divided.getType(), divided.getAmount(), t);
 					transfer.setAmount(transfer.getAmount() - fill);
+					transferredAmount += fill;
 					if (fill < toTransfer)
 						iterator.remove();
 				}
@@ -235,6 +238,10 @@ public class FluidNetwork {
 
 			flowSpeed -= transfer.getAmount();
 			transfer = FluidStack.EMPTY;
+			try (Transaction extract = t.openNested()) {
+				handler.extract(fluid.getType(), transferredAmount, extract);
+				extract.commit();
+			}
 			t.commit();
 		}
 	}

@@ -31,7 +31,6 @@ import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.foundation.utility.animation.InterpolatedValue;
 import io.github.fabricators_of_create.porting_lib.block.CustomRenderBoundingBoxBlockEntity;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
 import io.github.fabricators_of_create.porting_lib.util.ItemStackUtil;
 import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
@@ -40,8 +39,6 @@ import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
@@ -90,28 +87,6 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 
 	BlockApiCache<Storage<ItemVariant>, Direction> capAbove;
 	BlockApiCache<Storage<ItemVariant>, Direction> capBelow;
-
-	final SnapshotParticipant<ChuteData> snapshotParticipant = new SnapshotParticipant<>() {
-		@Override
-		protected ChuteData createSnapshot() {
-			return new ChuteData(item.copy(), itemPosition.lastValue, itemPosition.value);
-		}
-
-		@Override
-		protected void readSnapshot(ChuteData snapshot) {
-			item = snapshot.stack;
-			itemPosition.lastValue = snapshot.lastPos;
-			itemPosition.value = snapshot.value;
-		}
-
-		@Override
-		protected void onFinalCommit() {
-			notifyUpdate();
-		}
-	};
-
-	private record ChuteData(ItemStack stack, float lastPos, float value) {
-	}
 
 	public ChuteTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
@@ -190,32 +165,25 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 
 		if (itemMotion < 0) {
 			if (nextOffset < .5f) {
-				if (!transact(this::handleDownwardOutput))
+				if (!handleDownwardOutput(true))
 					nextOffset = .5f;
 				else if (nextOffset < 0) {
+					handleDownwardOutput(clientSide);
 					nextOffset = itemPosition.value;
 				}
 			}
 		} else if (itemMotion > 0) {
 			if (nextOffset > .5f) {
-				if (!transact(this::handleUpwardOutput))
+				if (!handleUpwardOutput(true))
 					nextOffset = .5f;
 				else if (nextOffset > 1) {
+					handleUpwardOutput(clientSide);
 					nextOffset = itemPosition.value;
 				}
 			}
 		}
 
 		itemPosition.set(nextOffset);
-	}
-
-	private boolean transact(Predicate<TransactionContext> consumer) {
-		try (Transaction t = TransferUtil.getTransaction()) {
-			boolean success = consumer.test(t);
-			boolean client = (level != null && level.isClientSide && !isVirtual());
-			if (success && !client) t.commit();
-			return success;
-		}
 	}
 
 	private void updateAirFlow(float itemSpeed) {
@@ -385,33 +353,36 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 		}
 	}
 
-	private boolean handleDownwardOutput(TransactionContext ctx) {
+	private boolean handleDownwardOutput(boolean simulate) {
 		BlockState blockState = getBlockState();
 		ChuteTileEntity targetChute = getTargetChute(blockState);
 		Direction direction = AbstractChuteBlock.getChuteFacing(blockState);
 
 		if (level == null || direction == null || !this.canOutputItems())
 			return false;
-		Storage<ItemVariant> storageBelow = grabCapability(Direction.DOWN);
-		if (storageBelow != null) {
+			Storage<ItemVariant> below = grabCapability(Direction.DOWN);
+		if (below != null) {
 			if (level.isClientSide && !isVirtual())
 				return false;
-			long inserted = storageBelow.insert(ItemVariant.of(item), item.getCount(), ctx);
-			ItemStack held = getItem();
-			ItemStack remainder = item.copy();
-			remainder.shrink((int) inserted);
-			snapshotParticipant.updateSnapshots(ctx);
-			setItem(remainder, itemPosition.get(0));
-			if (remainder.getCount() != held.getCount())
-				return true;
-			if (direction == Direction.DOWN)
-				return false;
+			try (Transaction t = TransferUtil.getTransaction()) {
+				long inserted = below.insert(ItemVariant.of(item), item.getCount(), t);
+				if (inserted != 0 && !simulate) t.commit();
+				ItemStack held = getItem();
+				if (!simulate) {
+					ItemStack newStack = held.copy();
+					newStack.shrink((int) inserted);
+					setItem(newStack, itemPosition.get(0));
+				}
+				if (inserted != 0)
+					return true;
+				if (direction == Direction.DOWN)
+					return false;
+			}
 		}
 
 		if (targetChute != null) {
 			boolean canInsert = targetChute.canAcceptItem(item);
-			if (canInsert) {
-				targetChute.snapshotParticipant.updateSnapshots(ctx);
+			if (!simulate && canInsert) {
 				targetChute.setItem(item, direction == Direction.DOWN ? 1 : .51f);
 				setItem(ItemStack.EMPTY);
 			}
@@ -420,7 +391,7 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 
 		// Diagonal chutes cannot drop items
 		if (direction.getAxis()
-			.isHorizontal())
+				.isHorizontal())
 			return false;
 
 		if (FunnelBlock.getFunnelFacing(level.getBlockState(worldPosition.below())) == Direction.DOWN)
@@ -428,35 +399,39 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 		if (Block.canSupportRigidBlock(level, worldPosition.below()))
 			return false;
 
-		snapshotParticipant.updateSnapshots(ctx);
-		setItem(ItemStack.EMPTY);
-		Vec3 dropVec = VecHelper.getCenterOf(worldPosition)
-				.add(0, -12 / 16f, 0);
-		TransactionCallback.onSuccess(ctx, () -> {
+		if (!simulate) {
+			Vec3 dropVec = VecHelper.getCenterOf(worldPosition)
+					.add(0, -12 / 16f, 0);
 			ItemEntity dropped = new ItemEntity(level, dropVec.x, dropVec.y, dropVec.z, item.copy());
 			dropped.setDefaultPickUpDelay();
 			dropped.setDeltaMovement(0, -.25f, 0);
 			level.addFreshEntity(dropped);
-		});
+			setItem(ItemStack.EMPTY);
+		}
 
 		return true;
 	}
 
-	private boolean handleUpwardOutput(TransactionContext ctx) {
+	private boolean handleUpwardOutput(boolean simulate) {
 		BlockState stateAbove = level.getBlockState(worldPosition.above());
 
 		if (level == null || !this.canOutputItems())
 			return false;
 
 		if (AbstractChuteBlock.isOpenChute(getBlockState())) {
-			Storage<ItemVariant> storageAbove = grabCapability(Direction.UP);
-			if (storageAbove != null) {
+			Storage<ItemVariant> above  = grabCapability(Direction.UP);
+			if (above != null) {
 				if (level.isClientSide && !isVirtual() && !ChuteBlock.isChute(stateAbove))
 					return false;
-				int countBefore = item.getCount();
-				long inserted = storageAbove.insert(ItemVariant.of(item), countBefore, ctx);
-				item.shrink((int) inserted);
-				return countBefore != item.getCount();
+				try (Transaction t = TransferUtil.getTransaction()) {
+					long inserted = above.insert(ItemVariant.of(item), item.getCount(), t);
+					if (!simulate) {
+						item = item.copy();
+						item.shrink((int) inserted);
+						itemHandler.update();
+					}
+					return inserted != 0;
+				}
 			}
 		}
 
@@ -474,9 +449,10 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 		}
 
 		if (bestOutput != null) {
-			bestOutput.snapshotParticipant.updateSnapshots(ctx);
-			bestOutput.setItem(item, 0);
-			setItem(ItemStack.EMPTY);
+			if (!simulate) {
+				bestOutput.setItem(item, 0);
+				setItem(ItemStack.EMPTY);
+			}
 			return true;
 		}
 
@@ -487,17 +463,15 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 		if (!inputChutes.isEmpty())
 			return false;
 
-
-		snapshotParticipant.updateSnapshots(ctx);
-		setItem(ItemStack.EMPTY);
-		Vec3 dropVec = VecHelper.getCenterOf(worldPosition)
-				.add(0, 8 / 16f, 0);
-		TransactionCallback.onSuccess(ctx, () -> {
+		if (!simulate) {
+			Vec3 dropVec = VecHelper.getCenterOf(worldPosition)
+					.add(0, 8 / 16f, 0);
 			ItemEntity dropped = new ItemEntity(level, dropVec.x, dropVec.y, dropVec.z, item.copy());
 			dropped.setDefaultPickUpDelay();
 			dropped.setDeltaMovement(0, getItemMotion() * 2, 0);
 			level.addFreshEntity(dropped);
-		});
+			setItem(ItemStack.EMPTY);
+		}
 		return true;
 	}
 
@@ -540,6 +514,7 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 	public void setItem(ItemStack stack, float insertionPos) {
 		item = stack;
 		itemPosition.lastValue = itemPosition.value = insertionPos;
+		itemHandler.update();
 	}
 
 	@Override

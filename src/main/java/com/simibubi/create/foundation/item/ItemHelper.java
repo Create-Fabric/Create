@@ -194,6 +194,7 @@ public class ItemHelper {
 				// if the code reaches this point, we've extracted as much as possible, and it isn't enough.
 				if (mode == ExtractionCountMode.UPTO) { // we don't need to get exactly the amount requested
 					if (variant != null && extracted != 0) {
+						if (!simulate) t.commit();
 						return variant.toStack((int) extracted);
 					}
 				}
