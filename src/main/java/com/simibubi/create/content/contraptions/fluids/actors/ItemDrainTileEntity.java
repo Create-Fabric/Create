@@ -247,12 +247,15 @@ public class ItemDrainTileEntity extends SmartTileEntity implements IHaveGoggleI
 		try (Transaction t = TransferUtil.getTransaction()) {
 			if (processingTicks > 5) {
 				internalTank.allowInsertion();
-				if (fluidFromItem.isEmpty() ||
-						internalTank.getPrimaryHandler()
-						.insert(fluidFromItem.getType(), fluidFromItem.getAmount(), t) != fluidFromItem.getAmount()) {
-					internalTank.forbidInsertion();
-					processingTicks = FILLING_TIME;
-					return true;
+				try (Transaction nested = t.openNested()) {
+					if (!fluidFromItem.isEmpty()) {
+						long inserted = internalTank.getPrimaryHandler().insert(fluidFromItem.getType(), fluidFromItem.getAmount(), nested);
+						if (inserted != fluidFromItem.getAmount()) {
+							internalTank.forbidInsertion();
+							processingTicks = FILLING_TIME;
+							return true;
+						}
+					}
 				}
 				internalTank.forbidInsertion();
 				return true;
@@ -268,6 +271,7 @@ public class ItemDrainTileEntity extends SmartTileEntity implements IHaveGoggleI
 			else
 				heldItem = null;
 			internalTank.allowInsertion();
+			TransferUtil.insertFluid(internalTank.getPrimaryHandler(), fluidFromItem);
 			t.commit();
 			internalTank.forbidInsertion();
 			notifyUpdate();

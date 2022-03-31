@@ -32,14 +32,11 @@ import com.simibubi.create.foundation.utility.animation.InterpolatedValue;
 import io.github.fabricators_of_create.porting_lib.block.CustomRenderBoundingBoxBlockEntity;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
 import io.github.fabricators_of_create.porting_lib.util.ItemStackUtil;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -54,11 +51,11 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -122,11 +119,17 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 		itemPosition = new InterpolatedValue();
 		itemHandler = new ChuteItemHandler(this);
 		canPickUpItems = false;
-		capAbove = TransferUtil.getItemCache(level, pos.above());
-		capBelow = TransferUtil.getItemCache(level, pos.below());
+
 		bottomPullDistance = 0;
 		//		airCurrent = new AirCurrent(this);
 		updateAirFlow = true;
+	}
+
+	@Override
+	public void setLevel(Level level) {
+		super.setLevel(level);
+		capAbove = TransferUtil.getItemCache(level, worldPosition.above());
+		capBelow = TransferUtil.getItemCache(level, worldPosition.below());
 	}
 
 	@Override
@@ -185,28 +188,33 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 
 		float nextOffset = itemPosition.value + itemMotion;
 
-		try (Transaction t = TransferUtil.getTransaction()) {
-			if (itemMotion < 0) {
-				if (nextOffset < .5f) {
-					if (!handleDownwardOutput(t))
-						nextOffset = .5f;
-					else if (nextOffset < 0) {
-						nextOffset = itemPosition.value;
-					}
-				}
-			} else if (itemMotion > 0) {
-				if (nextOffset > .5f) {
-					if (!handleUpwardOutput(t))
-						nextOffset = .5f;
-					else if (nextOffset > 1) {
-						nextOffset = itemPosition.value;
-					}
+		if (itemMotion < 0) {
+			if (nextOffset < .5f) {
+				if (!transact(this::handleDownwardOutput))
+					nextOffset = .5f;
+				else if (nextOffset < 0) {
+					nextOffset = itemPosition.value;
 				}
 			}
+		} else if (itemMotion > 0) {
+			if (nextOffset > .5f) {
+				if (!transact(this::handleUpwardOutput))
+					nextOffset = .5f;
+				else if (nextOffset > 1) {
+					nextOffset = itemPosition.value;
+				}
+			}
+		}
 
-			itemPosition.set(nextOffset);
-			if (!clientSide)
-				t.commit();
+		itemPosition.set(nextOffset);
+	}
+
+	private boolean transact(Predicate<TransactionContext> consumer) {
+		try (Transaction t = TransferUtil.getTransaction()) {
+			boolean success = consumer.test(t);
+			boolean client = (level != null && level.isClientSide && !isVirtual());
+			if (success && !client) t.commit();
+			return success;
 		}
 	}
 
@@ -518,8 +526,6 @@ public class ChuteTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 			return null;
 		BlockApiCache<Storage<ItemVariant>, Direction> cache = side == Direction.UP ? capAbove : capBelow;
 		BlockEntity te = cache.getBlockEntity();
-		if (te == null)
-			return null;
 		if (te instanceof ChuteTileEntity) {
 			if (side != Direction.DOWN || !(te instanceof SmartChuteTileEntity) || getItemMotion() > 0)
 				return null;

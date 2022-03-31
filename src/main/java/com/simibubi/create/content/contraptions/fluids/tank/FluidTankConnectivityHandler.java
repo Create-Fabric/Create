@@ -308,7 +308,7 @@ public class FluidTankConnectivityHandler {
 			t.commit();
 		}
 
-		te.tankInventory = null;
+		te.actualTank = null;
 		if (tryReconnect)
 			formTanks(te.getType(), world, cache == null ? new TankSearchCache() : cache, frontier);
 	}

@@ -44,6 +44,7 @@ public class FluidTankTileEntity extends SmartTileEntity implements IHaveGoggleI
 
 	protected boolean forceFluidLevelUpdate;
 	protected FluidTank tankInventory;
+	protected FluidTank actualTank;
 	protected BlockPos controller;
 	protected BlockPos lastKnownPos;
 	protected boolean updateConnectivity;
@@ -62,6 +63,7 @@ public class FluidTankTileEntity extends SmartTileEntity implements IHaveGoggleI
 	public FluidTankTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 		tankInventory = createInventory();
+		actualTank = tankInventory;
 		forceFluidLevelUpdate = true;
 		updateConnectivity = false;
 		window = true;
@@ -302,7 +304,7 @@ public class FluidTankTileEntity extends SmartTileEntity implements IHaveGoggleI
 	}
 
 	private void refreshCapability() {
-		tankInventory = isController() ? tankInventory
+		actualTank = isController() ? tankInventory
 				: getControllerTE() != null ? getControllerTE().tankInventory : new FluidTank(0);
 	}
 
@@ -479,8 +481,8 @@ public class FluidTankTileEntity extends SmartTileEntity implements IHaveGoggleI
 	@Nullable
 	@Override
 	public Storage<FluidVariant> getFluidStorage(@Nullable Direction direction) {
-		if (tankInventory == null)
+		if (actualTank == null)
 			refreshCapability();
-		return tankInventory;
+		return actualTank;
 	}
 }

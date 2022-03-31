@@ -172,72 +172,34 @@ public class ItemHelper {
 
 	public static ItemStack extract(Storage<ItemVariant> inv, Predicate<ItemStack> test, ExtractionCountMode mode, int amount,
 		boolean simulate) {
-		ItemStack extracting = ItemStack.EMPTY;
-		boolean amountRequired = mode == ExtractionCountMode.EXACTLY;
-		boolean checkHasEnoughItems = amountRequired;
-		boolean hasEnoughItems = !checkHasEnoughItems;
-		boolean potentialOtherMatch = false;
-		int maxExtractionCount = amount;
-
-		try (Transaction t = TransferUtil.getTransaction()) {
-			Extraction: do {
-				extracting = ItemStack.EMPTY;
-
+		long extracted = 0;
+		ItemVariant variant = null;
+		if (inv.supportsExtraction()) {
+			try (Transaction t = TransferUtil.getTransaction()) {
 				for (StorageView<ItemVariant> view : inv.iterable(t)) {
-					int amountToExtractFromThisSlot =
-							Math.min(maxExtractionCount - extracting.getCount(), view.getResource().getItem()
-									.getMaxStackSize());
-					long extracted = view.extract(view.getResource(), amountToExtractFromThisSlot, t);
-					ItemStack stack = view.getResource().toStack((int) view.getAmount());
-					if (extracted == 0)
-						continue;
-					if (!test.test(stack))
-						continue;
-					if (!extracting.isEmpty() && !canItemStackAmountsStack(stack, extracting)) {
-						potentialOtherMatch = true;
-						continue;
-					}
-
-					if (extracting.isEmpty())
-						extracting = stack.copy();
-					else
-						extracting.grow(stack.getCount());
-
-//					if (!simulate && hasEnoughItems)
-//						inv.extractItem(slot, stack.getCount(), false);
-
-					if (extracting.getCount() >= maxExtractionCount) {
-						if (checkHasEnoughItems) {
-							hasEnoughItems = true;
-							checkHasEnoughItems = false;
-							continue Extraction;
-						} else {
-							break Extraction;
-						}
+					if (view.isResourceBlank()) continue;
+					variant = variant == null ? view.getResource() : variant;
+					if (!test.test(variant.toStack())) continue;
+					long toExtract = Math.min(amount, view.getAmount());
+					long actualExtracted = view.extract(variant, toExtract, t);
+					if (actualExtracted == 0) continue;
+					extracted += actualExtracted;
+					if (extracted == amount) {
+						if (!simulate)
+							t.commit();
+						return variant.toStack((int) extracted);
 					}
 				}
 
-				if (!extracting.isEmpty() && !hasEnoughItems && potentialOtherMatch) {
-					ItemStack blackListed = extracting.copy();
-					test = test.and(i -> !ItemHandlerHelper.canItemStacksStack(i, blackListed));
-					continue;
+				// if the code reaches this point, we've extracted as much as possible, and it isn't enough.
+				if (mode == ExtractionCountMode.UPTO) { // we don't need to get exactly the amount requested
+					if (variant != null && extracted != 0) {
+						return variant.toStack((int) extracted);
+					}
 				}
-
-				if (checkHasEnoughItems)
-					checkHasEnoughItems = false;
-				else
-					break Extraction;
-
-			} while (true);
-
-			if (!simulate)
-				t.commit();
+			}
 		}
-
-		if (amountRequired && extracting.getCount() < amount)
-			return ItemStack.EMPTY;
-
-		return extracting;
+		return ItemStack.EMPTY;
 	}
 
 	public static ItemStack extract(Storage<ItemVariant> inv, Predicate<ItemStack> test,

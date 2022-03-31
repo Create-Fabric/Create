@@ -59,12 +59,7 @@ public class GenericItemFilling {
 			return false;
 		if (!isFluidHandlerValid(stack, tank))
 			return false;
-		for (FluidStack contained : TransferUtil.getAllFluids(tank)) {
-			if (tank.simulateInsert(contained.getType(), 1, TransferUtil.getTransaction()) != 0) {
-				return true;
-			}
-		}
-		return false;
+		return tank.supportsInsertion();
 	}
 
 	public static long getRequiredAmountForItem(Level world, ItemStack stack, FluidStack availableFluid) {
@@ -88,7 +83,7 @@ public class GenericItemFilling {
 //			return FluidConstants.BUCKET;
 //		}
 
-		long filled = tank.simulateInsert(availableFluid.getType(), availableFluid.getAmount(), TransferUtil.getTransaction());
+		long filled = tank.simulateInsert(availableFluid.getType(), availableFluid.getAmount(), null);
 		return filled == 0 ? -1 : filled;
 	}
 

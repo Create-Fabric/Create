@@ -17,6 +17,8 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 
+import net.minecraft.world.level.Level;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,7 +61,12 @@ public class BeltTunnelTileEntity extends SmartTileEntity implements ItemTransfe
 		flaps = new EnumMap<>(Direction.class);
 		sides = new HashSet<>();
 		flapsToSend = new LinkedList<>();
-		belowStorageCache = TransferUtil.getItemCache(level, pos.below());
+	}
+
+	@Override
+	public void setLevel(Level level) {
+		super.setLevel(level);
+		belowStorageCache = TransferUtil.getItemCache(level, worldPosition.below());
 	}
 
 	@Override

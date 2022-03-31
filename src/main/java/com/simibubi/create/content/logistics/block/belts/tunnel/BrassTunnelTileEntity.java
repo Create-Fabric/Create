@@ -18,6 +18,8 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 
 import net.minecraft.server.level.ServerLevel;
 
+import net.minecraft.world.level.Level;
+
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.simibubi.create.AllBlocks;
@@ -82,7 +84,7 @@ public class BrassTunnelTileEntity extends BeltTunnelTileEntity implements IHave
 	private Set<BrassTunnelTileEntity> syncSet;
 
 	protected ScrollOptionBehaviour<SelectionMode> selectionMode;
-	private final BlockApiCache<Storage<ItemVariant>, Direction> beltCapabilityCache;
+	private BlockApiCache<Storage<ItemVariant>, Direction> beltCapabilityCache;
 	private BrassTunnelItemHandler tunnelCapability;
 
 	public BrassTunnelTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -90,10 +92,15 @@ public class BrassTunnelTileEntity extends BeltTunnelTileEntity implements IHave
 		distributionTargets = Couple.create(ArrayList::new);
 		syncSet = new HashSet<>();
 		stackToDistribute = ItemStack.EMPTY;
-		beltCapabilityCache = TransferUtil.getItemCache(level, pos.below());
 		tunnelCapability = new BrassTunnelItemHandler(this);
 		previousOutputIndex = 0;
 		syncedOutputActive = false;
+	}
+
+	@Override
+	public void setLevel(Level level) {
+		super.setLevel(level);
+		beltCapabilityCache = TransferUtil.getItemCache(level, worldPosition.below());
 	}
 
 	@Override
@@ -706,7 +713,7 @@ public class BrassTunnelTileEntity extends BeltTunnelTileEntity implements IHave
 	}
 
 	public Storage<ItemVariant> getBeltCapability() {
-		return beltCapabilityCache.find(Direction.UP);
+		return beltCapabilityCache != null ? beltCapabilityCache.find(Direction.UP) : null;
 	}
 
 	public enum SelectionMode implements INamedIconOptions {

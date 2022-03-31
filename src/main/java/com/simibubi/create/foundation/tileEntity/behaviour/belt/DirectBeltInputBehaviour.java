@@ -72,7 +72,10 @@ public class DirectBeltInputBehaviour extends TileEntityBehaviour {
 		try (Transaction t = TransferUtil.getTransaction()) {
 			long trying = inserted.stack.getCount();
 			long successful = storage.insert(ItemVariant.of(inserted.stack), inserted.stack.getCount(), t);
-			if (trying == successful) return ItemStack.EMPTY;
+			if (trying == successful) {
+				if (!simulate) t.commit();
+				return ItemStack.EMPTY;
+			}
 			ItemStack stack = inserted.stack.copy();
 			stack.setCount((int) (trying - successful));
 			if (!simulate) t.commit();
