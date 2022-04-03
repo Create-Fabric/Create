@@ -197,11 +197,12 @@ public class FluidNetwork {
 			long transferredAmount = 0;
 			try (Transaction test = t.openNested()) {
 				long extracted = handler.extract(fluid.getType(), flowSpeed, test);
-				if (extracted != 0) transfer = new FluidStack(fluid.getType(), extracted);
+				if (extracted > 0) transfer = new FluidStack(fluid.getType(), extracted);
 
 				if (transfer.isEmpty())
 					return;
 				flowSpeed = transfer.getAmount();
+				test.abort();
 			}
 			List<Pair<BlockFace, Storage<FluidVariant>>> availableOutputs = new ArrayList<>(targets);
 			while (!availableOutputs.isEmpty() && transfer.getAmount() > 0) {

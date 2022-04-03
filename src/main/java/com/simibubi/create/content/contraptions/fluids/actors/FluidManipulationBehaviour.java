@@ -18,6 +18,7 @@ import com.simibubi.create.foundation.utility.VecHelper;
 import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -69,9 +70,12 @@ public abstract class FluidManipulationBehaviour extends TileEntityBehaviour {
 		frontier = new ArrayList<>();
 	}
 
-	public void counterpartActed() {
+	public void counterpartActed(TransactionContext ctx) {
+		snapshotParticipant().updateSnapshots(ctx);
 		counterpartActed = true;
 	}
+
+	protected abstract SnapshotParticipant<?> snapshotParticipant();
 
 	protected int validationTimer() {
 		int maxBlocks = maxBlocks();

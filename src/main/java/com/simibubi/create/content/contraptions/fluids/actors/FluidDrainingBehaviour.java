@@ -54,7 +54,7 @@ public class FluidDrainingBehaviour extends FluidManipulationBehaviour {
 	SnapshotParticipant<Data> snapshotParticipant = new SnapshotParticipant<>() {
 		@Override
 		protected Data createSnapshot() {
-			return new Data(new ArrayList<>(validationFrontier), new HashSet<>(validationVisited),
+			return new Data(rootPos.immutable(), new ArrayList<>(validationFrontier), new HashSet<>(validationVisited),
 					new HashSet<>(newValidationSet), revalidateIn,
 					new BoundingBox(
 							affectedArea.minX(), affectedArea.minY(), affectedArea.minZ(),
@@ -71,12 +71,19 @@ public class FluidDrainingBehaviour extends FluidManipulationBehaviour {
 			revalidateIn = snapshot.revalidateIn;
 			affectedArea = snapshot.affectedArea;
 			queueList = snapshot.queueList;
-			queue = new ObjectHeapPriorityQueue<>(queueList);
+			rootPos = snapshot.rootPos;
+			queue = new ObjectHeapPriorityQueue<>(queueList, FluidDrainingBehaviour.this::comparePositions);
 		}
 	};
 
-	record Data(List<BlockPosEntry> validationFrontier, Set<BlockPos> validationVisited,
-				Set<BlockPos> newValidationSet, int revalidateIn, BoundingBox affectedArea,
+	@Override
+	protected SnapshotParticipant<?> snapshotParticipant() {
+		return snapshotParticipant;
+	}
+
+	record Data(BlockPos rootPos, List<BlockPosEntry> validationFrontier,
+				Set<BlockPos> validationVisited, Set<BlockPos> newValidationSet,
+				int revalidateIn, BoundingBox affectedArea,
 				ObjectArrayList<BlockPosEntry> queueList) {
 	}
 
@@ -389,8 +396,13 @@ public class FluidDrainingBehaviour extends FluidManipulationBehaviour {
 
 	public FluidStack getDrainableFluid(BlockPos rootPos) {
 		try (Transaction t = TransferUtil.getTransaction()) {
-			return fluid == null || isSearching() || !pullNext(rootPos, t) ? FluidStack.EMPTY
-					: new FluidStack(fluid, FluidConstants.BUCKET);
+			if (fluid == null || isSearching() || !pullNext(rootPos, t)) {
+				return FluidStack.EMPTY;
+			} else if (fluid == null) { // fabric: we need to check again because null isn't allowed and search/pull can set to null
+				return FluidStack.EMPTY;
+			} else {
+				return new FluidStack(fluid, FluidConstants.BUCKET);
+			}
 		}
 	}
 

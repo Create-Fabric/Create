@@ -60,18 +60,24 @@ public class FluidFillingBehaviour extends FluidManipulationBehaviour {
 	SnapshotParticipant<Data> snapshotParticipant = new SnapshotParticipant<>() {
 		@Override
 		protected Data createSnapshot() {
-			return new Data(new HashSet<>(visited), new ObjectArrayList<>(queueList));
+			return new Data(new HashSet<>(visited), new ObjectArrayList<>(queueList), counterpartActed);
 		}
 
 		@Override
 		protected void readSnapshot(Data snapshot) {
 			visited = snapshot.visited;
 			queueList = snapshot.queueList;
-			queue = new ObjectHeapPriorityQueue<>(queueList);
+			queue = new ObjectHeapPriorityQueue<>(queueList, (p, p2) -> -comparePositions(p, p2));
+			counterpartActed = snapshot.counterpartActed;
 		}
 	};
 
-	record Data(Set<BlockPos> visited, List<BlockPosEntry> queueList) {
+	@Override
+	protected SnapshotParticipant<?> snapshotParticipant() {
+		return snapshotParticipant;
+	}
+
+	record Data(Set<BlockPos> visited, List<BlockPosEntry> queueList, boolean counterpartActed) {
 	}
 
 	public FluidFillingBehaviour(SmartTileEntity te) {

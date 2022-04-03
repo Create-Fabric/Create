@@ -43,7 +43,7 @@ public class FluidTankTileEntity extends SmartTileEntity implements IHaveGoggleI
 	private static final int MAX_SIZE = 3;
 
 	protected boolean forceFluidLevelUpdate;
-	protected FluidTank tankInventory;
+	protected SmartFluidTank tankInventory;
 	protected FluidTank actualTank;
 	protected BlockPos controller;
 	protected BlockPos lastKnownPos;

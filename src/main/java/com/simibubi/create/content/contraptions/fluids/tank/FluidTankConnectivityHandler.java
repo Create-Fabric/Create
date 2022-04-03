@@ -12,6 +12,8 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import com.simibubi.create.foundation.fluid.SmartFluidTank;
+
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 
@@ -213,14 +215,14 @@ public class FluidTankConnectivityHandler {
 							continue;
 
 						opaque |= !tank.window;
-						FluidTank tankTank = tank.tankInventory;
+						SmartFluidTank tankTank = tank.tankInventory;
 						FluidStack fluidInTank = tankTank.getFluid();
 						if (!fluidInTank.isEmpty()) {
 							if (teTank.isEmpty() && teTank instanceof CreativeSmartFluidTank)
 								((CreativeSmartFluidTank) teTank).setContainedFluid(fluidInTank);
 							teTank.insert(fluidInTank.getType(), fluidInTank.getAmount(), t);
 						}
-						tankTank.setFluid(FluidStack.EMPTY);
+						tankTank.setFluid(FluidStack.EMPTY, t);
 
 						splitTankAndInvalidate(tank, cache, false);
 						tank.setController(origin);
