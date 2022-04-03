@@ -227,6 +227,7 @@ public class MechanicalCrafterBlock extends HorizontalKineticBlock
 				.placeItemBackInInventory(inSlot);
 			crafter.getInventory()
 				.setStackInSlot(0, ItemStack.EMPTY);
+			crafter.sendData();
 			return InteractionResult.SUCCESS;
 		}
 
