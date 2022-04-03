@@ -1,0 +1,12 @@
+{
+  "fuels": [
+    {
+      "item": "create:blaze_cake",
+      "fuel": 6000
+    }, 
+    {
+      "item": "create:creative_blaze_cake",
+      "fuel": 192000
+    }
+  ]
+}
