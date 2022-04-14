@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "mores"
+      ]
+		}
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "mores:tuff_iron_ore"
+    }
+  ],
+  "results": [
+    {
+      "item": "create:crushed_iron_ore",
+      "count": 2
+    },
+    {
+      "item": "create:crushed_iron_ore",
+      "chance": 0.25
+    },
+    {
+      "item": "create:experience_nugget",
+      "chance": 0.75
+    },
+    {
+      "item": "minecraft:tuff",
+      "chance": 0.125
+    }
+  ],
+  "processingTime": 350
+}

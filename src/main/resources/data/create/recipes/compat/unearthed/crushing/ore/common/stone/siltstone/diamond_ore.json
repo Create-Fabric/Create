@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "unearthed"
+      ]
+		}
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "unearthed:siltstone_diamond_ore"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "minecraft:diamond",
+      "chance": 0.75
+    },
+    {
+      "item": "create:experience_nugget",
+      "chance": 0.75
+    },
+    {
+      "item": "unearthed:siltstone",
+      "chance": 0.125
+    }
+  ],
+  "processingTime": 350
+}

@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "unearthed"
+      ]
+		}
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "unearthed:pyroxene"
+    },
+    {
+      "item": "minecraft:diorite"
+    }
+  ],
+  "results": [
+    {
+      "item": "unearthed:gabbro",
+      "count": 4
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "unearthed"
+      ]
+		}
+  ],
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "unearthed:regolith"
+    },
+    {
+      "item": "unearthed:regolith"
+    },
+    {
+      "item": "unearthed:rhyolite_regolith"
+    },
+    {
+      "fluid": "minecraft:water",
+      "nbt": {},
+      "amount": 8100
+    }
+  ],
+  "results": [
+    {
+      "item": "unearthed:weathered_rhyolite"
+    }
+  ]
+}

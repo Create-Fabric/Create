@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "alloy_forgery"
+      ]
+    }
+  ],
+  "type": "alloy_forgery:forging",
+  "inputs": [
+    {
+      "item": "create:zinc_ingot"
+    },
+    {
+      "item": "minecraft:copper_ingot"
+    }
+  ],
+  "output": {
+    "id": "create:brass_ingot",
+    "count": 1
+  },
+  "overrides": {
+    "2+": {
+      "id": "create:brass_ingot",
+      "count": 2
+    }
+  },
+  "min_forge_tier": 1,
+  "fuel_per_tick": 10
+}

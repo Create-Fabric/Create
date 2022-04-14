@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "unearthed"
+      ]
+		}
+  ],
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "unearthed:limestone_regolith"
+    }
+  ],
+  "results": [
+    {
+      "item": "unearthed:regolith",
+      "count": 2
+    },
+    {
+      "item": "unearthed:limestone",
+      "chance": 0.125
+    }
+  ],
+  "processingTime": 100
+}

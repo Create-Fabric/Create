@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "promenade"
+      ]
+		}
+  ],
+  "type": "create:cutting",
+  "ingredients": [
+    {
+      "item": "promenade:dark_amaranth_stem"
+    }
+  ],
+  "results": [
+    {
+      "item": "promenade:stripped_dark_amaranth_stem"
+    }
+  ],
+  "processingTime": 50
+}

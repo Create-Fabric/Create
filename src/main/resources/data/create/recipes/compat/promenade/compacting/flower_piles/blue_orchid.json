@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "promenade"
+      ]
+		}
+  ],
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "minecraft:blue_orchid"
+    },
+    {
+      "item": "minecraft:blue_orchid"
+    },
+    {
+      "item": "minecraft:blue_orchid"
+    }
+  ],
+  "results": [
+    {
+      "item": "promenade:blue_orchid_pile"
+    }
+  ]
+}

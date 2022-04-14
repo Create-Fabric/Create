@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "unearthed"
+      ]
+		}
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "unearthed:slate_coal_ore"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:coal"
+    },
+    {
+      "item": "minecraft:coal",
+      "chance": 0.75
+    },
+    {
+      "item": "create:experience_nugget",
+      "chance": 0.75
+    },
+    {
+      "item": "unearthed:cobbled_slate",
+      "chance": 0.125
+    }
+  ],
+  "processingTime": 150
+}

@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "unearthed"
+      ]
+		}
+  ],
+  "type": "create:splashing",
+  "ingredients": [
+    {
+      "item": "unearthed:phyllite_regolith"
+    }
+  ],
+  "results": [
+    {
+      "item": "unearthed:regolith"
+    },
+    {
+      "item": "unearthed:regolith",
+      "chance": 0.75
+    },
+    {
+      "item": "unearthed:phyllite",
+      "chance": 0.5
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+"fabric:load_conditions": [
+   {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "alloy_forgery"
+      ]
+    }
+  ],
+  "fuels": [
+    {
+      "item": "create:blaze_cake",
+      "fuel": 6400
+    },
+    {
+      "item": "create:blaze_cake",
+      "fuel": 96000
+    }
+  ]
+}

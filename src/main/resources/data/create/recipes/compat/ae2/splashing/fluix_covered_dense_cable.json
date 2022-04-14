@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+       "condition": "fabric:all_mods_loaded",
+       "values": [
+         "ae2"
+       ]
+     }
+   ],
+  "type": "create:splashing",
+  "ingredients": [
+    {
+      "tag": "ae2:covered_dense_cable"
+    }
+  ],
+  "results": [
+    {
+      "item": "ae2:fluix_covered_dense_cable"
+    }
+  ]
+}

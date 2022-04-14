@@ -1,0 +1,1 @@
+{"fabric:load_conditions":[{"condition":"fabric:all_mods_loaded","values":["promenade"]}],"results":[{"item":"promenade:pink_tulip_pile"}],"type":"create:compacting","ingredients":[{"item":"minecraft:pink_tulip"},{"item":"minecraft:pink_tulip"},{"item":"minecraft:pink_tulip"}]}

@@ -1,0 +1,27 @@
+{
+    "fabric:load_conditions": [
+        {
+            "condition": "fabric:all_mods_loaded",
+            "values": [
+                "promenade"
+            ]
+        }
+    ],
+    "results": [
+        {
+            "item": "promenade:azure_bluet_pile"
+        }
+    ],
+    "type": "create:compacting",
+    "ingredients": [
+        {
+            "item": "minecraft:azure_bluet"
+        },
+        {
+            "item": "minecraft:azure_bluet"
+        },
+        {
+            "item": "minecraft:azure_bluet"
+        }
+    ]
+}

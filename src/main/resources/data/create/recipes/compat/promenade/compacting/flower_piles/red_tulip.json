@@ -1,0 +1,1 @@
+{"fabric:load_conditions":[{"condition":"fabric:all_mods_loaded","values":["promenade"]}],"results":[{"item":"promenade:red_tulip_pile"}],"type":"create:compacting","ingredients":[{"item":"minecraft:red_tulip"},{"item":"minecraft:red_tulip"},{"item":"minecraft:red_tulip"}]}

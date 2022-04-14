@@ -1,0 +1,38 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "ae2"
+      ]
+		}
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "ae2:quartz_ore"
+    }
+  ],
+  "results": [
+    {
+      "item": "ae2:certus_quartz_crystal"
+    },
+    {
+      "item": "ae2:certus_quartz_dust",
+      "count": 2
+    },
+    {
+      "item": "ae2:certus_quartz_crystal",
+      "chance": 0.75
+    },
+    {
+      "item": "ae2:certus_quartz_dust",
+      "chance": 0.25
+    },
+    {
+      "item": "minecraft:cobblestone",
+      "chance": 0.12
+    }
+  ],
+  "processingTime": 150
+}

@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "unearthed"
+      ]
+		}
+  ],
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "unearthed:phyllite_regolith"
+    },
+    {
+      "fluid": "minecraft:water",
+      "amount": 40500
+    }
+  ],
+  "results": [
+    {
+      "item": "unearthed:phyllite_grassy_regolith"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "unearthed"
+      ]
+		}
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "tag": "c:gems/quartz"
+    },
+    {
+      "item": "minecraft:andesite"
+    }
+  ],
+  "results": [
+    {
+      "item": "unearthed:rhyolite",
+      "count": 4
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+    "fabric:load_conditions": [
+        {
+            "condition": "fabric:all_mods_loaded",
+            "values": [
+                "promenade"
+            ]
+        }
+    ],
+    "results": [
+        {
+            "item": "promenade:lily_of_the_valley_pile"
+        }
+    ],
+    "type": "create:compacting",
+    "ingredients": [
+        {
+            "item": "minecraft:lily_of_the_valley"
+        },
+        {
+            "item": "minecraft:lily_of_the_valley"
+        },
+        {
+            "item": "minecraft:lily_of_the_valley"
+        }
+    ]
+}

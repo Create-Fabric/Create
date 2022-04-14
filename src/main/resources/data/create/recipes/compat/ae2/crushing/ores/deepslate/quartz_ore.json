@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "ae2"
+      ]
+		}
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "ae2:deepslate_quartz_ore"
+    }
+  ],
+  "results": [
+    {
+      "item": "ae2:certus_quartz_crystal",
+      "count": 2
+    },
+    {
+      "item": "ae2:certus_quartz_dust",
+      "count": 3
+    },
+    {
+      "item": "ae2:certus_quartz_crystal",
+      "chance": 0.25
+    },
+    {
+      "item": "minecraft:cobbled_deepslate",
+      "chance": 0.12
+    }
+  ],
+  "processingTime": 250
+}

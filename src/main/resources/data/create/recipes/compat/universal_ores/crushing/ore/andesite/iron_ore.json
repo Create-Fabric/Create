@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "universal_ores"
+      ]
+		}
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "universal_ores:andesite_iron_ore"
+    }
+  ],
+  "results": [
+    {
+      "item": "create:crushed_iron_ore"
+    },
+    {
+      "item": "create:crushed_iron_ore",
+      "chance": 0.75
+    },
+    {
+      "item": "create:experience_nugget",
+      "chance": 0.75
+    },
+    {
+      "item": "minecraft:andesite",
+      "chance": 0.125
+    }
+  ],
+  "processingTime": 250
+}

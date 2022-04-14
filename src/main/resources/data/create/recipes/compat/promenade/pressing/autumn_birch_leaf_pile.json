@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "promenade"
+      ]
+		}
+  ],
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "item": "promenade:autumn_birch_leaves"
+    }
+  ],
+  "results": [
+    {
+      "item": "promenade:autumn_birch_leaf_pile"
+    }
+  ]
+}

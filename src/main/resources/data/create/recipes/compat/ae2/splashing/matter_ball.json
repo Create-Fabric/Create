@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+    {
+       "condition": "fabric:all_mods_loaded",
+       "values": [
+         "ae2"
+       ]
+     }
+   ],
+  "type": "create:splashing",
+  "ingredients": [
+    {
+      "tag": "ae2:paint_balls"
+    }
+  ],
+  "results": [
+    {
+      "item": "ae2:matter_ball"
+    }
+  ]
+}

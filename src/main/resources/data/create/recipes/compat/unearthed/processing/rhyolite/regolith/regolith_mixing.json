@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "unearthed"
+      ]
+		}
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "unearthed:rhyolite"
+    },
+    {
+      "item": "unearthed:regolith"
+    },
+    {
+      "item": "unearthed:regolith"
+    }
+    
+  ],
+  "results": [
+    {
+      "item": "unearthed:rhyolite_regolith",
+      "count": 2
+    }
+  ]
+}

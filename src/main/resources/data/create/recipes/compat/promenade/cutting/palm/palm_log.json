@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "promenade"
+      ]
+		}
+  ],
+  "type": "create:cutting",
+  "ingredients": [
+    {
+      "item": "promenade:palm_log"
+    }
+  ],
+  "results": [
+    {
+      "item": "promenade:stripped_palm_log"
+    }
+  ],
+  "processingTime": 50
+}

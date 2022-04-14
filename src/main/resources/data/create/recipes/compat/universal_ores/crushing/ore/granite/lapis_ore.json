@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "universal_ores"
+      ]
+		}
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "universal_ores:granite_lapis_ore"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:lapis_lazuli",
+      "count": 10
+    },
+    {
+      "item": "minecraft:lapis_lazuli",
+      "chance": 0.5
+    },
+    {
+      "item": "create:experience_nugget",
+      "chance": 0.75
+    },
+    {
+      "item": "minecraft:granite",
+      "chance": 0.125
+    }
+  ],
+  "processingTime": 250
+}
