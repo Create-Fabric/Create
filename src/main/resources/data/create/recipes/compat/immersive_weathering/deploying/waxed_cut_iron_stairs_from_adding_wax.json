@@ -1,0 +1,1 @@
+{"fabric:load_conditions":[{"condition":"fabric:all_mods_loaded","values":["immersive_weathering"]}],"results":[{"item":"immersive_weathering:waxed_cut_iron_stairs"}],"type":"create:deploying","ingredients":[{"item":"immersive_weathering:cut_iron_stairs"},{"item":"minecraft:honeycomb_block"}],"keepHeldItem":true}

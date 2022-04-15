@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "betternether"
+      ]
+		}
+  ],
+  "type": "create:cutting",
+  "ingredients": [
+    {
+      "item": "betternether:anchor_tree_log"
+    }
+  ],
+  "results": [
+    {
+      "item": "betternether:anchor_tree_stripped_log"
+    }
+  ],
+  "processingTime": 50
+}

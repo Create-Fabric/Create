@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "immersive_weathering"
+      ]
+		}
+  ],
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "item": "minecraft:azalea_leaves"
+    }
+  ],
+  "results": [
+    {
+      "item": "immersive_weathering:azalea_leaf_pile",
+      "count": 2
+    }
+  ]
+}

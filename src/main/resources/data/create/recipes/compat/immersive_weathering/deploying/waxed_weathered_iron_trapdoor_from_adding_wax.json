@@ -1,0 +1,1 @@
+{"fabric:load_conditions":[{"condition":"fabric:all_mods_loaded","values":["immersive_weathering"]}],"results":[{"item":"immersive_weathering:waxed_weathered_iron_trapdoor"}],"type":"create:deploying","ingredients":[{"item":"immersive_weathering:weathered_iron_trapdoor"},{"item":"minecraft:honeycomb_block"}],"keepHeldItem":true}

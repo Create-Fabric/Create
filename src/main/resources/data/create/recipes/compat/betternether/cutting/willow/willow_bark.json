@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "betternether"
+      ]
+		}
+  ],
+  "type": "create:cutting",
+  "ingredients": [
+    {
+      "item": "betternether:willow_bark"
+    }
+  ],
+  "results": [
+    {
+      "item": "betternether:willow_stripped_bark"
+    }
+  ],
+  "processingTime": 50
+}
