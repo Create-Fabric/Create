@@ -4,14 +4,14 @@
     {
       "condition": "fabric:all_mods_loaded",
       "values": [
-        "appliedenergistics2"
+        "ae2"
       ]
     }
   ],
   "type": "create:mixing",
   "ingredients": [
     {
-      "tag": "c:redstone_dusts"
+      "tag": "c:dusts/redstone"
     },
     {
       "fluid": "minecraft:water",
@@ -19,15 +19,15 @@
       "amount": 27000
     },
     {
-      "item": "appliedenergistics2:charged_certus_quartz_crystal"
+      "item": "ae2:charged_certus_quartz_crystal"
     },
     {
-      "tag": "c:quartz"
+      "tag": "ae2:all_nether_quartz"
     }
   ],
   "results": [
     {
-      "item": "appliedenergistics2:fluix_crystal",
+      "item": "ae2:fluix_crystal",
       "count": 2
     }
   ],

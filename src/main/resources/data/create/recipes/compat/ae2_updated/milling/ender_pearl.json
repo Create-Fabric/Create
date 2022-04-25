@@ -3,19 +3,19 @@
 		{
 			"condition": "fabric:all_mods_loaded",
       "values": [
-        "appliedenergistics2"
+        "ae2"
       ]
 		}
 	],
 	"type": "create:milling",
     "ingredients": [
     	{
-    		"tag": "c:ender_pearls"
+    		"item": "minecraft:ender_pearl"
     	}
     ],
 	"results": [
 		{
-			"item": "appliedenergistics2:ender_dust",
+			"item": "ae2:ender_dust",
 			"count": 1
 		}
 	],

@@ -1,7 +1,7 @@
 {
 	"fabric:load_conditions": [
 		{
-      "condition": "fabric:all_mods_loaded",
+			"condition": "fabric:all_mods_loaded",
       "values": [
         "appliedenergistics2"
       ]
@@ -10,12 +10,12 @@
 	"type": "create:milling",
     "ingredients": [
     	{
-    		"tag": "c:certus_quartz_crystals"
+    		"tag": "c:iron_ingots"
     	}
     ],
 	"results": [
 		{
-			"item": "appliedenergistics2:certus_quartz_dust",
+			"item": "appliedenergistics2:iron_dust",
 			"count": 1
 		}
 	],
