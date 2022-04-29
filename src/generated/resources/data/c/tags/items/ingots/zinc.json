@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "create:zinc_ingot"
+    "create:zinc_ingot",
+    "#c:zinc_ingots"
   ]
 }

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "create:brass_block"
+    "create:brass_block",
+    "#c:brass_blocks"
   ]
 }

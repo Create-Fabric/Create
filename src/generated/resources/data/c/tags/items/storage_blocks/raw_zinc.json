@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "create:raw_zinc_block"
+    "create:raw_zinc_block",
+    "#c:raw_zinc_blocks"
   ]
 }

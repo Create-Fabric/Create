@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "create:zinc_nugget"
+    "create:zinc_nugget",
+    "#c:zinc_nuggets"
   ]
 }

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "create:brass_nugget"
+    "create:brass_nugget",
+    "#c:brass_nuggets"
   ]
 }

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "create:raw_zinc"
+    "create:raw_zinc",
+    "#c:raw_zinc_ores"
   ]
 }

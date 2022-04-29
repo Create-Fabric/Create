@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "create:golden_sheet"
+    "create:golden_sheet",
+    "#c:gold_plates"
   ]
 }

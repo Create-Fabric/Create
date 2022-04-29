@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "create:copper_sheet"
+    "create:copper_sheet",
+    "#c:copper_plates"
   ]
 }

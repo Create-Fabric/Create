@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "create:iron_sheet"
+    "create:iron_sheet",
+    "#c:iron_plates"
   ]
 }
