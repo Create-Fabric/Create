@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "architects_palette"
+      ]
+		}
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "minecraft:magma_block"
+    },
+    {
+      "item": "minecraft:nether_bricks"
+    }
+  ],
+  "results": [
+    {
+      "item": "architects_palette:molten_nether_bricks",
+      "count": 2
+    }
+  ]
+}

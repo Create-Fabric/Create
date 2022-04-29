@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "ecologics"
+      ]
+		}
+  ],
+  "type": "create:cutting",
+  "ingredients": [
+    {
+      "item": "ecologics:stripped_walnut_wood"
+    }
+  ],
+  "results": [
+    {
+      "item": "ecologics:walnut_planks",
+      "count": 6
+    }
+  ],
+  "processingTime": 50
+}

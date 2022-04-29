@@ -1,0 +1,31 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "techreborn:deepslate_bauxite_ore"
+    }
+  ],
+  "results": [
+    {
+      "item": "techreborn:bauxite_dust",
+      "count": 2
+    },
+    {
+      "item": "techreborn:bauxite_dust",
+      "chance": 0.75
+    },
+    {
+      "item": "minecraft:cobbled_deepslate",
+      "chance": 0.12
+    }
+  ],
+  "processingTime": 250
+}

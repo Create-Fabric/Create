@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+  ],
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "minecraft:shroomlight"
+    }
+  ],
+  "results": [
+    {
+      "item": "techreborn:glowstone_small_dust",
+      "count": 2
+    }
+  ],
+  "processingTime": 150
+}

@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "mythicmetals"
+      ]
+		}
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "tag": "c:adamantite_ingots"
+    },
+  	{
+      "tag": "c:mythril_ingots"
+    },
+  	{
+      "tag": "c:orichalcum_ingots"
+    },
+  	{
+      "tag": "c:palladium_ingots"
+    },
+  	{
+	  "item": "mythicmetals:unobtainium"
+	}
+  ],
+  "results": [
+    {
+      "item": "mythicmetals:metallurgium_ingot",
+      "count": 1
+    }
+  ],
+  "heatRequirement": "superheated"
+}

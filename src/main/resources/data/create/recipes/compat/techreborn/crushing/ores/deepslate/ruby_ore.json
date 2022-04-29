@@ -1,0 +1,39 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "techreborn:deepslate_ruby_ore"
+    }
+  ],
+  "results": [
+    {
+      "item": "techreborn:ruby_gem",
+      "count": 4
+    },
+    {
+      "item": "techreborn:ruby_gem",
+      "chance": 0.5
+    },
+    {
+      "item": "techreborn:red_garnet_gem",
+      "chance": 0.3
+    },
+    {
+      "item": "create:experience_nugget",
+      "chance": 0.75
+    },
+    {
+      "item": "minecraft:cobbled_deepslate",
+      "chance": 0.12
+    }
+  ],
+  "processingTime": 250
+}

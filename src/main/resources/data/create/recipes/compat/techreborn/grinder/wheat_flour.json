@@ -1,0 +1,23 @@
+{
+    "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+  ],
+    "type": "techreborn:grinder",
+    "power": 2,
+    "time": 120,
+    "ingredients": [
+        {
+            "tag": "c:crops/wheat"
+        }
+    ],
+    "results": [
+        {
+            "item": "create:wheat_flour"
+        }
+    ]
+}

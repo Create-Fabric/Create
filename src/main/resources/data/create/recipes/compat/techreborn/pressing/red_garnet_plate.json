@@ -1,0 +1,21 @@
+{
+    "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+	],
+    "type": "create:pressing",
+    "ingredients": [
+      {
+        "tag": "c:red_garnet_dusts"
+      }
+    ],
+    "results": [
+      {
+        "item": "techreborn:red_garnet_plate"
+      }
+    ]
+}

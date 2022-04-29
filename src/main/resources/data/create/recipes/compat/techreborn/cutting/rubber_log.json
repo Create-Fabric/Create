@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+  ],
+  "type": "create:cutting",
+  "ingredients": [
+    {
+      "item": "techreborn:rubber_log"
+    }
+  ],
+  "results": [
+    {
+      "item": "techreborn:rubber_log_stripped"
+    }
+  ],
+  "processingTime": 50
+}

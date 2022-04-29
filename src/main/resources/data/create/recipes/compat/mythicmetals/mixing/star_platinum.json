@@ -1,0 +1,29 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "mythicmetals"
+      ]
+		}
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "mythicmetals:starrite"
+    },
+  	{
+      "tag": "c:platinum_ingots"
+    },
+    {
+      "item": "mythicmetals:carmot_ingot"
+    }
+  ],
+  "results": [
+    {
+      "item": "mythicmetals:star_platinum",
+      "count": 1
+    }
+  ],
+  "heatRequirement": "heated"
+}

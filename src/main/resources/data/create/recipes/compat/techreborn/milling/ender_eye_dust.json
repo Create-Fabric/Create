@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+  ],
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "minecraft:ender_eye"
+    }
+  ],
+  "results": [
+    {
+      "item": "techreborn:ender_eye_dust"
+    }
+  ],
+  "processingTime": 150
+}

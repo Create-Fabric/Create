@@ -1,0 +1,24 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+  ],
+  "type": "techreborn:fluid_replicator",
+  "power": 30,
+  "time": 50,
+  "tank": {
+    "fluid": "create:chocolate",
+    "amount": 1000
+  },
+  "ingredients": [
+    {
+      "item": "techreborn:uu_matter",
+      "count": 2
+    }
+  ],
+  "results": []
+}

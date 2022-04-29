@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "ecologics"
+      ]
+		}
+  ],
+  "type": "create:cutting",
+  "ingredients": [
+    {
+      "item": "ecologics:walnut_log"
+    }
+  ],
+  "results": [
+    {
+      "item": "ecologics:stripped_walnut_log"
+    }
+  ],
+  "processingTime": 50
+}

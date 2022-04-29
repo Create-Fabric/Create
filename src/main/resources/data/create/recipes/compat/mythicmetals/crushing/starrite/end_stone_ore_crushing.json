@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "mythicmetals"
+      ]
+		}
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "mythicmetals:end_stone_starrite_ore"
+    }
+  ],
+  "results": [
+    {
+      "item": "mythicmetals:starrite",
+      "count": 2
+    },
+    {
+      "item": "mythicmetals:starrite",
+      "chance": 0.25
+    },
+    {
+      "item": "create:experience_nugget",
+      "chance": 0.75
+    },
+    {
+      "item": "minecraft:end_stone",
+      "chance": 0.125
+    }
+  ],
+  "processingTime": 350
+}

@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "tag": "c:nickel_ingots"
+    }
+    
+  ],
+  "results": [
+    {
+      "item": "techreborn:invar_ingot",
+      "count": 3
+    }
+  ],
+  "heatRequirement": "heated"
+}

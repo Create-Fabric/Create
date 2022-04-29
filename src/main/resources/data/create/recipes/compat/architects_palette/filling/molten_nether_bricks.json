@@ -1,0 +1,26 @@
+{
+    "fabric:load_conditions": [
+        {
+           "condition": "fabric:all_mods_loaded",
+           "values": [
+             "architects_palette"
+           ]
+         }
+       ],
+    "type": "create:filling",
+    "ingredients": [
+      {
+        "item": "minecraft:cracked_nether_bricks"
+      },
+      {
+        "fluid": "minecraft:lava",
+        "nbt": {},
+        "amount": 40500
+      }
+    ],
+    "results": [
+      {
+        "item": "architects_palette:molten_nether_bricks"
+      }
+    ]
+  }

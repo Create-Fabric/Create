@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "mythicmetals"
+      ]
+		}
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "mythicmetals:quadrillum_ingot"
+    },
+    {
+      "tag": "c:manganese_ingots"
+    }
+  ],
+  "results": [
+    {
+      "item": "mythicmetals:durasteel_ingot",
+      "count": 1
+    }
+  ],
+  "heatRequirement": "heated"
+}

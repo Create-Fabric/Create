@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+  ],
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "minecraft:nautilus_shell"
+    }
+  ],
+  "results": [
+    {
+      "item": "techreborn:calcite_small_dust"
+    }
+  ],
+  "processingTime": 150
+}

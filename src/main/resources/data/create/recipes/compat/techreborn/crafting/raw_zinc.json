@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+	],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  S",
+    "  S",
+    "S  "
+  ],
+  "key": {
+    "S": {
+      "item": "techreborn:uu_matter"
+    }
+  },
+  "result": {
+    "item": "create:raw_zinc",
+    "count": 1
+  }
+}

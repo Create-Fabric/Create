@@ -1,0 +1,21 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "architects_palette"
+      ]
+		}
+  ],
+  "type": "create:haunting",
+  "ingredients": [
+    {
+      "item": "minecraft:bone"
+    }
+  ],
+  "results": [
+    {
+      "item": "architects_palette:withered_bone"
+    }
+  ]
+}

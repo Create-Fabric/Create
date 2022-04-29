@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+	],
+  "type": "techreborn:industrial_grinder",
+  "power": 16,
+  "time": 40,
+  "tank": {
+	"fluid": "techreborn:mercury",
+	"amount": 1000
+  },
+  "ingredients": [
+	{
+	  "tag": "c:ingots/zinc"
+	}
+  ],
+  "results": [
+	{
+	  "item": "create:raw_zinc"
+	}
+  ]
+}

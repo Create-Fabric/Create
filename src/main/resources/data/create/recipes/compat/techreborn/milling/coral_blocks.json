@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+  ],
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "tag": "c:coral_blocks"
+    }
+  ],
+  "results": [
+    {
+      "item": "techreborn:calcite_dust"
+    }
+  ],
+  "processingTime": 150
+}

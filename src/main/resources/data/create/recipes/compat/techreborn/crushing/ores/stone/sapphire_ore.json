@@ -1,0 +1,38 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "techreborn:sapphire_ore"
+    }
+  ],
+  "results": [
+    {
+      "item": "techreborn:sapphire_gem"
+    },
+    {
+      "item": "techreborn:sapphire_gem",
+      "chance": 0.5
+    },
+    {
+      "item": "techreborn:peridot_gem",
+      "chance": 0.15
+    },
+    {
+      "item": "create:experience_nugget",
+      "chance": 0.75
+    },
+    {
+      "item": "minecraft:cobblestone",
+      "chance": 0.12
+    }
+  ],
+  "processingTime": 150
+}

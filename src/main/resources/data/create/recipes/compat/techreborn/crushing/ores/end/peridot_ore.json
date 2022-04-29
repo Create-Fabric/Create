@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "techreborn:peridot_ore"
+    }
+  ],
+  "results": [
+    {
+      "item": "techreborn:peridot_gem"
+    },
+    {
+      "item": "techreborn:peridot_dust",
+      "chance": 0.75
+    },
+    {
+      "item": "minecraft:end_stone",
+      "chance": 0.12
+    }
+  ],
+  "processingTime": 350
+}

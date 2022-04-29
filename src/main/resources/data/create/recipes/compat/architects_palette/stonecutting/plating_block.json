@@ -1,0 +1,16 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "architects_palette"
+      ]
+		}
+  ],
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "tag": "c:plates/iron"
+  },
+  "result": "architects_palette:plating_block",
+  "count": 4
+}

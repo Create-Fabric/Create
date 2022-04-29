@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+  ],
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "techreborn:hv_cable"
+    },
+    {
+      "item": "techreborn:rubber"
+    }
+  ],
+  "results": [
+    {
+      "item": "techreborn:insulated_hv_cable"
+    }
+  ],
+  "keepHeldItem": false
+}

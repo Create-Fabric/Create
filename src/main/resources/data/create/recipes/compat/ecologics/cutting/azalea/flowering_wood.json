@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "ecologics"
+      ]
+		}
+  ],
+  "type": "create:cutting",
+  "ingredients": [
+    {
+      "item": "ecologics:flowering_azalea_wood"
+    }
+  ],
+  "results": [
+    {
+      "item": "ecologics:stripped_azalea_wood"
+    }
+  ],
+  "processingTime": 50
+}

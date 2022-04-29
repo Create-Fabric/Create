@@ -1,0 +1,35 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "mythicmetals"
+      ]
+		}
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "mythicmetals:deepslate_morkite_ore"
+    }
+  ],
+  "results": [
+    {
+      "item": "mythicmetals:morkite",
+      "count": 3
+    },
+    {
+      "item": "mythicmetals:morkite",
+      "chance": 0.25
+    },
+    {
+      "item": "create:experience_nugget",
+      "chance": 0.75
+    },
+    {
+      "item": "minecraft:cobbled_deepslate",
+      "chance": 0.125
+    }
+  ],
+  "processingTime": 350
+}

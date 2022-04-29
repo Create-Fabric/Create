@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+	],
+  "type": "techreborn:centrifuge",
+  "power": 5,
+  "time": 2400,
+  "ingredients": [
+    {
+      "item": "create:raw_zinc"
+    }
+  ],
+  "results": [
+    {
+      "item": "techreborn:lead_nugget"
+    },
+    {
+      "item": "create:copper_nugget"
+    }
+  ]
+}

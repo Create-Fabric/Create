@@ -1,0 +1,23 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "tag": "c:storage_blocks/amethyst"
+    }
+  ],
+  "results": [
+    {
+      "item": "techreborn:amethyst_dust",
+      "count": 2
+    }
+  ],
+  "processingTime": 150
+}

@@ -1,0 +1,30 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "tag": "c:cinnabar_ores"
+    }
+  ],
+  "results": [
+    {
+      "item": "techreborn:cinnabar_dust"
+    },
+    {
+      "item": "techreborn:cinnabar_dust",
+      "chance": 0.75
+    },
+    {
+      "item": "minecraft:netherrack",
+      "chance": 0.12
+    }
+  ],
+  "processingTime": 150
+}

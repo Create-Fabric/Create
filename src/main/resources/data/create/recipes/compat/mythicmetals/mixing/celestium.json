@@ -1,0 +1,34 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "mythicmetals"
+      ]
+		}
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "mythicmetals:starrite"
+    },
+    {
+      "tag": "c:platinum_ingots"
+    },
+    {
+      "item": "mythicmetals:carmot_ingot"
+    },
+    {
+      "item": "mythicmetals:kyber_ingot"
+    },
+    {
+      "item": "mythicmetals:unobtainium"
+    }
+  ],
+  "results": [
+    {
+      "item": "mythicmetals:celestium_ingot"
+    }
+  ],
+  "heatRequirement": "superheated"
+}

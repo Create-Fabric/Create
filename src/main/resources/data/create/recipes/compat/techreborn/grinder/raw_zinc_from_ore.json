@@ -1,0 +1,24 @@
+{
+    "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+  ],
+  "type": "techreborn:grinder",
+  "power": 2,
+  "time": 270,
+  "ingredients": [
+    {
+      "tag": "c:ores/zinc"
+    }
+  ],
+  "results": [
+    {
+      "item": "create:raw_zinc",
+      "count": 2
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+  ],
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "tag": "c:yellow_garnet_gems"
+    }
+  ],
+  "results": [
+    {
+      "item": "techreborn:yellow_garnet_dust"
+    }
+  ],
+  "processingTime": 150
+}

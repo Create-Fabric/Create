@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "architects_palette"
+      ]
+		}
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "minecraft:soul_sand"
+    },
+    {
+      "tag": "c:nuggets/gold"
+    }
+  ],
+  "results": [
+    {
+      "item": "architects_palette:sunmetal_brick",
+      "count": 2
+    }
+  ],
+  "heatRequirement": "heated"
+}

@@ -1,0 +1,22 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+  ],
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "tag": "c:basalt"
+    }
+  ],
+  "results": [
+    {
+      "item": "techreborn:basalt_dust"
+    }
+  ],
+  "processingTime": 150
+}

@@ -1,0 +1,21 @@
+{
+    "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+	],
+    "type": "create:pressing",
+    "ingredients": [
+      {
+        "tag": "c:bronze_ingots"
+      }
+    ],
+    "results": [
+      {
+        "item": "techreborn:bronze_plate"
+      }
+    ]
+}

@@ -1,0 +1,24 @@
+{
+    "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "techreborn"
+      ]
+		}
+	],
+    "type": "create:compacting",
+    "ingredients": [
+      {
+        "tag": "c:saw_dusts"
+      },
+      {
+        "tag": "c:saw_dusts"
+      }
+    ],
+    "results": [
+      {
+        "item": "techreborn:wood_plate"
+      }
+    ]
+  }
