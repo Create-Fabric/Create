@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "alloygery"
+      ]
+		}
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "tag": "c:ingots/iron"
+    },
+    {
+      "tag": "c:nickel_ingots"
+    }
+  ],
+  "results": [
+    {
+      "item": "alloygery:invar_ingot",
+      "count": 2
+    }
+  ],
+  "heatRequirement": "heated"
+}

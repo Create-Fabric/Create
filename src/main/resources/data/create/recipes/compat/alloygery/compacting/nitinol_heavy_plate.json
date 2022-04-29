@@ -1,0 +1,24 @@
+{
+    "fabric:load_conditions": [
+        {
+            "condition": "fabric:all_mods_loaded",
+            "values": [
+                "alloygery"
+            ]
+        }
+    ],
+    "results": [
+        {
+            "item": "alloygery:nitinol_heavy_plate"
+        }
+    ],
+    "type": "create:compacting",
+    "ingredients": [
+        {
+            "tag": "c:nitinol_ingots"
+        },
+        {
+            "tag": "c:nitinol_ingots"
+        }
+    ]
+}

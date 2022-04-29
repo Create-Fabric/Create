@@ -1,0 +1,24 @@
+{
+    "fabric:load_conditions": [
+        {
+            "condition": "fabric:all_mods_loaded",
+            "values": [
+                "alloygery"
+            ]
+        }
+    ],
+    "results": [
+        {
+            "item": "alloygery:constantan_heavy_plate"
+        }
+    ],
+    "type": "create:compacting",
+    "ingredients": [
+        {
+            "tag": "c:constantan_ingots"
+        },
+        {
+            "tag": "c:constantan_ingots"
+        }
+    ]
+}

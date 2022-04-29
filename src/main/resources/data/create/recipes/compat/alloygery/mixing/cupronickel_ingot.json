@@ -1,0 +1,32 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "alloygery"
+      ]
+		}
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "tag": "c:nickel_ingots"
+    },
+    {
+      "tag": "c:nickel_ingots"
+    },
+    {
+      "tag": "c:bronze_ingots"
+    },
+    {
+      "tag": "c:ingots/copper"
+    }
+  ],
+  "results": [
+    {
+      "item": "alloygery:cupronickel_ingot",
+      "count": 4
+    }
+  ],
+  "heatRequirement": "heated"
+}

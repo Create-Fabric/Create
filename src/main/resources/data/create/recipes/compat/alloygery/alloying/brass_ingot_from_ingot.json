@@ -1,0 +1,25 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "alloygery"
+      ]
+		}
+  ],
+  "type": "alloygery:alloying",
+  "inputs": [
+    {
+      "tag": "c:ingots/copper"
+    },
+    {
+      "tag": "c:ingots/zinc"
+    }
+  ],
+  "output":{
+    "id": "create:brass_ingot",
+    "count": 1
+  },
+  "smelting_time": 800,
+  "experience": 0.7
+}

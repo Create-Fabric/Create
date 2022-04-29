@@ -1,0 +1,1 @@
+{"fabric:load_conditions":[{"condition":"fabric:all_mods_loaded","values":["alloygery"]}],"results":[{"item":"alloygery:bronze_plate"}],"type":"create:pressing","ingredients":[{"tag":"c:bronze_ingots"}]}

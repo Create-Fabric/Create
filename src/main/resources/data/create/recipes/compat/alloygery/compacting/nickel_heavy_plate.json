@@ -1,0 +1,24 @@
+{
+    "fabric:load_conditions": [
+        {
+            "condition": "fabric:all_mods_loaded",
+            "values": [
+                "alloygery"
+            ]
+        }
+    ],
+    "results": [
+        {
+            "item": "alloygery:nickel_heavy_plate"
+        }
+    ],
+    "type": "create:compacting",
+    "ingredients": [
+        {
+            "tag": "c:nickel_ingots"
+        },
+        {
+            "tag": "c:nickel_ingots"
+        }
+    ]
+}

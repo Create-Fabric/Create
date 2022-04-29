@@ -1,0 +1,1 @@
+{"fabric:load_conditions":[{"condition":"fabric:all_mods_loaded","values":["alloygery"]}],"results":[{"item":"alloygery:nitinol_plate"}],"type":"create:pressing","ingredients":[{"tag":"c:nitinol_ingots"}]}

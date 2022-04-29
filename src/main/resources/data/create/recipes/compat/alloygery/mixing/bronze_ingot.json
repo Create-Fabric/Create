@@ -1,0 +1,32 @@
+{
+  "fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "alloygery"
+      ]
+		}
+  ],
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "tag": "c:ingots/copper"
+    },
+    {
+      "tag": "c:ingots/copper"
+    },
+    {
+      "tag": "c:ingots/copper"
+    },
+    {
+      "tag": "c:tin_ingots"
+    }
+  ],
+  "results": [
+    {
+      "item": "alloygery:bronze_ingot",
+      "count": 4
+    }
+  ],
+  "heatRequirement": "heated"
+}
