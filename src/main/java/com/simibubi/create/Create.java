@@ -70,6 +70,8 @@ public class Create implements ModInitializer {
 	public static final ServerLagger LAGGER = new ServerLagger();
 	public static final Random RANDOM = new Random();
 
+	public static final long BottleConstants = 20250;
+
 	private static final NonNullSupplier<CreateRegistrate> REGISTRATE = CreateRegistrate.lazy(ID);
 
 	@Override

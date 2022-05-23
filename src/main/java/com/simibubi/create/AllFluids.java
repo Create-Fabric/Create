@@ -13,6 +13,7 @@ import com.simibubi.create.foundation.utility.NBTHelper;
 import com.tterrag.registrate.fabric.EnvExecutor;
 import com.tterrag.registrate.fabric.SimpleFlowableFluid;
 import com.tterrag.registrate.util.entry.FluidEntry;
+import com.simibubi.create.Create;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -79,9 +80,9 @@ public class AllFluids {
 				Fluid still = tea.getSource();
 				Fluid flowing = tea.getFlowing();
 				FluidStorage.combinedItemApiProvider(AllItems.BUILDERS_TEA.get()).register(context ->
-						new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(still), FluidConstants.BOTTLE));
+						new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(still), Create.BottleConstants));
 				FluidStorage.combinedItemApiProvider(GLASS_BOTTLE).register(context ->
-						new EmptyItemFluidStorage(context, bottle -> ItemVariant.of(AllItems.BUILDERS_TEA.get()), still, FluidConstants.BOTTLE));
+						new EmptyItemFluidStorage(context, bottle -> ItemVariant.of(AllItems.BUILDERS_TEA.get()), still, Create.BottleConstants));
 
 				FluidVariantAttributes.register(still, new TeaFluidVariantAttributeHandler());
 				FluidVariantAttributes.register(flowing, new TeaFluidVariantAttributeHandler());
@@ -106,9 +107,9 @@ public class AllFluids {
 					.onRegisterAfter(Item.class, honey -> {
 						Fluid source = honey.getSource();
 						FluidStorage.combinedItemApiProvider(HONEY_BOTTLE).register(context ->
-								new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(source), FluidConstants.BOTTLE));
+								new FullItemFluidStorage(context, bottle -> ItemVariant.of(GLASS_BOTTLE), FluidVariant.of(source), Create.BottleConstants));
 						FluidStorage.combinedItemApiProvider(GLASS_BOTTLE).register(context ->
-								new EmptyItemFluidStorage(context, bottle -> ItemVariant.of(HONEY_BOTTLE), source, FluidConstants.BOTTLE));
+								new EmptyItemFluidStorage(context, bottle -> ItemVariant.of(HONEY_BOTTLE), source, Create.BottleConstants));
 						FluidStorage.combinedItemApiProvider(source.getBucket()).register(context ->
 								new FullItemFluidStorage(context, bucket -> ItemVariant.of(BUCKET), FluidVariant.of(source), FluidConstants.BUCKET));
 						FluidStorage.combinedItemApiProvider(BUCKET).register(context ->

@@ -10,6 +10,7 @@ import com.simibubi.create.foundation.fluid.FluidHelper;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.utility.NBTHelper;
 import com.simibubi.create.foundation.utility.Pair;
+import com.simibubi.create.Create;
 import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 
 import net.fabricmc.api.EnvType;
@@ -55,8 +56,8 @@ public class PotionFluidHandler {
 		List<MobEffectInstance> list = PotionUtils.getCustomEffects(stack);
 		BottleType bottleTypeFromItem = bottleTypeFromItem(stack.getItem());
 		if (potion == Potions.WATER && list.isEmpty() && bottleTypeFromItem == BottleType.REGULAR)
-			return new FluidStack(Fluids.WATER, FluidConstants.BOTTLE);
-		FluidStack fluid = PotionFluid.withEffects(FluidConstants.BOTTLE, potion, list);
+			return new FluidStack(Fluids.WATER, Create.BottleConstants);
+		FluidStack fluid = PotionFluid.withEffects(Create.BottleConstants, potion, list);
 		CompoundTag tagInfo = fluid.getTag();
 		NBTHelper.writeEnum(tagInfo, "Bottle", bottleTypeFromItem);
 		FluidVariant variant = FluidVariant.of(fluid.getFluid(), tagInfo);
@@ -92,7 +93,7 @@ public class PotionFluidHandler {
 	}
 
 	public static long getRequiredAmountForFilledBottle(ItemStack stack, FluidStack availableFluid) {
-		return FluidConstants.BOTTLE;
+		return Create.BottleConstants;
 	}
 
 	public static ItemStack fillBottle(ItemStack stack, FluidStack availableFluid) {
