@@ -134,6 +134,8 @@ loom {
 }
 
 processResources {
+    exclude("**/*.bbmodel", "**/*.lnk")
+    
     Map<String, String> properties = new HashMap<>()
     properties.put("version", project.version)
     properties.put("loader_version", project.loader_version)
