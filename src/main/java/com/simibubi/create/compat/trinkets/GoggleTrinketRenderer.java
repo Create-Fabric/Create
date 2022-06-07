@@ -6,6 +6,8 @@ import com.mojang.math.Vector3f;
 import com.simibubi.create.AllItems;
 
 import dev.emi.trinkets.api.SlotReference;
+import dev.emi.trinkets.api.TrinketInventory;
+import dev.emi.trinkets.api.TrinketsApi;
 import dev.emi.trinkets.api.client.TrinketRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
@@ -17,6 +19,8 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.Map;
 
 public class GoggleTrinketRenderer implements TrinketRenderer {
 	@Override
@@ -38,7 +42,9 @@ public class GoggleTrinketRenderer implements TrinketRenderer {
 			matrices.mulPose(Vector3f.ZP.rotationDegrees(180.0f));
 			matrices.scale(0.625f, 0.625f, 0.625f);
 
-			if (!entity.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
+			@SuppressWarnings("OptionalGetWithoutIsPresent")
+			TrinketInventory hatSlot = TrinketsApi.getTrinketComponent(entity).get().getInventory().get("head").get("hat");
+			if (!entity.getItemBySlot(EquipmentSlot.HEAD).isEmpty() || (hatSlot != null && !hatSlot.isEmpty())) {
 				matrices.mulPose(Vector3f.ZP.rotationDegrees(180.0f));
 				matrices.translate(0, -0.25, 0);
 			}
