@@ -25,7 +25,7 @@ public abstract class ProcessingRecipeGen extends CreateRecipeProvider {
 
 	protected static final List<ProcessingRecipeGen> GENERATORS = new ArrayList<>();
 	protected static final long BUCKET = FluidConstants.BUCKET;
-	protected static final long BOTTLE = FluidConstants.BOTTLE;
+	protected static final long BOTTLE = Create.BottleConstants;
 
 	public static void registerAll(FabricDataGenerator gen) {
 		GENERATORS.add(new CrushingRecipeGen(gen));

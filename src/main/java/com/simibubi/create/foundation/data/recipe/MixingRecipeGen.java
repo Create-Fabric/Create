@@ -3,6 +3,7 @@ package com.simibubi.create.foundation.data.recipe;
 import com.simibubi.create.AllFluids;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllRecipeTypes;
+import com.simibubi.create.Create;
 import com.simibubi.create.content.contraptions.processing.HeatCondition;
 
 import me.alphamode.forgetags.Tags;
@@ -21,20 +22,20 @@ public class MixingRecipeGen extends ProcessingRecipeGen {
 		.output(Fluids.LAVA, FluidConstants.BUCKET / 20)
 		.requiresHeat(HeatCondition.SUPERHEATED)),
 
-		TEA = create("tea", b -> b.require(Fluids.WATER, FluidConstants.BOTTLE)
-			.require(Tags.Fluids.MILK, FluidConstants.BOTTLE)
+		TEA = create("tea", b -> b.require(Fluids.WATER, Create.BottleConstants)
+			.require(Tags.Fluids.MILK, Create.BottleConstants)
 			.require(ItemTags.LEAVES)
-			.output(AllFluids.TEA.get(), FluidConstants.BOTTLE * 2)
+			.output(AllFluids.TEA.get(), Create.BottleConstants * 2)
 			.requiresHeat(HeatCondition.HEATED)),
 
-		CHOCOLATE = create("chocolate", b -> b.require(Tags.Fluids.MILK, FluidConstants.BOTTLE)
+		CHOCOLATE = create("chocolate", b -> b.require(Tags.Fluids.MILK, Create.BottleConstants)
 			.require(Items.SUGAR)
 			.require(Items.COCOA_BEANS)
-			.output(AllFluids.CHOCOLATE.get(), FluidConstants.BOTTLE)
+			.output(AllFluids.CHOCOLATE.get(), Create.BottleConstants)
 			.requiresHeat(HeatCondition.HEATED)),
 
 		CHOCOLATE_MELTING = create("chocolate_melting", b -> b.require(AllItems.BAR_OF_CHOCOLATE.get())
-			.output(AllFluids.CHOCOLATE.get(), FluidConstants.BOTTLE)
+			.output(AllFluids.CHOCOLATE.get(), Create.BottleConstants)
 			.requiresHeat(HeatCondition.HEATED)),
 
 		HONEY = create("honey", b -> b.require(Items.HONEY_BLOCK)

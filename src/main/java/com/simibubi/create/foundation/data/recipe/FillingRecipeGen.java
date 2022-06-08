@@ -3,6 +3,7 @@ package com.simibubi.create.foundation.data.recipe;
 import com.simibubi.create.AllFluids;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllRecipeTypes;
+import com.simibubi.create.Create;
 import com.simibubi.create.AllTags.AllFluidTags;
 import com.simibubi.create.content.contraptions.fluids.potion.PotionFluidHandler;
 
@@ -17,27 +18,27 @@ public class FillingRecipeGen extends ProcessingRecipeGen {
 
 	GeneratedRecipe
 
-	HONEY_BOTTLE = create("honey_bottle", b -> b.require(AllFluidTags.HONEY.tag, FluidConstants.BOTTLE)
+	HONEY_BOTTLE = create("honey_bottle", b -> b.require(AllFluidTags.HONEY.tag, Create.BottleConstants)
 		.require(Items.GLASS_BOTTLE)
 		.output(Items.HONEY_BOTTLE)),
 
-		BUILDERS_TEA = create("builders_tea", b -> b.require(AllFluids.TEA.get(), FluidConstants.BOTTLE)
+		BUILDERS_TEA = create("builders_tea", b -> b.require(AllFluids.TEA.get(), Create.BottleConstants)
 			.require(Items.GLASS_BOTTLE)
 			.output(AllItems.BUILDERS_TEA.get())),
 
-		BLAZE_CAKE = create("blaze_cake", b -> b.require(Fluids.LAVA, FluidConstants.BOTTLE)
+		BLAZE_CAKE = create("blaze_cake", b -> b.require(Fluids.LAVA, Create.BottleConstants)
 			.require(AllItems.BLAZE_CAKE_BASE.get())
 			.output(AllItems.BLAZE_CAKE.get())),
 
-		HONEYED_APPLE = create("honeyed_apple", b -> b.require(AllFluidTags.HONEY.tag, FluidConstants.BOTTLE)
+		HONEYED_APPLE = create("honeyed_apple", b -> b.require(AllFluidTags.HONEY.tag, Create.BottleConstants)
 			.require(Items.APPLE)
 			.output(AllItems.HONEYED_APPLE.get())),
 
-		SWEET_ROLL = create("sweet_roll", b -> b.require(Tags.Fluids.MILK, FluidConstants.BOTTLE)
+		SWEET_ROLL = create("sweet_roll", b -> b.require(Tags.Fluids.MILK, Create.BottleConstants)
 			.require(Items.BREAD)
 			.output(AllItems.SWEET_ROLL.get())),
 
-		CHOCOLATE_BERRIES = create("chocolate_glazed_berries", b -> b.require(AllFluids.CHOCOLATE.get(), FluidConstants.BOTTLE)
+		CHOCOLATE_BERRIES = create("chocolate_glazed_berries", b -> b.require(AllFluids.CHOCOLATE.get(), Create.BottleConstants)
 			.require(Items.SWEET_BERRIES)
 			.output(AllItems.CHOCOLATE_BERRIES.get())),
 

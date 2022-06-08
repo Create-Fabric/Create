@@ -12,6 +12,7 @@ import com.simibubi.create.foundation.advancement.AllTriggers;
 import com.simibubi.create.foundation.config.AllConfigs;
 import com.simibubi.create.foundation.fluid.FluidHelper;
 import com.simibubi.create.foundation.utility.BlockFace;
+import com.simibubi.create.Create;
 
 import io.github.fabricators_of_create.porting_lib.extensions.LevelExtensions;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
@@ -363,7 +364,7 @@ public class OpenEndedPipe extends FlowSource {
 		public void applyEffects(OpenEndedPipe pipe, FluidStack fluid) {
 			if (pipe.cachedFluid == null || pipe.cachedEffects == null || !fluid.isFluidEqual(pipe.cachedFluid)) {
 				FluidStack copy = fluid.copy();
-				copy.setAmount(FluidConstants.BOTTLE);
+				copy.setAmount(Create.BottleConstants);
 				ItemStack bottle = PotionFluidHandler.fillBottle(new ItemStack(Items.GLASS_BOTTLE), fluid);
 				pipe.cachedEffects = PotionUtils.getMobEffects(bottle);
 			}

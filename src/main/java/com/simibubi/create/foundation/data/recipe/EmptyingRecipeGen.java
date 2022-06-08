@@ -3,6 +3,7 @@ package com.simibubi.create.foundation.data.recipe;
 import com.simibubi.create.AllFluids;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllRecipeTypes;
+import com.simibubi.create.Create;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -18,12 +19,12 @@ public class EmptyingRecipeGen extends ProcessingRecipeGen {
 
 		HONEY_BOTTLE = create("honey_bottle", b -> b
 			.require(Items.HONEY_BOTTLE)
-			.output(AllFluids.HONEY.get(), FluidConstants.BOTTLE)
+			.output(AllFluids.HONEY.get(), Create.BottleConstants)
 			.output(Items.GLASS_BOTTLE)),
 
 		BUILDERS_TEA = create("builders_tea", b -> b
 			.require(AllItems.BUILDERS_TEA.get())
-			.output(AllFluids.TEA.get(), FluidConstants.BOTTLE)
+			.output(AllFluids.TEA.get(), Create.BottleConstants)
 			.output(Items.GLASS_BOTTLE))
 
 	;

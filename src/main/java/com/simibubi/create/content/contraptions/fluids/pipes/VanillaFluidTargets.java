@@ -3,6 +3,7 @@ package com.simibubi.create.content.contraptions.fluids.pipes;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.LEVEL_HONEY;
 
 import com.simibubi.create.AllFluids;
+import com.simibubi.create.Create;
 
 import io.github.fabricators_of_create.porting_lib.extensions.LevelExtensions;
 import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
@@ -33,7 +34,7 @@ public class VanillaFluidTargets {
 			((LevelExtensions) level).updateSnapshots(ctx);
 			level.setBlock(pos, state.setValue(LEVEL_HONEY, 0), 3);
 			return new FluidStack(AllFluids.HONEY.get()
-				.getSource(), FluidConstants.BOTTLE);
+				.getSource(), Create.BottleConstants);
 		}
 
 		if (state.getBlock() == Blocks.LAVA_CAULDRON) {
