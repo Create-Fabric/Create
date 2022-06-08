@@ -12,6 +12,7 @@ import com.simibubi.create.AllTileEntities;
 import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
 import com.simibubi.create.content.contraptions.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.ITE;
+import com.simibubi.create.foundation.tileEntity.behaviour.filtering.FilteringBehaviour;
 import com.simibubi.create.foundation.utility.Lang;
 
 import dev.cafeteria.fakeplayerapi.server.FakeServerPlayer;
@@ -115,6 +116,9 @@ public class BlazeBurnerBlock extends Block implements ITE<BlazeBurnerTileEntity
 	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand,
 		BlockHitResult blockRayTraceResult) {
 		ItemStack heldItem = player.getItemInHand(hand);
+
+		if (!FilteringBehaviour.playerCanInteract(player))
+			return InteractionResult.PASS;
 
 		if (state.getValue(HEAT_LEVEL) == HeatLevel.NONE) {
 			if (heldItem.getItem() instanceof FlintAndSteelItem) {

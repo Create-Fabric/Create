@@ -10,6 +10,8 @@ import com.simibubi.create.content.contraptions.base.KineticBlock;
 import com.simibubi.create.content.contraptions.base.RotatedPillarKineticBlock;
 import com.simibubi.create.foundation.block.ITE;
 import com.simibubi.create.foundation.gui.ScreenOpener;
+import com.simibubi.create.foundation.tileEntity.behaviour.filtering.FilteringBehaviour;
+
 import io.github.fabricators_of_create.porting_lib.block.WeakPowerCheckingBlock;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
@@ -89,6 +91,8 @@ public class SequencedGearshiftBlock extends HorizontalAxisKineticBlock implemen
 	@Override
 	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn,
 		BlockHitResult hit) {
+		if (!FilteringBehaviour.playerCanInteract(player))
+			return InteractionResult.PASS;
 		ItemStack held = player.getMainHandItem();
 		if (AllTags.AllItemTags.WRENCHES.matches(held))
 			return InteractionResult.PASS;

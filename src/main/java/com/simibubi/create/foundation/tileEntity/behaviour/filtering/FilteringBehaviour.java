@@ -238,7 +238,7 @@ public class FilteringBehaviour extends TileEntityBehaviour {
 	}
 
 	public static boolean playerCanInteract(Player player) {
-		boolean adventure = !player.getAbilities().mayBuild && !player.isSpectator(); // from GameRenderer
+		boolean adventure = !player.mayBuild() && !player.isSpectator(); // from GameRenderer
 		return !(adventure && AllConfigs.SERVER.limitAdventureMode.get());
 	}
 
