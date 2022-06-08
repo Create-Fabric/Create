@@ -54,12 +54,19 @@ dependencies {
     modApi("me.shedaniel.cloth:basic-math:0.6.0")
     modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}") { transitive = false }
-    modImplementation("me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}") { transitive = false }
+    modCompileOnly("me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}") { transitive = false }
     modImplementation("dev.architectury:architectury-fabric:${project.architectury_version}")
     modLocalRuntime("maven.modrinth:lazydfu:0.1.2")
     modLocalRuntime("maven.modrinth:lithium:mc1.18.2-0.7.9")
     modCompileOnly("maven.modrinth:sandwichable:1.2+1.18.2")
     modImplementation("dev.emi:trinkets:${project.trinkets_version}")
+    modCompileOnly("dev.emi:emi:${project.emi_version}")
+
+    if ("${project.recipe_viewer}" == 'emi') {
+        modImplementation("dev.emi:emi:${project.emi_version}")
+    } else if ("${project.recipe_viewer}" == 'rei') {
+        modImplementation("me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}") { transitive = false }
+    }
 
     // uncomment these to test
 

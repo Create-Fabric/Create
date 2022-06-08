@@ -28,6 +28,9 @@
     "fabric-datagen": [
       "com.simibubi.create.CreateData"
     ],
+    "emi": [
+      "com.simibubi.create.compat.emi.CreateEmiPlugin"
+    ],
     "rei": [
       "com.simibubi.create.compat.rei.CreateREI"
     ]
