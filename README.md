@@ -35,4 +35,5 @@ Check out the in-game Documentation for further info on how to use the added fea
 <h4 align="center">Looking for the Forge version? <a href="https://github.com/Creators-of-Create/Create">Find it here</a></h4>
 
 <h3 align="center">Development</h3>
+
 Looking to make an addon for Create? A template mod for a Fabric addon can be found [here](https://github.com/Fabricators-of-Create/create-fabric-addon-template).
