@@ -20,6 +20,61 @@ version = mod_version + (dev && buildNumber != null ? "-${buildNumber}" : '')
 group = project.maven_group
 archivesBaseName = "create-${project.minecraft_version}"
 
+def localProps = new Properties()
+// there is no API method in Gradle to retrieve the path to .gradle
+// this is the same way Loom does it
+def localPropsFile = file(".gradle/create/local.properties")
+
+import javax.swing.JOptionPane
+import javax.swing.UIManager
+
+def openRecipeViewerDialog(localProps, localPropsFile) {
+    try {
+        // only exists on Linux and is not the default for some reason
+        UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel")
+    } catch (e) {
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
+    }
+    def choices = new String[] {
+        'EMI',
+        'REI',
+        'JEI'
+    }
+    def choice = JOptionPane.showOptionDialog(null,
+        """
+        <html>
+        <b>Which recipe viewer do you want to use in the Create development environment?</b><br/><br/>
+        You can change your choice later by running the <code>chooseRecipeViewer</code> Gradle task.
+        </html>
+        """.trim().replace("\n", ""),
+        'Create',
+        JOptionPane.DEFAULT_OPTION,
+        JOptionPane.QUESTION_MESSAGE,
+        null,
+        choices,
+        project.default_recipe_viewer.toUpperCase(Locale.ROOT)
+    )
+    if (choice >= 0 && choice < choices.length) {
+        localPropsFile.getParentFile().mkdirs()
+        localProps.setProperty("recipe_viewer", choices[choice].toLowerCase(Locale.ROOT))
+        localPropsFile.withWriter { localProps.store(it, "Create local build configuration") }
+    }
+}
+
+if (localPropsFile.exists()) {
+    localPropsFile.withReader { localProps.load(it) }
+}
+
+if (!localProps.containsKey("recipe_viewer")) {
+    if (!java.awt.GraphicsEnvironment.isHeadless()) {
+        openRecipeViewerDialog(localProps, localPropsFile)
+    } else {
+        println "No GUI available, using default recipe viewer "+project.default_recipe_viewer
+    }
+}
+
+def recipeViewer = localProps.getOrDefault("recipe_viewer", project.default_recipe_viewer)
+
 repositories {
     mavenCentral()
     mavenLocal()
@@ -79,7 +134,6 @@ dependencies {
     // EMI
     modCompileOnly("dev.emi:emi:${project.emi_version}") { transitive = false }
 
-    def recipeViewer = project.recipe_viewer
     if (recipeViewer == "emi") {
         modRuntimeOnly("dev.emi:emi:${project.emi_version}")  { transitive = false }
     } else if (recipeViewer == "rei") {
@@ -204,6 +258,12 @@ processResources {
 
 tasks.withType(JavaCompile).configureEach {
     it.options.release = Integer.parseInt(sourceCompatibility)
+}
+
+task chooseRecipeViewer {
+    doFirst {
+        openRecipeViewerDialog(localProps, localPropsFile)
+    }
 }
 
 java {
