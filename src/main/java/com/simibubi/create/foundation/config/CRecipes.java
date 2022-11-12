@@ -14,6 +14,7 @@ public class CRecipes extends ConfigBase {
 	public final ConfigBool allowStonecuttingOnSaw = b(true, "allowStonecuttingOnSaw", Comments.allowStonecuttingOnSaw);
 	public final ConfigBool allowWoodcuttingOnSaw = b(true, "allowWoodcuttingOnSaw", Comments.allowWoodcuttingOnSaw);
 	public final ConfigBool allowCastingBySpout = b(true, "allowCastingBySpout", Comments.allowCastingBySpout);
+	public final ConfigBool allowFillingBySpout = b(true, "allowFillingBySpout", Comments.allowFillingBySpout);
 	public final ConfigBool displayLogStrippingRecipes = b(true, "displayLogStrippingRecipes", Comments.displayLogStrippingRecipes);
 	public final ConfigInt lightSourceCountForRefinedRadiance =
 		i(10, 1, "lightSourceCountForRefinedRadiance", Comments.refinedRadiance);
@@ -44,6 +45,8 @@ public class CRecipes extends ConfigBase {
 			"Allow any Druidcraft woodcutter recipes to be processed by a Mechanical Saw.";
 		static String allowCastingBySpout =
 			"Allow Spouts to interact with Casting Tables and Basins from Tinkers' Construct.";
+		static String allowFillingBySpout =
+			"Allow Spouts to fill the Petal Apothecary from Botania.";
 		static String refinedRadiance =
 			"The amount of Light sources destroyed before Chromatic Compound turns into Refined Radiance.";
 		static String refinedRadianceRecipe = "Allow the standard in-world Refined Radiance recipes.";

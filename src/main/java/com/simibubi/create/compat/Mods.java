@@ -15,7 +15,8 @@ public enum Mods {
 	TCONSTRUCT,
 	SANDWICHABLE,
 	TRINKETS,
-	MODMENU;
+	MODMENU,
+	BOTANIA;
 
 	private final boolean loaded;
 

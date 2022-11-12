@@ -45,6 +45,7 @@ repositories {
             includeGroup("com.jamieswhiteshirt")
         }
     }
+    maven { url = "https://maven.blamejared.com/vazkii/botania/Botania/" }
 }
 
 dependencies {
@@ -102,6 +103,7 @@ def compat(DependencyHandler deps) {
     deps.modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
     deps.modCompileOnly("maven.modrinth:sandwichable:1.2+1.18.2")
     deps.modImplementation("dev.emi:trinkets:${project.trinkets_version}") { exclude(group: "com.terraformersmc") }
+    deps.modImplementation("vazkii.botania:Botania:${project.botania_version}")
 }
 
 // setup the three recipe viewer mods

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import com.simibubi.create.Create;
+import com.simibubi.create.compat.botania.ApothecaryFilling;
 import com.simibubi.create.compat.tconstruct.SpoutCasting;
 import com.simibubi.create.content.contraptions.fluids.actors.SpoutTileEntity;
 import io.github.fabricators_of_create.porting_lib.util.FluidStack;
@@ -48,6 +49,7 @@ public abstract class BlockSpoutingBehaviour {
 
 	public static void registerDefaults() {
 		addCustomSpoutInteraction(Create.asResource("ticon_casting"), new SpoutCasting());
+		addCustomSpoutInteraction(Create.asResource("botania_apothecary_filling"), new ApothecaryFilling());
 	}
 
 }
