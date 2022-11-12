@@ -55,7 +55,6 @@ public class ApothecaryFilling extends BlockSpoutingBehaviour {
 			return 0;
 		}
 
-		System.out.println(availableFluid.getAmount());
 		// don't insert if we have less than a bucket's worth of fluid
 		if (availableFluid.getAmount() < FluidConstants.BUCKET) {
 			return 0;
