@@ -38,7 +38,7 @@ public class ApothecaryFilling extends BlockSpoutingBehaviour {
 			return 0;
 
 		// this shouldn't fail but... better safe than sorry.
-		if (!(te instanceof TileAltar apothecary))
+		if (!(te instanceof IPetalApothecary apothecary))
 			return 0;
 		// don't insert if it's not empty
 		if (apothecary.getFluid() != IPetalApothecary.State.EMPTY)
