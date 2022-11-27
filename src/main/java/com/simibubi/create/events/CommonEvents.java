@@ -2,6 +2,7 @@ package com.simibubi.create.events;
 
 import java.util.concurrent.Executor;
 
+import io.github.fabricators_of_create.porting_lib.event.client.ClientWorldEvents;
 import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.Commands;
 
@@ -247,7 +248,9 @@ public class CommonEvents {
 		ServerEntityEvents.ENTITY_LOAD.register(CommonEvents::onEntityAdded);
 		ServerLifecycleEvents.SERVER_STOPPED.register(CommonEvents::serverStopping);
 		ServerWorldEvents.LOAD.register(CommonEvents::onLoadWorld);
+		ClientWorldEvents.LOAD.register(CommonEvents::onLoadWorld);
 		ServerWorldEvents.UNLOAD.register(CommonEvents::onUnloadWorld);
+		ClientWorldEvents.UNLOAD.register(CommonEvents::onUnloadWorld);
 		ServerPlayConnectionEvents.DISCONNECT.register(CommonEvents::playerLoggedOut);
 		AttackEntityCallback.EVENT.register(CommonEvents::onEntityAttackedByPlayer);
 		CommandRegistrationCallback.EVENT.register(CommonEvents::registerCommands);
