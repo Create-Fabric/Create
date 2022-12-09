@@ -1,0 +1,23 @@
+{
+	"fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "ae2"
+      ]
+		}
+	],
+    "type": "create:crushing",
+    "ingredients": [
+    	{
+    		"item": "ae2:fluix_crystal"
+    	}
+    ],
+	"results": [
+		{
+			"item": "ae2:fluix_dust",
+			"count": 4
+		}
+	],
+	"processingTime": 300
+}
