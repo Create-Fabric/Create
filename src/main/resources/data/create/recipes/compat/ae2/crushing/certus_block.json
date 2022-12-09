@@ -1,0 +1,28 @@
+{
+	"fabric:load_conditions": [
+		{
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "ae2"
+      ]
+		}
+	],
+    "type": "create:crushing",
+    "ingredients": [
+    	{
+    		"item": "ae2:quartz_block"
+    	}
+    ],
+	"results": [
+		{
+			"item": "ae2:certus_quartz_crystal",
+			"count": 4
+		},
+		{
+			"item": "ae2:certus_quartz_dust",
+			"count": 1,
+			"chance": 0.1
+		}
+	],
+	"processingTime": 300
+}
