@@ -91,8 +91,9 @@ public class ArmInteractionPointHandler {
 	}
 
 	public static void flushSettings(BlockPos pos) {
-		if (currentItem == null)
-			return;
+		// fabric: due to event order differences from forge, this method gets called after currentItem is set to null
+		// if (currentItem == null)
+		// 	return;
 
 		int removed = 0;
 		for (Iterator<ArmInteractionPoint> iterator = currentSelection.iterator(); iterator.hasNext();) {
