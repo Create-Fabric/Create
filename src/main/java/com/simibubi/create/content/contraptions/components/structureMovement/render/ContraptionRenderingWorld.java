@@ -64,6 +64,7 @@ public abstract class ContraptionRenderingWorld<C extends ContraptionRenderInfo>
 				.map(Reference::get)
 				.filter(Objects::nonNull)
 				.map(AbstractContraptionEntity::getContraption)
+				.filter(Objects::nonNull)
 				.forEach(this::getRenderInfo);
 	}
 
