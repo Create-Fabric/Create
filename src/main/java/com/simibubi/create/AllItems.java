@@ -158,7 +158,7 @@ public class AllItems {
 		.register();
 
 	public static final ItemEntry<Item> RAW_ZINC =
-		taggedIngredient("raw_zinc", forgeItemTag("zinc_raw_materials"), TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("c", "raw_materials")));
+		taggedIngredient("raw_zinc", forgeItemTag("raw_zinc_ores"), TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("c", "raw_ores")));
 
 	public static final ItemEntry<Item> ANDESITE_ALLOY = taggedIngredient("andesite_alloy", CREATE_INGOTS.tag),
 		ZINC_INGOT = taggedIngredient("zinc_ingot", forgeItemTag("zinc_ingots"), CREATE_INGOTS.tag),
