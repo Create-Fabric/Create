@@ -294,6 +294,10 @@
       "required": false
     },
     {
+      "id": "traverse:stripped_fir_wood",
+      "required": false
+    },
+    {
       "id": "terrestria:stripped_cypress_wood",
       "required": false
     },
@@ -334,8 +338,21 @@
       "required": false
     },
     {
-      "id": "traverse:stripped_fir_wood",
+      "id":"cinderscapes:stripped_umbral_hyphae",
+      "required": false
+    },
+    {
+      "id":"cinderscapes:stripped_umbral_stem",
+      "required": false
+    },
+    {
+      "id":"cinderscapes:stripped_scorched_hyphae",
+      "required": false
+    },
+    {
+      "id":"cinderscapes:stripped_scorched_stem",
       "required": false
     }
+
   ]
 }
