@@ -342,17 +342,8 @@
       "required": false
     },
     {
-      "id":"cinderscapes:stripped_umbral_stem",
-      "required": false
-    },
-    {
       "id":"cinderscapes:stripped_scorched_hyphae",
       "required": false
-    },
-    {
-      "id":"cinderscapes:stripped_scorched_stem",
-      "required": false
     }
-
   ]
 }
