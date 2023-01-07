@@ -292,6 +292,50 @@
     {
       "id": "byg:stripped_bulbis_wood",
       "required": false
+    },
+    {
+      "id": "terrestria:stripped_cypress_wood",
+      "required": false
+    },
+    {
+      "id": "terrestria:stripped_hemlock_wood",
+      "required": false
+    },
+    {
+      "id": "terrestria:stripped_japanese_maple_wood",
+      "required": false
+    },
+    {
+      "id": "terrestria:stripped_rainbow_eucalyptus_wood",
+      "required": false
+    },
+    {
+      "id": "terrestria:stripped_redwood_wood",
+      "required": false
+    },
+    {
+      "id": "terrestria:stripped_rubber_wood",
+      "required": false
+    },
+    {
+      "id": "terrestria:stripped_sakura_wood",
+      "required": false
+    },
+    {
+      "id": "terrestria:stripped_small_oak_wood",
+      "required": false
+    },
+    {
+      "id": "terrestria:stripped_willow_wood",
+      "required": false
+    },
+    {
+      "id": "terrestria:stripped_yucca_palm_wood",
+      "required": false
+    },
+    {
+      "id": "traverse:stripped_fir_wood",
+      "required": false
     }
   ]
 }

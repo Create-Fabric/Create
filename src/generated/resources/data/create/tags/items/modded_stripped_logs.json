@@ -292,6 +292,50 @@
     {
       "id": "byg:stripped_bulbis_stem",
       "required": false
+    },
+    {
+      "id": "terrestria:stripped_cypress_log",
+      "required": false
+    },
+    {
+      "id": "terrestria:stripped_hemlock_log",
+      "required": false
+    },
+    {
+      "id": "terrestria:stripped_japanese_maple_log",
+      "required": false
+    },
+    {
+      "id": "terrestria:stripped_rainbow_eucalyptus_log",
+      "required": false
+    },
+    {
+      "id": "terrestria:stripped_redwood_log",
+      "required": false
+    },
+    {
+      "id": "terrestria:stripped_rubber_log",
+      "required": false
+    },
+    {
+      "id": "terrestria:stripped_sakura_log",
+      "required": false
+    },
+    {
+      "id": "terrestria:stripped_small_oak_log",
+      "required": false
+    },
+    {
+      "id": "terrestria:stripped_willow_log",
+      "required": false
+    },
+    {
+      "id": "terrestria:stripped_yucca_palm_log",
+      "required": false
+    },
+    {
+      "id": "traverse:stripped_fir_log",
+      "required": false
     }
   ]
 }
