@@ -92,9 +92,6 @@ def setup(DependencyHandler deps) {
 def devEnv(DependencyHandler deps) {
     deps.modLocalRuntime("maven.modrinth:lazydfu:0.1.3")
     deps.modLocalRuntime("maven.modrinth:lithium:mc1.19.2-0.10.0")
-    // used to prevent forge config api port from complaining
-    deps.modImplementation("com.github.AlphaMode:fakeconfig:master-SNAPSHOT") { exclude(group: "net.fabricmc.fabric-api") }
-    deps.modImplementation("com.github.AlphaMode:fakeconfigtoml:master-SNAPSHOT") { exclude(group: "net.fabricmc.fabric-api") }
 }
 
 // setup mods that are available for compatibility reasons
