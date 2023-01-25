@@ -65,7 +65,7 @@ dependencies {
 def dependencies(DependencyHandler deps) {
     deps.modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
 
-    deps.modImplementation(deps.include("io.github.fabricators_of_create:Porting-Lib:${project.port_lib_version}+${project.minecraft_version}-handler-speed"))
+    deps.modImplementation(deps.include("io.github.fabricators_of_create:Porting-Lib:${project.port_lib_version}+${project.minecraft_version}"))
     deps.modImplementation(deps.include("me.alphamode:ForgeTags:${project.forge_tags_version}"))
     deps.modImplementation(deps.include("com.electronwill.night-config:core:${project.night_config_core_version}"))
     deps.modImplementation(deps.include("com.electronwill.night-config:toml:${project.night_config_toml_version}"))
