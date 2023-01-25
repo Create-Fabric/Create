@@ -32,9 +32,7 @@ public class ItemCountDisplaySource extends NumericSingleLineDisplaySource {
 
 		int collected = 0;
 		try (Transaction t = TransferUtil.getTransaction()) {
-			for (StorageView<ItemVariant> view : handler.iterable(t)) {
-				if (view.isResourceBlank())
-					continue;
+			for (StorageView<ItemVariant> view : TransferUtil.getNonEmpty(handler, t)) {
 				if (!filteringBehaviour.test(view.getResource().toStack()))
 					continue;
 				// extract to avoid counting multiple times

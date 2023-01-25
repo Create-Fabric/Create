@@ -141,15 +141,10 @@ public class MountedStorage {
 		Storage<ItemVariant> teHandler = TransferUtil.getItemStorage(te);
 		if (teHandler != null && teHandler.supportsInsertion()) {
 			try (Transaction t = TransferUtil.getTransaction()) {
-				for (StorageView<ItemVariant> view : teHandler.iterable(t)) {
-					// we need to remove whatever is in there to fill with our modified contents
-					if (view.isResourceBlank()) continue;
-					view.extract(view.getResource(), view.getAmount(), t);
-				}
-				for (int i = 0; i < handler.getSlots(); i++) {
-					ItemStack stack = handler.getStackInSlot(i);
-					if (stack.isEmpty()) continue;
-					teHandler.insert(ItemVariant.of(stack), stack.getCount(), t);
+				// we need to remove whatever is in there to fill with our modified contents
+				TransferUtil.clearStorage(teHandler);
+				for (StorageView<ItemVariant> view : handler.nonEmptyIterable()) {
+					teHandler.insert(view.getResource(), view.getAmount(), t);
 				}
 				t.commit();
 			}

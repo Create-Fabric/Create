@@ -316,16 +316,14 @@ public class BasinTileEntity extends SmartTileEntity implements IHaveGoggleInfor
 			return;
 
 		try (Transaction t = TransferUtil.getTransaction()) {
-			for (StorageView<ItemVariant> view : outputInventory.iterable(t)) {
-				if (view.isResourceBlank()) continue;
+			for (StorageView<ItemVariant> view : TransferUtil.getNonEmpty(outputInventory, t)) {
 				ItemVariant variant = view.getResource();
 				ItemStack stack = variant.toStack(ItemHelper.truncateLong(view.getAmount()));
 				if (acceptOutputs(ImmutableList.of(stack), ImmutableList.of(), t)) {
 					view.extract(variant, stack.getCount(), t);
 				}
 			}
-			for (StorageView<FluidVariant> view : outputTank.getCapability().iterable(t)) {
-				if (view.isResourceBlank()) continue;
+			for (StorageView<FluidVariant> view : TransferUtil.getNonEmpty(outputTank.getCapability(), t)) {
 				FluidVariant variant = view.getResource();
 				FluidStack stack = new FluidStack(view);
 				if (acceptOutputs(ImmutableList.of(), ImmutableList.of(stack), t)) {

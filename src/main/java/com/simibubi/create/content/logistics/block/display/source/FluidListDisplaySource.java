@@ -53,9 +53,7 @@ public class FluidListDisplaySource extends ValueListDisplaySource {
 		Map<Fluid, FluidStack> fluidNames = new HashMap<>();
 
 		try (Transaction t = TransferUtil.getTransaction()) {
-			for (StorageView<FluidVariant> view : handler.iterable(t)) {
-				if (view.isResourceBlank())
-					continue;
+			for (StorageView<FluidVariant> view : TransferUtil.getNonEmpty(handler, t)) {
 				FluidStack stack = new FluidStack(view);
 				if (!filteringBehaviour.test(stack))
 					continue;

@@ -238,8 +238,7 @@ public class MechanicalMixerTileEntity extends BasinOperatingTileEntity {
 			return matchingRecipes;
 
 		try (Transaction t = TransferUtil.getTransaction()) {
-			for (StorageView<ItemVariant> view : availableItems.iterable(t)) {
-				if (view.isResourceBlank()) continue;
+			for (StorageView<ItemVariant> view : TransferUtil.getNonEmpty(availableItems, t)) {
 				List<MixingRecipe> list = PotionMixingRecipes.BY_ITEM.get(view.getResource().getItem());
 				if (list == null)
 					continue;

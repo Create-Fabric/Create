@@ -17,26 +17,12 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
-import com.simibubi.create.content.contraptions.components.structureMovement.Contraption.ContraptionInvWrapper;
-
-import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
-
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
-import net.fabricmc.fabric.api.registry.FuelRegistry;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.server.level.ServerPlayer;
-
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.commons.lang3.mutable.MutableObject;
 
 import com.simibubi.create.AllMovementBehaviours;
 import com.simibubi.create.Create;
+import com.simibubi.create.content.contraptions.components.structureMovement.Contraption.ContraptionInvWrapper;
 import com.simibubi.create.content.contraptions.components.structureMovement.MovementBehaviour;
 import com.simibubi.create.content.logistics.item.filter.FilterItem;
 import com.simibubi.create.content.logistics.trains.DimensionPalette;
@@ -59,6 +45,7 @@ import com.simibubi.create.content.logistics.trains.management.schedule.Schedule
 import com.simibubi.create.content.logistics.trains.management.schedule.ScheduleRuntime.State;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.config.AllConfigs;
+import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 import com.simibubi.create.foundation.networking.AllPackets;
 import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.foundation.utility.Iterate;
@@ -67,6 +54,13 @@ import com.simibubi.create.foundation.utility.NBTHelper;
 import com.simibubi.create.foundation.utility.Pair;
 import com.simibubi.create.foundation.utility.VecHelper;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -75,6 +69,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -1045,7 +1040,7 @@ public class Train {
 				continue;
 
 			try (Transaction t = TransferUtil.getTransaction()) {
-				for (StorageView<ItemVariant> view : fuelItems.iterable(t)) {
+				for (StorageView<ItemVariant> view : TransferUtil.getNonEmpty(fuelItems, t)) {
 					ItemVariant held = view.getResource();
 					Integer burnTime = FuelRegistry.INSTANCE.get(held.getItem());
 					if (burnTime == null || burnTime <= 0)

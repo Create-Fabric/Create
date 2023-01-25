@@ -21,9 +21,9 @@ import com.simibubi.create.foundation.tileEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.tileEntity.behaviour.belt.DirectBeltInputBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.scrollvalue.ScrollValueBehaviour;
 import com.simibubi.create.foundation.utility.AngleHelper;
-import com.simibubi.create.foundation.utility.LongAttached;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.LongAttached;
 import com.simibubi.create.foundation.utility.NBTHelper;
 import com.simibubi.create.foundation.utility.Pair;
 import com.simibubi.create.foundation.utility.VecHelper;
@@ -34,7 +34,6 @@ import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
 import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -263,7 +262,7 @@ public class EjectorTileEntity extends KineticTileEntity implements ItemTransfer
 
 		ItemStackHandler outputs = depotBehaviour.processingOutputBuffer;
 		try (Transaction t = TransferUtil.getTransaction()) {
-			for (StorageView<ItemVariant> view : outputs.iterable(t)) {
+			for (StorageView<ItemVariant> view : TransferUtil.getNonEmpty(outputs, t)) {
 				ItemVariant var = view.getResource();
 				long extracted = view.extract(view.getResource(), 64, t);
 				if (extracted != 0)
@@ -481,7 +480,7 @@ public class EjectorTileEntity extends KineticTileEntity implements ItemTransfer
 		return launcher.getGlobalVelocity(time, getFacing().getOpposite(), worldPosition)
 			.scale(.5f);
 	}
-	
+
 	@Override
 	public void destroy() {
 		super.destroy();

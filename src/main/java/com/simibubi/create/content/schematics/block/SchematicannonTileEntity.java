@@ -1,6 +1,5 @@
 package com.simibubi.create.content.schematics.block;
 
-import java.awt.Taskbar.State;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,11 +29,10 @@ import com.simibubi.create.foundation.utility.IPartialSafeNBT;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.NBTProcessors;
+
 import io.github.fabricators_of_create.porting_lib.block.CustomRenderBoundingBoxBlockEntity;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.util.LevelUtil;
 import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
-
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -494,8 +492,7 @@ public class SchematicannonTileEntity extends SmartTileEntity implements MenuPro
 		if (usage == ItemUseType.DAMAGE) {
 			for (Storage<ItemVariant> iItemHandler : attachedInventories) {
 				try (Transaction t = transaction.openNested()) {
-					for (StorageView<ItemVariant> view : iItemHandler.iterable(t)) {
-						if (view.isResourceBlank()) continue;
+					for (StorageView<ItemVariant> view : TransferUtil.getNonEmpty(iItemHandler, t)) {
 						ItemVariant variant = view.getResource();
 						ItemStack stack = variant.toStack();
 						if (!required.matches(stack))

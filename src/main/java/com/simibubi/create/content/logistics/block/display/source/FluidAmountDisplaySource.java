@@ -8,7 +8,6 @@ import com.simibubi.create.foundation.tileEntity.behaviour.filtering.FilteringBe
 import com.simibubi.create.foundation.tileEntity.behaviour.inventory.TankManipulationBehaviour;
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.FluidFormatter;
-
 import com.simibubi.create.foundation.utility.Lang;
 
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
@@ -40,9 +39,7 @@ public class FluidAmountDisplaySource extends SingleLineDisplaySource {
 
 		long collected = 0;
 		try (Transaction t = TransferUtil.getTransaction()) {
-			for (StorageView<FluidVariant> view : handler.iterable(t)) {
-				if (view.isResourceBlank())
-					continue;
+			for (StorageView<FluidVariant> view : TransferUtil.getNonEmpty(handler, t)) {
 				FluidStack stack = new FluidStack(view);
 				if (!filteringBehaviour.test(stack))
 					continue;

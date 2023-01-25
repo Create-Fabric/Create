@@ -1,13 +1,14 @@
 package com.simibubi.create.content.logistics.block.inventories;
 
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Supplier;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerSnapshot;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
@@ -18,12 +19,14 @@ import net.minecraft.world.item.ItemStack;
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class BottomlessItemHandler extends ItemStackHandler implements SingleSlotStorage<ItemVariant> {
+public class BottomlessItemHandler extends ItemStackHandler implements SingleSlotStorage<ItemVariant> { // must extend ItemStackHandler for mounted storages
 
 	private Supplier<ItemStack> suppliedItemStack;
+	private List<? extends StorageView<ItemVariant>> self;
 
 	public BottomlessItemHandler(Supplier<ItemStack> suppliedItemStack) {
 		this.suppliedItemStack = suppliedItemStack;
+		self = List.of(this);
 	}
 
 	@Override
@@ -65,6 +68,11 @@ public class BottomlessItemHandler extends ItemStackHandler implements SingleSlo
 	@Override
 	public Iterator<StorageView<ItemVariant>> iterator(TransactionContext transaction) {
 		return SingleSlotStorage.super.iterator(transaction); // no, this is not pointless
+	}
+
+	@Override
+	public Iterator<? extends StorageView<ItemVariant>> nonEmptyViews() {
+		return isResourceBlank() ? Collections.emptyIterator() : self.iterator();
 	}
 
 	@Override
