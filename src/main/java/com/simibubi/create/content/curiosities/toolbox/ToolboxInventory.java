@@ -13,6 +13,7 @@ import com.simibubi.create.foundation.utility.NBTHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerSnapshot;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.nbt.CompoundTag;
@@ -108,15 +109,9 @@ public class ToolboxInventory extends ItemStackHandler {
 	}
 
 	@Override
-	protected SnapshotData createSnapshot() {
-		SnapshotData d = super.createSnapshot();
-		return new ToolboxSnapshotData(d.stacks, new ArrayList<>(filters));
-	}
-
-	@Override
-	protected void readSnapshot(SnapshotData snapshot) {
-		super.readSnapshot(snapshot);
-		this.filters = ((ToolboxSnapshotData) snapshot).filters;
+	protected ItemStackHandlerSnapshot createSnapshot() {
+		ItemStackHandlerSnapshot snapshot = super.createSnapshot();
+		return new ToolboxSnapshotData(snapshot, new ArrayList<>(filters));
 	}
 
 	@Override
@@ -245,12 +240,19 @@ public class ToolboxInventory extends ItemStackHandler {
 		return ItemHandlerHelper.canItemStacksStack(stack1, stack2);
 	}
 
-	public static class ToolboxSnapshotData extends SnapshotData {
+	public static class ToolboxSnapshotData implements ItemStackHandlerSnapshot {
+		public final ItemStackHandlerSnapshot base;
 		public final List<ItemStack> filters;
 
-		public ToolboxSnapshotData(ItemStack[] stacks, List<ItemStack> filters) {
-			super(stacks);
+		public ToolboxSnapshotData(ItemStackHandlerSnapshot base, List<ItemStack> filters) {
+			this.base = base;
 			this.filters = filters;
+		}
+
+		@Override
+		public void apply(ItemStackHandler handler) {
+			base.apply(handler);
+			((ToolboxInventory) handler).filters = filters;
 		}
 	}
 }

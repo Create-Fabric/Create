@@ -8,6 +8,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerSnapshot;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
@@ -81,18 +82,17 @@ public class BottomlessItemHandler extends ItemStackHandler implements SingleSlo
 	}
 
 	@Override
-	protected void readSnapshot(SnapshotData snapshot) {
-	}
-
-	@Override
-	protected SnapshotData createSnapshot() {
+	protected ItemStackHandlerSnapshot createSnapshot() {
 		return BottomlessSnapshotData.INSTANCE;
 	}
 
-	public static class BottomlessSnapshotData extends SnapshotData {
-		public static final BottomlessSnapshotData INSTANCE = new BottomlessSnapshotData(null);
-		public BottomlessSnapshotData(ItemStack[] stacks) {
-			super(stacks);
+	public static class BottomlessSnapshotData implements ItemStackHandlerSnapshot {
+		public static final BottomlessSnapshotData INSTANCE = new BottomlessSnapshotData();
+		private BottomlessSnapshotData() {
+		}
+
+		@Override
+		public void apply(ItemStackHandler handler) {
 		}
 	}
 }
