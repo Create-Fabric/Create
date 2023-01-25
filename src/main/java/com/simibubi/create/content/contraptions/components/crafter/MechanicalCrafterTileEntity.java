@@ -61,7 +61,7 @@ public class MechanicalCrafterTileEntity extends KineticTileEntity implements It
 			this.te = te;
 			forbidExtraction();
 			whenContentsChanged(() -> {
-				if (handler.getStackInSlot(0).isEmpty()) // fabric: only has one slot, this is safe
+				if (getStackInSlot(0).isEmpty()) // fabric: only has one slot, this is safe
 					return;
 				if (te.phase == Phase.IDLE)
 					te.checkCompletedRecipe(false);
@@ -74,7 +74,7 @@ public class MechanicalCrafterTileEntity extends KineticTileEntity implements It
 				return 0;
 			if (te.covered)
 				return 0;
-			long inserted = handler.insert(resource, maxAmount, transaction);
+			long inserted = super.insert(resource, maxAmount, transaction);
 			if (inserted != 0)
 				TransactionCallback.onSuccess(transaction, () -> te.getLevel()
 						.playSound(null, te.getBlockPos(), SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, .25f,

@@ -5,15 +5,14 @@ import java.util.function.Consumer;
 
 import io.github.fabricators_of_create.porting_lib.transfer.ViewOnlyWrappedIterator;
 import io.github.fabricators_of_create.porting_lib.transfer.callbacks.TransactionCallback;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
-public class ProcessingInventory extends ItemStackHandler {
+public class ProcessingInventory extends ItemStackHandlerContainer {
 	public float remainingTime;
 	public float recipeDuration;
 	public boolean appliedRecipe;

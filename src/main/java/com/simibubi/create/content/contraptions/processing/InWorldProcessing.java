@@ -21,13 +21,11 @@ import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.tileEntity.behaviour.belt.TransportedItemStackHandlerBehaviour.TransportedResult;
 import com.simibubi.create.foundation.utility.Color;
 import com.simibubi.create.foundation.utility.VecHelper;
+
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
 import io.github.fabricators_of_create.porting_lib.util.DamageSourceHelper;
-
 import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -35,6 +33,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.Container;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -67,7 +66,7 @@ public class InWorldProcessing {
 
 	private static final DamageSource LAVA_DAMAGE_SOURCE = DamageSourceHelper.port_lib$createFireDamageSource("create.fan_lava").setScalesWithDifficulty();
 
-	private static final RecipeWrapper RECIPE_WRAPPER = new RecipeWrapper(new ItemStackHandler(1));
+	private static final Container RECIPE_WRAPPER = new ItemStackHandlerContainer(1);
 	private static final SplashingWrapper SPLASHING_WRAPPER = new SplashingWrapper();
 	private static final HauntingWrapper HAUNTING_WRAPPER = new HauntingWrapper();
 
@@ -492,15 +491,15 @@ public class InWorldProcessing {
 		}
 	}
 
-	public static class SplashingWrapper extends RecipeWrapper {
+	public static class SplashingWrapper extends ItemStackHandlerContainer {
 		public SplashingWrapper() {
-			super(new ItemStackHandler(1));
+			super(1);
 		}
 	}
 
-	public static class HauntingWrapper extends RecipeWrapper {
+	public static class HauntingWrapper extends ItemStackHandlerContainer {
 		public HauntingWrapper() {
-			super(new ItemStackHandler(1));
+			super(1);
 		}
 	}
 

@@ -6,17 +6,11 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
-import com.simibubi.create.content.contraptions.processing.ProcessingRecipe;
-
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
-import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.contraptions.processing.ProcessingInventory;
+import com.simibubi.create.content.contraptions.processing.ProcessingRecipe;
 import com.simibubi.create.foundation.config.AllConfigs;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.sound.SoundScapes;
@@ -26,12 +20,15 @@ import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.belt.DirectBeltInputBehaviour;
 import com.simibubi.create.foundation.utility.NBTHelper;
 import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.fabricators_of_create.porting_lib.util.ItemStackUtil;
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 import com.tterrag.registrate.fabric.EnvExecutor;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
+import io.github.fabricators_of_create.porting_lib.util.ItemStackUtil;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -42,6 +39,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -59,7 +57,6 @@ public class CrushingWheelControllerTileEntity extends SmartTileEntity implement
 	protected boolean searchForEntity;
 
 	public ProcessingInventory inventory;
-	private RecipeWrapper wrapper;
 	public float crushingspeed;
 
 	public CrushingWheelControllerTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -72,7 +69,6 @@ public class CrushingWheelControllerTileEntity extends SmartTileEntity implement
 			}
 
 		};
-		wrapper = new RecipeWrapper(inventory);
 	}
 
 	@Override
@@ -294,7 +290,7 @@ public class CrushingWheelControllerTileEntity extends SmartTileEntity implement
 	}
 
 	private void applyRecipe() {
-		Optional<ProcessingRecipe<RecipeWrapper>> recipe = findRecipe();
+		Optional<ProcessingRecipe<Container>> recipe = findRecipe();
 
 		List<ItemStack> list = new ArrayList<>();
 		if (recipe.isPresent()) {
@@ -317,10 +313,10 @@ public class CrushingWheelControllerTileEntity extends SmartTileEntity implement
 
 	}
 
-	public Optional<ProcessingRecipe<RecipeWrapper>> findRecipe() {
-		Optional<ProcessingRecipe<RecipeWrapper>> crushingRecipe = AllRecipeTypes.CRUSHING.find(wrapper, level);
+	public Optional<ProcessingRecipe<Container>> findRecipe() {
+		Optional<ProcessingRecipe<Container>> crushingRecipe = AllRecipeTypes.CRUSHING.find(inventory, level);
 		if (!crushingRecipe.isPresent())
-			crushingRecipe = AllRecipeTypes.MILLING.find(wrapper, level);
+			crushingRecipe = AllRecipeTypes.MILLING.find(inventory, level);
 		return crushingRecipe;
 	}
 
@@ -350,7 +346,7 @@ public class CrushingWheelControllerTileEntity extends SmartTileEntity implement
 	}
 
 	private void itemInserted(ItemStack stack) {
-		Optional<ProcessingRecipe<RecipeWrapper>> recipe = findRecipe();
+		Optional<ProcessingRecipe<Container>> recipe = findRecipe();
 		inventory.remainingTime = recipe.isPresent() ? recipe.get()
 			.getProcessingDuration() : 100;
 		inventory.appliedRecipe = false;

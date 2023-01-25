@@ -5,8 +5,7 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
-
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.world.Container;
@@ -15,7 +14,7 @@ import net.minecraft.world.item.crafting.Recipe;
 public class DeployerRecipeSearchEvent {
 	private boolean canceled = false;
 	private final DeployerTileEntity tileEntity;
-	private final RecipeWrapper inventory;
+	private final ItemStackHandlerContainer inventory;
 	@Nullable
 	Recipe<? extends Container> recipe = null;
 	private int maxPriority = 0;
@@ -31,7 +30,7 @@ public class DeployerRecipeSearchEvent {
 		void handle(DeployerRecipeSearchEvent event);
 	}
 
-	public DeployerRecipeSearchEvent(DeployerTileEntity tileEntity, RecipeWrapper inventory) {
+	public DeployerRecipeSearchEvent(DeployerTileEntity tileEntity, ItemStackHandlerContainer inventory) {
 		this.tileEntity = tileEntity;
 		this.inventory = inventory;
 	}
@@ -49,7 +48,7 @@ public class DeployerRecipeSearchEvent {
 		return tileEntity;
 	}
 
-	public RecipeWrapper getInventory() {
+	public ItemStackHandlerContainer getInventory() {
 		return inventory;
 	}
 

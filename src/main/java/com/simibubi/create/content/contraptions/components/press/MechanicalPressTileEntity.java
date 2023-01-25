@@ -22,11 +22,9 @@ import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -180,7 +178,7 @@ public class MechanicalPressTileEntity extends BasinOperatingTileEntity implemen
 			basinChecker.scheduleUpdate();
 	}
 
-	private static final RecipeWrapper pressingInv = new RecipeWrapper(new ItemStackHandler(1));
+	private static final Container pressingInv = new ItemStackHandlerContainer(1);
 
 	public Optional<PressingRecipe> getRecipe(ItemStack item) {
 		Optional<PressingRecipe> assemblyRecipe =

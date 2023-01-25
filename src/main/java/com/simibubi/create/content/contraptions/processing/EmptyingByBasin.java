@@ -6,17 +6,17 @@ import java.util.Optional;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.contraptions.fluids.potion.PotionFluidHandler;
 import com.simibubi.create.foundation.utility.Pair;
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
+import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.crafting.Recipe;
@@ -24,7 +24,7 @@ import net.minecraft.world.level.Level;
 
 public class EmptyingByBasin {
 
-	static RecipeWrapper wrapper = new RecipeWrapper(new ItemStackHandler(1));
+	static Container wrapper = new ItemStackHandlerContainer(1);
 
 	public static boolean canItemBeEmptied(Level world, ItemStack stack) {
 		if (stack.getItem() instanceof PotionItem)
@@ -46,7 +46,7 @@ public class EmptyingByBasin {
 			return PotionFluidHandler.emptyPotion(stack, simulate);
 
 		wrapper.setItem(0, stack);
-		Optional<Recipe<RecipeWrapper>> recipe = AllRecipeTypes.EMPTYING.find(wrapper, world);
+		Optional<Recipe<Container>> recipe = AllRecipeTypes.EMPTYING.find(wrapper, world);
 		if (recipe.isPresent()) {
 			EmptyingRecipe emptyingRecipe = (EmptyingRecipe) recipe.get();
 			List<ItemStack> results = emptyingRecipe.rollResults();

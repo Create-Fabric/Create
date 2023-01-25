@@ -13,27 +13,26 @@ import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.Lang;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
 import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 import io.github.fabricators_of_create.porting_lib.util.FluidUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 
-public class FillingRecipe extends ProcessingRecipe<RecipeWrapper> implements IAssemblyRecipe {
+public class FillingRecipe extends ProcessingRecipe<Container> implements IAssemblyRecipe {
 
 	public FillingRecipe(ProcessingRecipeParams params) {
 		super(AllRecipeTypes.FILLING, params);
 	}
 
 	@Override
-	public boolean matches(RecipeWrapper inv, Level p_77569_2_) {
+	public boolean matches(Container inv, Level p_77569_2_) {
 		return ingredients.get(0)
 			.test(inv.getItem(0));
 	}

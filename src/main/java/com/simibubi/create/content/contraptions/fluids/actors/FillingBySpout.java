@@ -6,17 +6,17 @@ import java.util.Optional;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.contraptions.itemAssembly.SequencedAssemblyRecipe;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
+import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 
 public class FillingBySpout {
 
-	static RecipeWrapper wrapper = new RecipeWrapper(new ItemStackHandler(1));
+	static Container wrapper = new ItemStackHandlerContainer(1);
 
 	public static boolean canItemBeFilled(Level world, ItemStack stack) {
 		wrapper.setItem(0, stack);
@@ -44,7 +44,7 @@ public class FillingBySpout {
 				return requiredFluid.getRequiredAmount();
 		}
 
-		for (Recipe<RecipeWrapper> recipe : world.getRecipeManager()
+		for (Recipe<Container> recipe : world.getRecipeManager()
 			.getRecipesFor(AllRecipeTypes.FILLING.getType(), wrapper, world)) {
 			FillingRecipe fillingRecipe = (FillingRecipe) recipe;
 			FluidIngredient requiredFluid = fillingRecipe.getRequiredFluid();
@@ -65,7 +65,7 @@ public class FillingBySpout {
 				.filter(fr -> fr.getRequiredFluid()
 					.test(toFill))
 				.orElseGet(() -> {
-					for (Recipe<RecipeWrapper> recipe : world.getRecipeManager()
+					for (Recipe<Container> recipe : world.getRecipeManager()
 						.getRecipesFor(AllRecipeTypes.FILLING.getType(), wrapper, world)) {
 						FillingRecipe fr = (FillingRecipe) recipe;
 						FluidIngredient requiredFluid = fr.getRequiredFluid();

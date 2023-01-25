@@ -13,11 +13,11 @@ import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.advancement.CreateAdvancement;
 import com.simibubi.create.foundation.utility.BlockHelper;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -43,8 +43,8 @@ public class ManualApplicationRecipe extends ItemApplicationRecipe {
 		if (blockState.isAir())
 			return InteractionResult.PASS;
 
-		RecipeType<Recipe<RecipeWrapper>> type = AllRecipeTypes.ITEM_APPLICATION.getType();
-		Optional<Recipe<RecipeWrapper>> foundRecipe = level.getRecipeManager()
+		RecipeType<Recipe<Container>> type = AllRecipeTypes.ITEM_APPLICATION.getType();
+		Optional<Recipe<Container>> foundRecipe = level.getRecipeManager()
 			.getAllRecipesFor(type)
 			.stream()
 			.filter(r -> {

@@ -4,13 +4,13 @@ import com.google.gson.JsonObject;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.contraptions.processing.ProcessingRecipeBuilder.ProcessingRecipeParams;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 
-public class ItemApplicationRecipe extends ProcessingRecipe<RecipeWrapper> {
+public class ItemApplicationRecipe extends ProcessingRecipe<Container> {
 
 	private boolean keepHeldItem;
 
@@ -20,7 +20,7 @@ public class ItemApplicationRecipe extends ProcessingRecipe<RecipeWrapper> {
 	}
 
 	@Override
-	public boolean matches(RecipeWrapper inv, Level p_77569_2_) {
+	public boolean matches(Container inv, Level p_77569_2_) {
 		return ingredients.get(0)
 			.test(inv.getItem(0))
 			&& ingredients.get(1)

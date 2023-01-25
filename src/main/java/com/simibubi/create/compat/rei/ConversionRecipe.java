@@ -7,9 +7,9 @@ import com.simibubi.create.Create;
 import com.simibubi.create.content.contraptions.processing.ProcessingRecipe;
 import com.simibubi.create.content.contraptions.processing.ProcessingRecipeBuilder;
 import com.simibubi.create.content.contraptions.processing.ProcessingRecipeBuilder.ProcessingRecipeParams;
-import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
@@ -18,7 +18,7 @@ import net.minecraft.world.level.Level;
  * Helper recipe type for displaying an item relationship in JEI
  */
 @ParametersAreNonnullByDefault
-public class ConversionRecipe extends ProcessingRecipe<RecipeWrapper> {
+public class ConversionRecipe extends ProcessingRecipe<Container> {
 
 	static int counter = 0;
 
@@ -35,7 +35,7 @@ public class ConversionRecipe extends ProcessingRecipe<RecipeWrapper> {
 	}
 
 	@Override
-	public boolean matches(RecipeWrapper inv, Level worldIn) {
+	public boolean matches(Container inv, Level worldIn) {
 		return false;
 	}
 

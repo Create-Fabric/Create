@@ -4,19 +4,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.transfer.ViewOnlyWrappedStorageView;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
-
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.AllRecipeTypes;
@@ -28,14 +15,20 @@ import com.simibubi.create.foundation.sound.SoundScapes.AmbienceGroup;
 import com.simibubi.create.foundation.tileEntity.TileEntityBehaviour;
 import com.simibubi.create.foundation.tileEntity.behaviour.belt.DirectBeltInputBehaviour;
 import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
-import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
-import io.github.fabricators_of_create.porting_lib.util.LazyOptional;
 
+import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.ViewOnlyWrappedStorageView;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -50,7 +43,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class MillstoneTileEntity extends KineticTileEntity implements ItemTransferable {
 
-	public ItemStackHandler inputInv;
+	public ItemStackHandlerContainer inputInv;
 	public ItemStackHandler outputInv;
 	public MillstoneInventoryHandler capability;
 	public int timer;
@@ -58,7 +51,7 @@ public class MillstoneTileEntity extends KineticTileEntity implements ItemTransf
 
 	public MillstoneTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
-		inputInv = new ItemStackHandler(1);
+		inputInv = new ItemStackHandlerContainer(1);
 		outputInv = new ItemStackHandler(9);
 		capability = new MillstoneInventoryHandler();
 	}
@@ -112,9 +105,8 @@ public class MillstoneTileEntity extends KineticTileEntity implements ItemTransf
 			.isEmpty())
 			return;
 
-		RecipeWrapper inventoryIn = new RecipeWrapper(inputInv);
-		if (lastRecipe == null || !lastRecipe.matches(inventoryIn, level)) {
-			Optional<MillingRecipe> recipe = AllRecipeTypes.MILLING.find(inventoryIn, level);
+		if (lastRecipe == null || !lastRecipe.matches(inputInv, level)) {
+			Optional<MillingRecipe> recipe = AllRecipeTypes.MILLING.find(inputInv, level);
 			if (!recipe.isPresent()) {
 				timer = 100;
 				sendData();
@@ -143,10 +135,8 @@ public class MillstoneTileEntity extends KineticTileEntity implements ItemTransf
 	}
 
 	private void process() {
-		RecipeWrapper inventoryIn = new RecipeWrapper(inputInv);
-
-		if (lastRecipe == null || !lastRecipe.matches(inventoryIn, level)) {
-			Optional<MillingRecipe> recipe = AllRecipeTypes.MILLING.find(inventoryIn, level);
+		if (lastRecipe == null || !lastRecipe.matches(inputInv, level)) {
+			Optional<MillingRecipe> recipe = AllRecipeTypes.MILLING.find(inputInv, level);
 			if (!recipe.isPresent())
 				return;
 			lastRecipe = recipe.get();
@@ -208,13 +198,12 @@ public class MillstoneTileEntity extends KineticTileEntity implements ItemTransf
 	}
 
 	private boolean canProcess(ItemStack stack) {
-		ItemStackHandler tester = new ItemStackHandler(1);
+		ItemStackHandlerContainer tester = new ItemStackHandlerContainer(1);
 		tester.setStackInSlot(0, stack);
-		RecipeWrapper inventoryIn = new RecipeWrapper(tester);
 
-		if (lastRecipe != null && lastRecipe.matches(inventoryIn, level))
+		if (lastRecipe != null && lastRecipe.matches(tester, level))
 			return true;
-		return AllRecipeTypes.MILLING.find(inventoryIn, level)
+		return AllRecipeTypes.MILLING.find(tester, level)
 			.isPresent();
 	}
 

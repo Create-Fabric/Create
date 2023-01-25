@@ -1,24 +1,15 @@
 package com.simibubi.create.foundation.item;
 
-import java.util.Iterator;
-import java.util.function.Consumer;
-
-import javax.annotation.Nonnull;
-
 import com.simibubi.create.foundation.tileEntity.SyncedTileEntity;
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandlerContainer;
 
 import io.github.fabricators_of_create.porting_lib.util.INBTSerializable;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.ItemStack;
 
-public class SmartInventory extends RecipeWrapper
-	implements IItemHandlerModifiableIntermediate, INBTSerializable<CompoundTag> {
+public class SmartInventory extends ItemStackHandlerContainer implements INBTSerializable<CompoundTag> {
 
 	protected boolean extractionAllowed;
 	protected boolean insertionAllowed;
@@ -30,21 +21,21 @@ public class SmartInventory extends RecipeWrapper
 	}
 
 	public SmartInventory(int slots, SyncedTileEntity te, int stackSize, boolean stackNonStackables) {
-		super(new SyncedStackHandler(slots, te, stackNonStackables, stackSize));
+		super(slots);
 		this.stackNonStackables = stackNonStackables;
 		insertionAllowed = true;
 		extractionAllowed = true;
 		this.stackSize = stackSize;
+		this.te = te;
 	}
 
 	public SmartInventory withMaxStackSize(int maxStackSize) {
 		stackSize = maxStackSize;
-		((SyncedStackHandler) handler).stackSize = maxStackSize;
 		return this;
 	}
 
 	public SmartInventory whenContentsChanged(Runnable updateCallback) {
-		((SyncedStackHandler) this.handler).whenContentsChange(updateCallback);
+		this.updateCallback = updateCallback;
 		return this;
 	}
 
@@ -72,7 +63,7 @@ public class SmartInventory extends RecipeWrapper
 	public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
 		if (!insertionAllowed)
 			return 0;
-		return handler.insert(resource, maxAmount, transaction);
+		return super.insert(resource, maxAmount, transaction);
 	}
 
 	@Override
@@ -81,73 +72,34 @@ public class SmartInventory extends RecipeWrapper
 			return 0;
 		if (stackNonStackables) {
 			try (Transaction t = transaction.openNested()) {
-				long extracted = handler.extract(resource, maxAmount, t);
+				long extracted = super.extract(resource, maxAmount, t);
 				t.abort();
 				if (extracted != 0 && resource.getItem().getMaxStackSize() < extracted)
 					maxAmount = resource.getItem().getMaxStackSize();
 			}
 		}
-		return handler.extract(resource, maxAmount, transaction);
+		return super.extract(resource, maxAmount, transaction);
+	}
+
+	// fabric: merge SyncedStackHandler, it exists only to be wrapped, and removing it allows avoiding extending RecipeWrapper
+
+	private SyncedTileEntity te;
+	private Runnable updateCallback;
+
+	@Override
+	protected void onFinalCommit() {
+		if (updateCallback != null)
+			updateCallback.run();
+		te.notifyUpdate();
 	}
 
 	@Override
-	public ItemStack getItem(int slot) {
-		return super.getItem(slot);
+	public int getSlotLimit(int slot) {
+		return Math.min(stackNonStackables ? 64 : super.getSlotLimit(slot), stackSize);
 	}
 
 	@Override
-	public CompoundTag serializeNBT() {
-		return getInv().serializeNBT();
-	}
-
-	@Override
-	public void deserializeNBT(CompoundTag nbt) {
-		getInv().deserializeNBT(nbt);
-	}
-
-	private SyncedStackHandler getInv() {
-		return (SyncedStackHandler) handler;
-	}
-
-	private static class SyncedStackHandler extends ItemStackHandler {
-
-		private SyncedTileEntity te;
-		private boolean stackNonStackables;
-		private int stackSize;
-		private Runnable updateCallback;
-
-		public SyncedStackHandler(int slots, SyncedTileEntity te, boolean stackNonStackables, int stackSize) {
-			super(slots);
-			this.te = te;
-			this.stackNonStackables = stackNonStackables;
-			this.stackSize = stackSize;
-		}
-
-		@Override
-		protected void onFinalCommit() {
-			if (updateCallback != null)
-				updateCallback.run();
-			te.notifyUpdate();
-		}
-
-		@Override
-		public int getSlotLimit(int slot) {
-			return Math.min(stackNonStackables ? 64 : super.getSlotLimit(slot), stackSize);
-		}
-
-		public void whenContentsChange(Runnable updateCallback) {
-			this.updateCallback = updateCallback;
-		}
-
-	}
-
-	@Override
-	public ItemStack getStackInSlotIntermediate(int slot) {
-		return getItem(slot);
-	}
-
-	@Override
-	public Iterator<StorageView<ItemVariant>> iterator(TransactionContext transaction) {
-		return handler.iterator(transaction);
+	public int getMaxStackSize() {
+		return Math.min(64, stackSize);
 	}
 }
