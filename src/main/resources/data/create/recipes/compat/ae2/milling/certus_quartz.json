@@ -10,7 +10,7 @@
 	"type": "create:milling",
     "ingredients": [
     	{
-    		"tag": "c:certus_quartz_crystals"
+    		"tag": "c:certus_quartz"
     	}
     ],
 	"results": [
