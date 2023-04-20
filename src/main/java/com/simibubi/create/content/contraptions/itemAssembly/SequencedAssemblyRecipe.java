@@ -147,8 +147,6 @@ public class SequencedAssemblyRecipe implements Recipe<Container> {
 	}
 
 	private boolean appliesTo(ItemStack input) {
-		if (ingredient.test(input))
-			return true;
 		if (input.hasTag()) {
 			if (getTransitionalItem().getItem() == input.getItem()) {
 				if (input.getTag().contains("SequencedAssembly")) {
@@ -158,6 +156,8 @@ public class SequencedAssemblyRecipe implements Recipe<Container> {
 				}
 			}
 		}
+		if (ingredient.test(input))
+			return true;
 		return false;
 	}
 
