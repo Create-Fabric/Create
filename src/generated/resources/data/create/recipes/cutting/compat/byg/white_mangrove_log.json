@@ -10,13 +10,13 @@
   ],
   "ingredients": [
     {
-      "item": "byg:white_mangrove_wood"
+      "item": "byg:white_mangrove_log"
     }
   ],
   "processingTime": 50,
   "results": [
     {
-      "item": "byg:stripped_white_mangrove_wood"
+      "item": "byg:stripped_white_mangrove_log"
     }
   ]
 }

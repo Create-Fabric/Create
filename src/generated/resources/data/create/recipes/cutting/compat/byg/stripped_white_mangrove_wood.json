@@ -10,13 +10,14 @@
   ],
   "ingredients": [
     {
-      "item": "byg:white_mangrove_wood"
+      "item": "byg:stripped_white_mangrove_wood"
     }
   ],
   "processingTime": 50,
   "results": [
     {
-      "item": "byg:stripped_white_mangrove_wood"
+      "count": 6,
+      "item": "byg:white_mangrove_planks"
     }
   ]
 }
