@@ -11,6 +11,8 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
 import com.simibubi.create.foundation.utility.VecHelper;
 
+import com.simibubi.create.infrastructure.config.AllConfigs;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms.TransformType;
@@ -124,8 +126,14 @@ public class DepotRenderer extends SafeBlockEntityRenderer<DepotBlockEntity> {
 
 		for (int i = 0; i <= count; i++) {
 			ms.pushPose();
-			if (blockItem)
-				ms.translate(r.nextFloat() * .0625f * i, 0, r.nextFloat() * .0625f * i);
+			if (blockItem){
+				if(AllConfigs.client().BlockItemAsItem.get()){
+					ms.translate(0, 0, 0);
+					msr.rotateX(90);
+				} else {
+					ms.translate(r.nextFloat() * .0625f * i, 0, r.nextFloat() * .0625f * i);
+				}
+				}
 			ms.scale(.5f, .5f, .5f);
 			if (!blockItem && !renderUpright) {
 				ms.translate(0, -3 / 16f, 0);
@@ -139,7 +147,12 @@ public class DepotRenderer extends SafeBlockEntityRenderer<DepotBlockEntity> {
 					msr.rotateY(10);
 				ms.translate(0, blockItem ? 1 / 64d : 1 / 16d, 0);
 			} else
+			if(AllConfigs.client().BlockItemAsItem.get()){
+				ms.translate(0, 0, 0);
+			} else {
 				ms.translate(0, 0, -1 / 16f);
+			}
+
 		}
 
 		ms.popPose();

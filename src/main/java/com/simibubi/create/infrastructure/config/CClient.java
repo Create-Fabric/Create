@@ -37,6 +37,7 @@ public class CClient extends ConfigBase {
 	// Fabric
 	public final ConfigEnum<FluidUnit> fluidUnitType = e(FluidUnit.MILIBUCKETS, "fluidUnitType",
 			Comments.fluidUnit);
+	public final ConfigBool BlockItemAsItem=b(false,"useBlockItemAsItem", Comments.BlockItemAsItem);
 	public final ConfigBool simplifyFluidUnit = b(true, "simplifyFluidUnit",
 			Comments.simplifyFluidUnit);
 	public final ConfigInt toolboxHotbarOverlayOffset = i(0, Integer.MIN_VALUE, Integer.MAX_VALUE, "toolboxHotbarOverlayOffset",
@@ -94,6 +95,8 @@ public class CClient extends ConfigBase {
 	public final ConfigFloat mountedZoomMultiplier = f(3, 0, "mountedZoomMultiplier", Comments.mountedZoomMultiplier);
 	public final ConfigBool showTrackGraphOnF3 = b(false, "showTrackGraphOnF3", Comments.showTrackGraphOnF3);
 	public final ConfigBool showExtendedTrackGraphOnF3 = b(false, "showExtendedTrackGraphOnF3", Comments.showExtendedTrackGraphOnF3);
+
+
 
 	@Override
 	public String getName() {
@@ -176,6 +179,8 @@ public class CClient extends ConfigBase {
 		static String fluidFogSettings = "Configure your vision range when submerged in Create's custom fluids";
 		static String honeyTransparencyMultiplier = "The vision range through honey will be multiplied by this factor";
 		static String chocolateTransparencyMultiplier = "The vision range though chocolate will be multiplied by this factor";
+
+		static String BlockItemAsItem="Changes the Render code of mutiple blocks to use ItemBlocks as an item";
 	}
 
 }
