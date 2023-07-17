@@ -1,5 +1,6 @@
 package com.simibubi.create.compat.computercraft.implementation;
 
+import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.compat.computercraft.AbstractComputerBehaviour;
 import com.simibubi.create.compat.computercraft.implementation.peripherals.DisplayLinkPeripheral;
 import com.simibubi.create.compat.computercraft.implementation.peripherals.SequencedGearshiftPeripheral;
@@ -14,49 +15,71 @@ import com.simibubi.create.content.kinetics.transmission.sequencer.SequencedGear
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkBlockEntity;
 import com.simibubi.create.content.trains.station.StationBlockEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
-import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
-import dan200.computercraft.api.peripheral.IPeripheral;
-import dan200.computercraft.api.peripheral.IPeripheralProvider;
-import net.minecraft.core.registries.BuiltInRegistries;
+import dan200.computercraft.api.peripheral.PeripheralLookup;
 
 public class ComputerBehaviour extends AbstractComputerBehaviour {
 
-	public static final IPeripheralProvider PERIPHERAL_PROVIDER = (level, blockPos, direction) -> {
-		AbstractComputerBehaviour behavior = BlockEntityBehaviour.get(level, blockPos, AbstractComputerBehaviour.TYPE);
-		if (behavior instanceof ComputerBehaviour real)
-			return real.peripheral;
-		return null;
-	};
-
-	IPeripheral peripheral;
-
 	public ComputerBehaviour(SmartBlockEntity te) {
 		super(te);
-		this.peripheral = getPeripheralFor(te);
+		registerPeripherals();
 	}
 
-	public static IPeripheral getPeripheralFor(SmartBlockEntity be) {
-		if (be instanceof SpeedControllerBlockEntity scbe)
-			return new SpeedControllerPeripheral(scbe, scbe.targetSpeed);
-		if (be instanceof DisplayLinkBlockEntity dlbe)
-			return new DisplayLinkPeripheral(dlbe);
-		if (be instanceof SequencedGearshiftBlockEntity sgbe)
-			return new SequencedGearshiftPeripheral(sgbe);
-		if (be instanceof SpeedGaugeBlockEntity sgbe)
-			return new SpeedGaugePeripheral(sgbe);
-		if (be instanceof StressGaugeBlockEntity sgbe)
-			return new StressGaugePeripheral(sgbe);
-		if (be instanceof StationBlockEntity sbe)
-			return new StationPeripheral(sbe);
+	public static void registerPeripherals() {
+		PeripheralLookup.get().registerForBlockEntities(
+				(blockEntity, context) -> {
+					if (blockEntity instanceof SpeedControllerBlockEntity scbe)
+						return new SpeedControllerPeripheral(scbe, scbe.targetSpeed);
+					return null;
+				},
+				AllBlockEntityTypes.ROTATION_SPEED_CONTROLLER.get());
 
-		throw new IllegalArgumentException(
-			"No peripheral available for " + BuiltInRegistries.BLOCK_ENTITY_TYPE.getKey(be.getType()));
-	}
+		PeripheralLookup.get().registerForBlockEntities(
+				(blockEntity, context) -> {
+					if (blockEntity instanceof DisplayLinkBlockEntity dlbe)
+						return new DisplayLinkPeripheral(dlbe);
+					return null;
+				},
+				AllBlockEntityTypes.DISPLAY_LINK.get());
 
-	@Override
-	public <T> T getPeripheral() {
-		//noinspection unchecked
-		return (T) peripheral;
+		PeripheralLookup.get().registerForBlockEntities(
+				(blockEntity, context) -> {
+					if (blockEntity instanceof DisplayLinkBlockEntity dlbe)
+						return new DisplayLinkPeripheral(dlbe);
+					return null;
+				},
+				AllBlockEntityTypes.DISPLAY_LINK.get());
+
+		PeripheralLookup.get().registerForBlockEntities(
+				(blockEntity, context) -> {
+					if (blockEntity instanceof SequencedGearshiftBlockEntity sgbe)
+						return new SequencedGearshiftPeripheral(sgbe);
+					return null;
+				},
+				AllBlockEntityTypes.SEQUENCED_GEARSHIFT.get());
+
+		PeripheralLookup.get().registerForBlockEntities(
+				(blockEntity, context) -> {
+					if (blockEntity instanceof SpeedGaugeBlockEntity sgbe)
+						return new SpeedGaugePeripheral(sgbe);
+					return null;
+				},
+				AllBlockEntityTypes.SPEEDOMETER.get());
+
+		PeripheralLookup.get().registerForBlockEntities(
+				(blockEntity, context) -> {
+					if (blockEntity instanceof StressGaugeBlockEntity sgbe)
+						return new StressGaugePeripheral(sgbe);
+					return null;
+				},
+				AllBlockEntityTypes.STRESSOMETER.get());
+
+		PeripheralLookup.get().registerForBlockEntities(
+				(blockEntity, context) -> {
+					if (blockEntity instanceof StationBlockEntity sbe)
+						return new StationPeripheral(sbe);
+					return null;
+				},
+				AllBlockEntityTypes.TRACK_STATION.get());
 	}
 }

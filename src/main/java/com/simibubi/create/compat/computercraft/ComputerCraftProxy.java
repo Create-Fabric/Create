@@ -6,8 +6,6 @@ import com.simibubi.create.compat.Mods;
 import com.simibubi.create.compat.computercraft.implementation.ComputerBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 
-import dan200.computercraft.api.ComputerCraftAPI;
-
 public class ComputerCraftProxy {
 
 	public static void register() {
@@ -18,8 +16,6 @@ public class ComputerCraftProxy {
 	private static void registerWithDependency() {
 		/* Comment if computercraft.implementation is not in the source set */
 		computerFactory = ComputerBehaviour::new;
-
-		ComputerCraftAPI.registerPeripheralProvider(ComputerBehaviour.PERIPHERAL_PROVIDER);
 	}
 
 	private static Function<SmartBlockEntity, ? extends AbstractComputerBehaviour> fallbackFactory;

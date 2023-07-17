@@ -101,7 +101,7 @@ def devEnv(DependencyHandler deps) {
 
 // setup mods that are available for compatibility reasons
 def compat(DependencyHandler deps) {
-    deps.modCompileOnly("maven.modrinth:cc-restitched:$cc_version")
+    deps.modCompileOnly("maven.modrinth:cc-tweaked:$cc_version")
 
     deps.modCompileOnly("vazkii.botania:Botania:$botania_version") { transitive = false }
     deps.modCompileOnly("com.terraformersmc:modmenu:$modmenu_version")
