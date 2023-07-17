@@ -1,5 +1,6 @@
 package com.simibubi.create.compat.computercraft.implementation;
 
+import com.mojang.datafixers.types.Func;
 import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.compat.computercraft.AbstractComputerBehaviour;
 import com.simibubi.create.compat.computercraft.implementation.peripherals.DisplayLinkPeripheral;
@@ -16,7 +17,12 @@ import com.simibubi.create.content.redstone.displayLink.DisplayLinkBlockEntity;
 import com.simibubi.create.content.trains.station.StationBlockEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 
+import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.peripheral.PeripheralLookup;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+
+import java.util.function.Function;
 
 public class ComputerBehaviour extends AbstractComputerBehaviour {
 
@@ -26,60 +32,30 @@ public class ComputerBehaviour extends AbstractComputerBehaviour {
 	}
 
 	public static void registerPeripherals() {
-		PeripheralLookup.get().registerForBlockEntities(
-				(blockEntity, context) -> {
-					if (blockEntity instanceof SpeedControllerBlockEntity scbe)
-						return new SpeedControllerPeripheral(scbe, scbe.targetSpeed);
-					return null;
-				},
-				AllBlockEntityTypes.ROTATION_SPEED_CONTROLLER.get());
+		registerPeripheral(SpeedControllerBlockEntity.class, AllBlockEntityTypes.ROTATION_SPEED_CONTROLLER.get(), (speedControllerBlockEntity -> new SpeedControllerPeripheral(speedControllerBlockEntity, speedControllerBlockEntity.targetSpeed)));
 
-		PeripheralLookup.get().registerForBlockEntities(
-				(blockEntity, context) -> {
-					if (blockEntity instanceof DisplayLinkBlockEntity dlbe)
-						return new DisplayLinkPeripheral(dlbe);
-					return null;
-				},
-				AllBlockEntityTypes.DISPLAY_LINK.get());
+		registerPeripheral(DisplayLinkBlockEntity.class, AllBlockEntityTypes.DISPLAY_LINK.get(), DisplayLinkPeripheral::new);
 
-		PeripheralLookup.get().registerForBlockEntities(
-				(blockEntity, context) -> {
-					if (blockEntity instanceof DisplayLinkBlockEntity dlbe)
-						return new DisplayLinkPeripheral(dlbe);
-					return null;
-				},
-				AllBlockEntityTypes.DISPLAY_LINK.get());
+		registerPeripheral(DisplayLinkBlockEntity.class, AllBlockEntityTypes.DISPLAY_LINK.get(), DisplayLinkPeripheral::new);
 
-		PeripheralLookup.get().registerForBlockEntities(
-				(blockEntity, context) -> {
-					if (blockEntity instanceof SequencedGearshiftBlockEntity sgbe)
-						return new SequencedGearshiftPeripheral(sgbe);
-					return null;
-				},
-				AllBlockEntityTypes.SEQUENCED_GEARSHIFT.get());
+		registerPeripheral(SequencedGearshiftBlockEntity.class, AllBlockEntityTypes.SEQUENCED_GEARSHIFT.get(), SequencedGearshiftPeripheral::new);
 
-		PeripheralLookup.get().registerForBlockEntities(
-				(blockEntity, context) -> {
-					if (blockEntity instanceof SpeedGaugeBlockEntity sgbe)
-						return new SpeedGaugePeripheral(sgbe);
-					return null;
-				},
-				AllBlockEntityTypes.SPEEDOMETER.get());
+		registerPeripheral(SpeedGaugeBlockEntity.class, AllBlockEntityTypes.SPEEDOMETER.get(), SpeedGaugePeripheral::new);
 
-		PeripheralLookup.get().registerForBlockEntities(
-				(blockEntity, context) -> {
-					if (blockEntity instanceof StressGaugeBlockEntity sgbe)
-						return new StressGaugePeripheral(sgbe);
-					return null;
-				},
-				AllBlockEntityTypes.STRESSOMETER.get());
+		registerPeripheral(StressGaugeBlockEntity.class, AllBlockEntityTypes.STRESSOMETER.get(), StressGaugePeripheral::new);
 
-		PeripheralLookup.get().registerForBlockEntities(
-				(blockEntity, context) -> {
-					if (blockEntity instanceof StationBlockEntity sbe)
-						return new StationPeripheral(sbe);
-					return null;
-				},
-				AllBlockEntityTypes.TRACK_STATION.get());
+		registerPeripheral(StationBlockEntity.class, AllBlockEntityTypes.TRACK_STATION.get(), StationPeripheral::new);
 	}
+
+	public static <T extends BlockEntity> void registerPeripheral(Class<T> blockEnityClass, BlockEntityType<T> type, Function<T, IPeripheral> provider) {
+		PeripheralLookup.get().registerForBlockEntities(
+				(blockEntity, context) -> {
+					if (blockEnityClass.isInstance(blockEntity)) {
+						return provider.apply((T) blockEntity);
+					}
+					return null;
+				},
+				type);
+	}
+
 }
