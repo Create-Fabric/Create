@@ -32,6 +32,7 @@ repositories {
     maven { url = "https://maven.shedaniel.me/" } // REI and deps
     maven { url = "https://api.modrinth.com/maven" } // LazyDFU, Sodium, Sandwichable
     maven { url = "https://maven.terraformersmc.com/" } // Mod Menu, Trinkets
+    maven { url = "https://squiddev.cc/maven" } // CC:T
     maven { url = "https://modmaven.dev" } // Botania
     maven { // Reach Entity Attributes
         url = "https://maven.jamieswhiteshirt.com/libs-release"
@@ -101,7 +102,7 @@ def devEnv(DependencyHandler deps) {
 
 // setup mods that are available for compatibility reasons
 def compat(DependencyHandler deps) {
-    deps.modCompileOnly("maven.modrinth:cc-restitched:$cc_version")
+    deps.modCompileOnly("cc.tweaked:cc-tweaked-$minecraft_version-fabric-api:$cc_version")
 
     deps.modCompileOnly("vazkii.botania:Botania:$botania_version") { transitive = false }
     deps.modCompileOnly("com.terraformersmc:modmenu:$modmenu_version")

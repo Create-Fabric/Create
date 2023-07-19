@@ -17,17 +17,21 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import dan200.computercraft.api.peripheral.IPeripheral;
-import dan200.computercraft.api.peripheral.IPeripheralProvider;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.level.Level;
+
+import org.jetbrains.annotations.Nullable;
 
 public class ComputerBehaviour extends AbstractComputerBehaviour {
 
-	public static final IPeripheralProvider PERIPHERAL_PROVIDER = (level, blockPos, direction) -> {
+	@Nullable
+	public static IPeripheral peripheralProvider(Level level, BlockPos blockPos) {
 		AbstractComputerBehaviour behavior = BlockEntityBehaviour.get(level, blockPos, AbstractComputerBehaviour.TYPE);
 		if (behavior instanceof ComputerBehaviour real)
-			return real.peripheral;
+			return real.getPeripheral();
 		return null;
-	};
+	}
 
 	IPeripheral peripheral;
 

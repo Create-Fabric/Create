@@ -6,7 +6,9 @@ import com.simibubi.create.compat.Mods;
 import com.simibubi.create.compat.computercraft.implementation.ComputerBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 
-import dan200.computercraft.api.ComputerCraftAPI;
+import dan200.computercraft.api.peripheral.PeripheralLookup;
+
+import static com.simibubi.create.compat.computercraft.implementation.ComputerBehaviour.peripheralProvider;
 
 public class ComputerCraftProxy {
 
@@ -19,7 +21,7 @@ public class ComputerCraftProxy {
 		/* Comment if computercraft.implementation is not in the source set */
 		computerFactory = ComputerBehaviour::new;
 
-		ComputerCraftAPI.registerPeripheralProvider(ComputerBehaviour.PERIPHERAL_PROVIDER);
+		PeripheralLookup.get().registerFallback((level, blockPos, blockState, blockEntity, direction) -> peripheralProvider(level, blockPos));
 	}
 
 	private static Function<SmartBlockEntity, ? extends AbstractComputerBehaviour> fallbackFactory;
