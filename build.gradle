@@ -95,7 +95,7 @@ def devEnv(DependencyHandler deps) {
     deps.modLocalRuntime("dev.onyxstudios.cardinal-components-api:cardinal-components-base:$cca_version")
     deps.modLocalRuntime("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:$cca_version")
     if (Boolean.valueOf(cc_enabled)) {
-        deps.modLocalRuntime("maven.modrinth:cc-restitched:$cc_version")
+        deps.modLocalRuntime("cc.tweaked:cc-tweaked-$minecraft_version-fabric:$cc_version")
         deps.modLocalRuntime("maven.modrinth:cloth-config:$cloth_version")
     }
 }
