@@ -307,8 +307,17 @@ public class CrushingWheelControllerBlockEntity extends SmartBlockEntity impleme
 					ItemHelper.addToList(stack, list);
 				}
 			}
+
+			// Change the inventory size when the list contains more than 16 items
+			int containerOriginalSize = inventory.getContainerSize();
+			if (inventory.getContainerSize() < list.size()){
+				inventory.setSize(list.size());
+			}
+
 			for (int slot = 0; slot < list.size() && slot + 1 < inventory.getSlotCount(); slot++)
 				inventory.setStackInSlot(slot + 1, list.get(slot));
+			inventory.setSize(containerOriginalSize);
+
 		} else {
 			inventory.clear();
 		}
