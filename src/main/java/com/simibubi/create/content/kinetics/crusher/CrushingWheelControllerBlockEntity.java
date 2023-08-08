@@ -316,8 +316,6 @@ public class CrushingWheelControllerBlockEntity extends SmartBlockEntity impleme
 
 			for (int slot = 0; slot < list.size() && slot + 1 < inventory.getSlotCount(); slot++)
 				inventory.setStackInSlot(slot + 1, list.get(slot));
-			inventory.setSize(containerOriginalSize);
-
 		} else {
 			inventory.clear();
 		}
