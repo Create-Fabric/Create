@@ -133,6 +133,7 @@ public class CrushingWheelControllerBlockEntity extends SmartBlockEntity impleme
 			if (level.isClientSide)
 				return;
 
+			int containerOriginalSize = inventory.getContainerSize();
 			if (inventory.remainingTime < 20 && !inventory.appliedRecipe) {
 				applyRecipe();
 				inventory.appliedRecipe = true;
@@ -184,7 +185,12 @@ public class CrushingWheelControllerBlockEntity extends SmartBlockEntity impleme
 					.put("BypassCrushingWheel", NbtUtils.writeBlockPos(worldPosition));
 				level.addFreshEntity(entityIn);
 			}
-			inventory.clear();
+			if (inventory.getContainerSize() != containerOriginalSize){
+				inventory.setSize(containerOriginalSize);
+			}else{
+				inventory.clear();
+			}
+
 			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 2 | 16);
 
 			return;
@@ -254,6 +260,7 @@ public class CrushingWheelControllerBlockEntity extends SmartBlockEntity impleme
 				intakeItem(itemEntity);
 			}
 		}
+
 	}
 
 	@Environment(EnvType.CLIENT)
@@ -309,13 +316,13 @@ public class CrushingWheelControllerBlockEntity extends SmartBlockEntity impleme
 			}
 
 			// Change the inventory size when the list contains more than 16 items
-			int containerOriginalSize = inventory.getContainerSize();
 			if (inventory.getContainerSize() < list.size()){
 				inventory.setSize(list.size());
 			}
 
 			for (int slot = 0; slot < list.size() && slot + 1 < inventory.getSlotCount(); slot++)
 				inventory.setStackInSlot(slot + 1, list.get(slot));
+
 		} else {
 			inventory.clear();
 		}
