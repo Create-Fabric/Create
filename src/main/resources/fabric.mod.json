@@ -73,7 +73,9 @@
   "breaks": {
     "optifabric": "*",
     "colormatic": "<=3.1.1",
-    "iris": "<=1.2.5",
+    "iris": "<=1.2.5"
+  },
+  "conflicts": {
     "sodium": ">=0.5.0"
   },
 
