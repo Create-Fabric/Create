@@ -44,10 +44,6 @@
     {
       "id": "immersiveengineering:breaker_switch",
       "required": false
-    },
-    {
-      "id": "bitsandchisels:bits_block",
-      "required": false
     }
   ]
 }
