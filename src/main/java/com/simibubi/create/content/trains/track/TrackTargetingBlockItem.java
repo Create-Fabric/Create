@@ -65,7 +65,7 @@ public class TrackTargetingBlockItem extends BlockItem {
 		if (player == null)
 			return InteractionResult.FAIL;
 
-		if (player.isSteppingCarefully() && stack.hasTag()) {
+		if (player.isShiftKeyDown() && stack.hasTag()) {
 			if (level.isClientSide)
 				return InteractionResult.SUCCESS;
 			player.displayClientMessage(Lang.translateDirect("track_target.clear"), true);
@@ -140,10 +140,10 @@ public class TrackTargetingBlockItem extends BlockItem {
 			itemInHand.setTag(null);
 		player.displayClientMessage(Lang.translateDirect("track_target.success")
 			.withStyle(ChatFormatting.GREEN), true);
-		
+
 		if (type == EdgePointType.SIGNAL)
 			AllAdvancements.SIGNAL.awardTo(player);
-		
+
 		return useOn;
 	}
 
