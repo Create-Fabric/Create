@@ -14,7 +14,7 @@ import com.simibubi.create.foundation.utility.Lang;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 

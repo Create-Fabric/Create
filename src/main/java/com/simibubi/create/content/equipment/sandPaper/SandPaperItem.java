@@ -208,11 +208,6 @@ public class SandPaperItem extends Item implements CustomUseEffectsItem {
 	}
 
 	@Override
-	public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
-		return toolAction == ToolActions.AXE_SCRAPE || toolAction == ToolActions.AXE_WAX_OFF;
-	}
-
-	@Override
 	public Boolean shouldTriggerUseEffects(ItemStack stack, LivingEntity entity) {
 		// Trigger every tick so that we have more fine grain control over the animation
 		return true;
