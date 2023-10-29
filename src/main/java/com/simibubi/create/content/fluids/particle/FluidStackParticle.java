@@ -3,7 +3,7 @@ package com.simibubi.create.content.fluids.particle;
 import com.simibubi.create.AllParticleTypes;
 import com.simibubi.create.content.fluids.potion.PotionFluid;
 import com.simibubi.create.foundation.utility.Color;
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRenderHandler;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;

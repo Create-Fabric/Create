@@ -20,7 +20,7 @@ import io.github.fabricators_of_create.porting_lib.brewing.BrewingRecipeRegistry
 import io.github.fabricators_of_create.porting_lib.brewing.IBrewingRecipe;
 import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.PotionBrewing$MixAccessor;
 import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.PotionBrewingAccessor;
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistry;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.core.Registry;

@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import io.github.fabricators_of_create.porting_lib.entity.events.EntityEvents.EntitySizeEvent;
 import io.github.fabricators_of_create.porting_lib.util.UsernameCache;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -105,9 +104,10 @@ public class DeployerFakePlayer extends FakePlayer {
 		return owner == null ? super.getUUID() : owner;
 	}
 
-	public static void deployerHasEyesOnHisFeet(EntitySizeEvent event) {
-		if (event.entity instanceof DeployerFakePlayer)
-			event.eyeHeight = 0;
+	public static float deployerHasEyesOnHisFeet(Entity entity, float height) {
+		if (entity instanceof DeployerFakePlayer)
+			return 0f;
+		return height;
 	}
 
 	public static boolean deployerCollectsDropsFromKilledEntities(LivingEntity target, DamageSource source, Collection<ItemEntity> drops, int lootingLevel, boolean recentlyHit) {
@@ -140,12 +140,12 @@ public class DeployerFakePlayer extends FakePlayer {
 		return i;
 	}
 
-	public static void entitiesDontRetaliate(LivingEntity entityLiving, LivingEntity target) {
+	public static boolean entitiesDontRetaliate(LivingEntity target, DamageSource source, float amount) {
 		if (!(target instanceof DeployerFakePlayer))
-			return;
-		if (!(entityLiving instanceof Mob))
-			return;
-		Mob mob = (Mob) entityLiving;
+			return false;
+		if (!(source.getEntity() instanceof Mob))
+			return false;
+		Mob mob = (Mob) source.getEntity();
 
 		CKinetics.DeployerAggroSetting setting = AllConfigs.server().kinetics.ignoreDeployerAttacks.get();
 
@@ -160,6 +160,7 @@ public class DeployerFakePlayer extends FakePlayer {
 		case NONE:
 		default:
 		}
+		return false; // true would short-circuit the event
 	}
 
 	// Credit to Mekanism for this approach. Helps fake players get past claims and

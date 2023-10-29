@@ -12,7 +12,7 @@ import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
 
 import io.github.fabricators_of_create.porting_lib.transfer.fluid.FluidTank;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 import org.apache.commons.lang3.tuple.Pair;
 
