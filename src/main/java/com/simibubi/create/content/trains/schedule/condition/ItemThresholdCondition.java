@@ -56,10 +56,11 @@ public class ItemThresholdCondition extends CargoThresholdCondition {
 					if (!stack.test(level, variant.toStack()))
 						continue;
 
-				if (stacks)
-					foundItems += view.getAmount() == variant.getItem().getMaxStackSize() ? 1 : 0;
-				else
-					foundItems += view.getAmount();
+					if (stacks)
+						foundItems += view.getAmount() == variant.getItem().getMaxStackSize() ? 1 : 0;
+					else
+						foundItems += view.getAmount();
+				}
 			}
 		}
 
