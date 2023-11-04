@@ -1,5 +1,7 @@
 package com.simibubi.create.content.equipment.armor;
 
+import java.util.List;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.foundation.gui.element.GuiGameElement;
@@ -13,8 +15,6 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
-
-import java.util.List;
 
 public class RemainingAirOverlay {
 	public static void render(PoseStack poseStack, int width, int height) {

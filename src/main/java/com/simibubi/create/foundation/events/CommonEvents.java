@@ -29,6 +29,7 @@ import com.simibubi.create.content.equipment.wrench.WrenchEventHandler;
 import com.simibubi.create.content.equipment.wrench.WrenchItem;
 import com.simibubi.create.content.equipment.zapper.ZapperInteractionHandler;
 import com.simibubi.create.content.equipment.zapper.ZapperItem;
+import com.simibubi.create.content.kinetics.belt.BeltHelper;
 import com.simibubi.create.content.fluids.FluidBottleItemHook;
 import com.simibubi.create.content.kinetics.crank.ValveHandleBlock;
 import com.simibubi.create.content.kinetics.crusher.CrushingWheelBlockEntity;
@@ -180,6 +181,7 @@ public class CommonEvents {
 	public static void addReloadListeners() {
 		ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(RecipeFinder.LISTENER);
 		ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(PotatoProjectileTypeManager.ReloadListener.INSTANCE);
+		ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(BeltHelper.LISTENER);
 	}
 
 	public static void onDatapackSync(ServerPlayer player, boolean joined) {

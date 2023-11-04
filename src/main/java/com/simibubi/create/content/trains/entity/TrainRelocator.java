@@ -84,7 +84,7 @@ public class TrainRelocator {
 			return InteractionResult.PASS;
 
 		if (!player.position()
-			.closerThan(relocatingOrigin, 24) || player.isSteppingCarefully()) {
+			.closerThan(relocatingOrigin, 24) || player.isShiftKeyDown()) {
 			relocatingTrain = null;
 			player.displayClientMessage(Lang.translateDirect("train.relocate.abort")
 				.withStyle(ChatFormatting.RED), true);
@@ -225,8 +225,8 @@ public class TrainRelocator {
 			Vec3 vec1 = recordedVecs.get(i);
 			Vec3 vec2 = recordedVecs.get(i + 1);
 			boolean blocking = i >= blockingIndex.intValue() - 1;
-			boolean collided = !blocked.booleanValue()
-				&& Train.findCollidingTrain(level, vec1, vec2, train, level.dimension()) != null;
+			boolean collided =
+				!blocked.booleanValue() && train.findCollidingTrain(level, vec1, vec2, level.dimension()) != null;
 			if (level.isClientSide && simulate)
 				toVisualise.add(vec2);
 			if (collided || blocking)

@@ -92,6 +92,7 @@ import com.simibubi.create.foundation.networking.SimplePacketBase.NetworkDirecti
 import com.simibubi.create.foundation.utility.ServerSpeedProvider;
 import com.simibubi.create.infrastructure.command.HighlightPacket;
 import com.simibubi.create.infrastructure.command.SConfigureConfigPacket;
+import com.simibubi.create.infrastructure.debugInfo.ServerDebugInfoPacket;
 
 import me.pepperbell.simplenetworking.S2CPacket;
 import me.pepperbell.simplenetworking.SimpleChannel;
@@ -200,6 +201,7 @@ public enum AllPackets {
 	CONTRAPTION_ACTOR_TOGGLE(ContraptionDisableActorPacket.class, ContraptionDisableActorPacket::new, PLAY_TO_CLIENT),
 	CONTRAPTION_COLLIDER_LOCK(ContraptionColliderLockPacket.class, ContraptionColliderLockPacket::new, PLAY_TO_CLIENT),
 	ATTACHED_COMPUTER(AttachedComputerPacket.class, AttachedComputerPacket::new, PLAY_TO_CLIENT),
+	SERVER_DEBUG_INFO(ServerDebugInfoPacket.class, ServerDebugInfoPacket::new, PLAY_TO_CLIENT),
 
 	// fabric: extra packet in place of custom entity data serializer
 	CARRIAGE_DATA_UPDATE(CarriageDataUpdatePacket.class, CarriageDataUpdatePacket::new, PLAY_TO_CLIENT)

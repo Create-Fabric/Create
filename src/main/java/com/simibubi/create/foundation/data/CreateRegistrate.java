@@ -9,7 +9,6 @@ import java.util.function.Supplier;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.simibubi.create.Create;
 import com.simibubi.create.CreateClient;
 import com.simibubi.create.content.decoration.encasing.CasingConnectivity;
 import com.simibubi.create.content.fluids.VirtualFluid;
@@ -147,8 +146,8 @@ public class CreateRegistrate extends AbstractRegistrate<CreateRegistrate> {
 		BiFunction<FluidAttributes.Builder, Fluid, FluidAttributes> attributesFactory,
 		NonNullFunction<SimpleFlowableFluid.Properties, T> factory) {
 		return entry(name,
-			c -> new VirtualFluidBuilder<>(self(), self(), name, c, Create.asResource("fluid/" + name + "_still"),
-				Create.asResource("fluid/" + name + "_flow"), /*attributesFactory, */factory));
+			c -> new VirtualFluidBuilder<>(self(), self(), name, c, new ResourceLocation(getModid(), "fluid/" + name + "_still"),
+				new ResourceLocation(getModid(), "fluid/" + name + "_flow"), /*attributesFactory, */factory));
 	}
 
 	public <T extends SimpleFlowableFluid> FluidBuilder<T, CreateRegistrate> virtualFluid(String name, ResourceLocation still, ResourceLocation flow,
@@ -161,8 +160,8 @@ public class CreateRegistrate extends AbstractRegistrate<CreateRegistrate> {
 
 	public FluidBuilder<VirtualFluid, CreateRegistrate> virtualFluid(String name) {
 		return entry(name,
-			c -> new VirtualFluidBuilder<>(self(), self(), name, c, Create.asResource("fluid/" + name + "_still"),
-				Create.asResource("fluid/" + name + "_flow"), /*null, */VirtualFluid::new));
+			c -> new VirtualFluidBuilder<>(self(), self(), name, c, new ResourceLocation(getModid(), "fluid/" + name + "_still"),
+				new ResourceLocation(getModid(), "fluid/" + name + "_flow"), /*null, */VirtualFluid::new));
 	}
 
 	public FluidBuilder<VirtualFluid, CreateRegistrate> virtualFluid(String name, ResourceLocation still, ResourceLocation flow) {
@@ -172,12 +171,12 @@ public class CreateRegistrate extends AbstractRegistrate<CreateRegistrate> {
 	}
 
 	public FluidBuilder<SimpleFlowableFluid.Flowing, CreateRegistrate> standardFluid(String name) {
-		return fluid(name, Create.asResource("fluid/" + name + "_still"), Create.asResource("fluid/" + name + "_flow"));
+		return fluid(name, new ResourceLocation(getModid(), "fluid/" + name + "_still"), new ResourceLocation(getModid(), "fluid/" + name + "_flow"));
 	}
 /*
 	public FluidBuilder<SimpleFlowableFluid.Flowing, CreateRegistrate> standardFluid(String name,
 		NonNullBiFunction<FluidAttributes.Builder, Fluid, FluidAttributes> attributesFactory) {
-		return fluid(name, Create.asResource("fluid/" + name + "_still"), Create.asResource("fluid/" + name + "_flow"),
+		return fluid(name, new ResourceLocation(getModid(), "fluid/" + name + "_still"), new ResourceLocation(getModid(), "fluid/" + name + "_flow"),
 			attributesFactory);
 	}
 */

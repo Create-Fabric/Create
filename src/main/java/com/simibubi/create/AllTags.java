@@ -15,6 +15,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
@@ -70,23 +71,27 @@ public class AllTags {
 
 		BRITTLE,
 		CASING,
+		CONTRAPTION_INVENTORY_DENY,
+		COPYCAT_ALLOW,
+		COPYCAT_DENY,
+		FAN_PROCESSING_CATALYSTS_BLASTING(MOD, "fan_processing_catalysts/blasting"),
+		FAN_PROCESSING_CATALYSTS_HAUNTING(MOD, "fan_processing_catalysts/haunting"),
+		FAN_PROCESSING_CATALYSTS_SMOKING(MOD, "fan_processing_catalysts/smoking"),
+		FAN_PROCESSING_CATALYSTS_SPLASHING(MOD, "fan_processing_catalysts/splashing"),
 		FAN_TRANSPARENT,
-		NON_MOVABLE,
+		GIRDABLE_TRACKS,
 		MOVABLE_EMPTY_COLLIDER,
+		NON_MOVABLE,
 		ORE_OVERRIDE_STONE,
 		PASSIVE_BOILER_HEATERS,
 		SAFE_NBT,
 		SEATS,
 		TOOLBOXES,
 		TRACKS,
-		GIRDABLE_TRACKS,
 		TREE_ATTACHMENTS,
 		VALVE_HANDLES,
 		WINDMILL_SAILS,
 		WRENCH_PICKUP,
-		COPYCAT_ALLOW,
-		COPYCAT_DENY,
-		CONTRAPTION_INVENTORY_DENY,
 
 		RELOCATION_NOT_SUPPORTED(FORGE),
 		WG_STONE(FORGE),
@@ -144,8 +149,10 @@ public class AllTags {
 		BLAZE_BURNER_FUEL_REGULAR(MOD, "blaze_burner_fuel/regular"),
 		BLAZE_BURNER_FUEL_SPECIAL(MOD, "blaze_burner_fuel/special"),
 		CASING,
+		CONTRAPTION_CONTROLLED,
 		CREATE_INGOTS,
 		CRUSHED_RAW_MATERIALS,
+		DEPLOYABLE_DRINK,
 		MODDED_STRIPPED_LOGS,
 		MODDED_STRIPPED_WOOD,
 		PRESSURIZED_AIR_SOURCES,
@@ -157,8 +164,6 @@ public class AllTags {
 		VALVE_HANDLES,
 		VANILLA_STRIPPED_LOGS,
 		VANILLA_STRIPPED_WOOD,
-		DEPLOYABLE_DRINK,
-		CONTRAPTION_CONTROLLED,
 
 		STRIPPED_LOGS(FORGE),
 		STRIPPED_WOOD(FORGE),
@@ -211,6 +216,11 @@ public class AllTags {
 
 		BOTTOMLESS_ALLOW(MOD, "bottomless/allow"),
 		BOTTOMLESS_DENY(MOD, "bottomless/deny"),
+		FAN_PROCESSING_CATALYSTS_BLASTING(MOD, "fan_processing_catalysts/blasting"),
+		FAN_PROCESSING_CATALYSTS_HAUNTING(MOD, "fan_processing_catalysts/haunting"),
+		FAN_PROCESSING_CATALYSTS_SMOKING(MOD, "fan_processing_catalysts/smoking"),
+		FAN_PROCESSING_CATALYSTS_SPLASHING(MOD, "fan_processing_catalysts/splashing"),
+
 		// fabric: extra tag for diving helmet behavior
 		DIVING_FLUIDS,
 
@@ -257,7 +267,7 @@ public class AllTags {
 	}
 
 	public enum AllEntityTags {
-
+		BLAZE_BURNER_CAPTURABLE,
 		IGNORE_SEAT,
 
 		;
@@ -291,13 +301,58 @@ public class AllTags {
 			this.alwaysDatagen = alwaysDatagen;
 		}
 
+		public boolean matches(EntityType<?> type) {
+			return type.is(tag);
+		}
+
 		public boolean matches(Entity entity) {
-			return entity.getType()
-				.is(tag);
+			return matches(entity.getType());
 		}
 
 		private static void init() {}
 
+	}
+
+	public enum AllRecipeSerializerTags {
+
+		AUTOMATION_IGNORE,
+
+		;
+
+		public final TagKey<RecipeSerializer<?>> tag;
+		public final boolean alwaysDatagen;
+
+		AllRecipeSerializerTags() {
+			this(MOD);
+		}
+
+		AllRecipeSerializerTags(NameSpace namespace) {
+			this(namespace, namespace.optionalDefault, namespace.alwaysDatagenDefault);
+		}
+
+		AllRecipeSerializerTags(NameSpace namespace, String path) {
+			this(namespace, path, namespace.optionalDefault, namespace.alwaysDatagenDefault);
+		}
+
+		AllRecipeSerializerTags(NameSpace namespace, boolean optional, boolean alwaysDatagen) {
+			this(namespace, null, optional, alwaysDatagen);
+		}
+
+		AllRecipeSerializerTags(NameSpace namespace, String path, boolean optional, boolean alwaysDatagen) {
+			ResourceLocation id = new ResourceLocation(namespace.id, path == null ? Lang.asId(name()) : path);
+			if (optional) {
+				tag = optionalTag(ForgeRegistries.RECIPE_SERIALIZERS, id);
+			} else {
+				tag = TagKey.create(Registry.RECIPE_SERIALIZER_REGISTRY, id);
+			}
+			this.alwaysDatagen = alwaysDatagen;
+		}
+
+		public boolean matches(RecipeSerializer<?> recipeSerializer) {
+			return ForgeRegistries.RECIPE_SERIALIZERS.getHolder(recipeSerializer).orElseThrow().is(tag);
+		}
+
+		private static void init() {}
 	}
 
 	public static void init() {
@@ -305,5 +360,6 @@ public class AllTags {
 		AllItemTags.init();
 		AllFluidTags.init();
 		AllEntityTags.init();
+		AllRecipeSerializerTags.init();
 	}
 }

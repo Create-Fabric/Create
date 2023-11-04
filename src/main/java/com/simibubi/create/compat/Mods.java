@@ -36,6 +36,14 @@ public enum Mods {
 		loaded = FabricLoader.getInstance().isModLoaded(asId());
 	}
 
+	public ResourceLocation rl(String path) {
+		return new ResourceLocation(id, path);
+	}
+
+	public Block getBlock(String id) {
+		return Registry.BLOCK.get(new ResourceLocation(asId(), id));
+	}
+
 	/**
 	 * @return a boolean of whether the mod is loaded or not based on mod id
 	 */
@@ -69,9 +77,5 @@ public enum Mods {
 		if (isLoaded()) {
 			toExecute.get().run();
 		}
-	}
-
-	public Block getBlock(String id) {
-		return Registry.BLOCK.get(new ResourceLocation(asId(), id));
 	}
 }

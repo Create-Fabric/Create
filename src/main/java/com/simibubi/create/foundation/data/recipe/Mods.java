@@ -26,6 +26,9 @@ public enum Mods {
 	TF("twilightforest"),
 	ECO("ecologics"),
 
+	GOOD("goodending"),
+	BMK("biomemakeover"),
+
 	// Fabric Mods
 	TR("techreborn"),
 	MI("modern_industrialization"),

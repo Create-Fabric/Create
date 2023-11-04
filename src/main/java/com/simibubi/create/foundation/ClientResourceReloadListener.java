@@ -2,6 +2,7 @@ package com.simibubi.create.foundation;
 
 import com.simibubi.create.Create;
 import com.simibubi.create.CreateClient;
+import com.simibubi.create.content.kinetics.belt.BeltHelper;
 import com.simibubi.create.foundation.sound.SoundScapes;
 import com.simibubi.create.foundation.utility.LangNumberFormat;
 
@@ -18,6 +19,7 @@ public class ClientResourceReloadListener implements ResourceManagerReloadListen
 		CreateClient.invalidateRenderers();
 		SoundScapes.invalidateAll();
 		LangNumberFormat.numberFormat.update();
+		BeltHelper.uprightCache.clear();
 	}
 
 	@Override

@@ -63,7 +63,7 @@ public class Create implements ModInitializer {
 
 	public static final String ID = "create";
 	public static final String NAME = "Create";
-	public static final String VERSION = "0.5.1c";
+	public static final String VERSION = "0.5.1f";
 
 	public static final Logger LOGGER = LogUtils.getLogger();
 
@@ -75,6 +75,10 @@ public class Create implements ModInitializer {
 	@Deprecated
 	public static final Random RANDOM = new Random();
 
+	/**
+	 * <b>Other mods should not use this field!</b> If you are an addon developer, create your own instance of
+	 * {@link CreateRegistrate}.
+	 */
 	public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(ID);
 
 	static {

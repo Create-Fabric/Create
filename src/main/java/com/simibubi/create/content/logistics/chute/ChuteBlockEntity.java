@@ -20,6 +20,7 @@ import com.simibubi.create.content.logistics.funnel.FunnelBlock;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.inventory.VersionedInventoryTrackerBehaviour;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.item.ItemHelper.ExtractionCountMode;
 import com.simibubi.create.foundation.particle.AirParticleData;
@@ -85,6 +86,8 @@ public class ChuteBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
 	int airCurrentUpdateCooldown;
 	int entitySearchCooldown;
 
+	VersionedInventoryTrackerBehaviour invVersionTracker;
+
 	StorageProvider<ItemVariant> capAbove;
 	StorageProvider<ItemVariant> capBelow;
 
@@ -110,6 +113,7 @@ public class ChuteBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
 	@Override
 	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
 		behaviours.add(new DirectBeltInputBehaviour(this).onlyInsertWhen((d) -> canDirectlyInsertCached()));
+		behaviours.add(invVersionTracker = new VersionedInventoryTrackerBehaviour(this));
 		registerAwardables(behaviours, AllAdvancements.CHUTE);
 	}
 
@@ -342,15 +346,20 @@ public class ChuteBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
 	private void handleInput(Storage<ItemVariant> inv, float startLocation) {
 		if (inv == null)
 			return;
+		if (invVersionTracker.stillWaiting(inv))
+			return;
 		Predicate<ItemStack> canAccept = this::canAcceptItem;
 		int count = getExtractionAmount();
 		ExtractionCountMode mode = getExtractionMode();
 		if (mode == ExtractionCountMode.UPTO || !ItemHelper.extract(inv, canAccept, mode, count, true)
 			.isEmpty()) {
 			ItemStack extracted = ItemHelper.extract(inv, canAccept, mode, count, false);
-			if (!extracted.isEmpty())
+			if (!extracted.isEmpty()) {
 				setItem(extracted, startLocation);
+				return;
+			}
 		}
+		invVersionTracker.awaitNewVersion(inv);
 	}
 
 	private boolean handleDownwardOutput(boolean simulate) {
@@ -364,20 +373,14 @@ public class ChuteBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
 		if (below != null) {
 			if (level.isClientSide && !isVirtual())
 				return false;
-			try (Transaction t = TransferUtil.getTransaction()) {
-				long inserted = below.insert(ItemVariant.of(item), item.getCount(), t);
-				if (inserted != 0 && !simulate) t.commit();
-				ItemStack held = getItem();
-				if (!simulate) {
-					ItemStack newStack = held.copy();
-					newStack.shrink(ItemHelper.truncateLong(inserted));
-					setItem(newStack, itemPosition.getValue(0));
-				}
-				if (inserted != 0)
-					return true;
-				if (direction == Direction.DOWN)
-					return false;
-			}
+			ItemStack remainder = ItemHandlerHelper.insertItemStacked(capBelow.orElse(null), item, simulate);
+			ItemStack held = getItem();
+			if (!simulate)
+				setItem(remainder, itemPosition.getValue(0));
+			if (remainder.getCount() != held.getCount())
+				return true;
+			if (direction == Direction.DOWN)
+				return false;
 		}
 
 		if (targetChute != null) {
@@ -423,17 +426,11 @@ public class ChuteBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
 			if (above != null) {
 				if (level.isClientSide && !isVirtual() && !ChuteBlock.isChute(stateAbove))
 					return false;
-				try (Transaction t = TransferUtil.getTransaction()) {
-					long inserted = above.insert(ItemVariant.of(item), item.getCount(), t);
-					if (!simulate) {
-						item = item.copy();
-						item.shrink(ItemHelper.truncateLong(inserted));
-						itemHandler.update();
-						sendData();
-						t.commit();
-					}
-					return inserted != 0;
-				}
+				int countBefore = item.getCount();
+				ItemStack remainder = ItemHandlerHelper.insertItemStacked(capAbove.orElse(null), item, simulate);
+				if (!simulate)
+					item = remainder;
+				return countBefore != remainder.getCount();
 			}
 		}
 
