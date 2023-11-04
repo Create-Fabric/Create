@@ -14,7 +14,7 @@ import com.simibubi.create.content.decoration.palettes.AllPaletteStoneTypes;
 import com.simibubi.create.content.fluids.VirtualFluid;
 import com.simibubi.create.content.fluids.potion.PotionFluid;
 import com.simibubi.create.content.fluids.potion.PotionFluid.BottleType;
-import com.simibubi.create.content.fluids.potion.PotionFluid.PotionFluidAttributes;
+//import com.simibubi.create.content.fluids.potion.PotionFluid.PotionFluidAttributes;
 import com.simibubi.create.content.fluids.potion.PotionFluidHandler;
 import com.simibubi.create.foundation.utility.NBTHelper;
 import com.tterrag.registrate.fabric.EnvExecutor;
@@ -54,7 +54,7 @@ public class AllFluids {
 	public static final long HONEY_BOTTLE_AMOUNT = FluidConstants.BLOCK / 4;
 
 	public static final FluidEntry<PotionFluid> POTION =
-			REGISTRATE.virtualFluid("potion", PotionFluidAttributes::new, PotionFluid::new)
+			REGISTRATE.virtualFluid("potion", /*PotionFluidAttributes::new,*/ PotionFluid::new)
 					.lang("Potion")
 					.onRegister(potion -> {
 						Fluid still = potion.getSource();

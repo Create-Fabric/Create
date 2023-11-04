@@ -1,12 +1,15 @@
 package com.simibubi.create.api.event;
 
+import net.fabricmc.fabric.api.event.Event;
+
+import net.fabricmc.fabric.api.event.EventFactory;
+
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.eventbus.api.Event;
 
 /**
  * This Event is fired when two fluids meet in a pipe ({@link Flow})<br>
@@ -16,7 +19,17 @@ import net.minecraftforge.eventbus.api.Event;
  * If it is not null, the event's BlockState will be placed in world after
  * firing.
  */
-public class PipeCollisionEvent extends Event {
+public class PipeCollisionEvent {
+
+	public static final Event<FlowCallback> FLOW = EventFactory.createArrayBacked(FlowCallback.class, callbacks -> event -> {
+		for (FlowCallback callback : callbacks)
+			callback.handleFlow(event);
+	});
+
+	public static final Event<SpillCallback> SPILL = EventFactory.createArrayBacked(SpillCallback.class, callbacks -> event -> {
+		for (SpillCallback callback : callbacks)
+			callback.handleSpill(event);
+	});
 
 	private final Level level;
 	private final BlockPos pos;
@@ -79,5 +92,15 @@ public class PipeCollisionEvent extends Event {
 		public Fluid getPipeFluid() {
 			return secondFluid;
 		}
+	}
+
+	@FunctionalInterface
+	public interface FlowCallback {
+		void handleFlow(Flow event);
+	}
+
+	@FunctionalInterface
+	public interface SpillCallback {
+		void handleSpill(Spill event);
 	}
 }

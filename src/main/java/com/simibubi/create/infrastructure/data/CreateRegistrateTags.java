@@ -10,6 +10,7 @@ import com.simibubi.create.foundation.data.recipe.Mods;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.RegistrateTagsProvider;
 
+import me.alphamode.forgetags.Tags;
 import net.minecraft.data.tags.TagsProvider.TagAppender;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -20,7 +21,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.Tags;
 
 public class CreateRegistrateTags {
 	public static void addGenerators() {
@@ -115,7 +115,7 @@ public class CreateRegistrateTags {
 		prov.tag(AllItemTags.STRIPPED_WOOD.tag)
 			.addTag(AllItemTags.VANILLA_STRIPPED_WOOD.tag)
 			.addTag(AllItemTags.MODDED_STRIPPED_WOOD.tag);
-		
+
 		prov.tag(AllItemTags.DEPLOYABLE_DRINK.tag)
 			.add(Items.MILK_BUCKET, Items.POTION);
 

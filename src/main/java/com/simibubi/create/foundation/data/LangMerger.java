@@ -38,11 +38,13 @@ public class LangMerger implements DataProvider {
 	private DataGenerator gen;
 	private final String modid;
 	private final String displayName;
+	@SuppressWarnings("removal")
 	private final LangPartial[] langPartials;
 
 	private List<Object> mergedLangData;
 	private List<String> langIgnore;
 
+	@SuppressWarnings("removal")
 	public <T extends LangPartial> LangMerger(DataGenerator gen, String modid, String displayName, T[] langPartials) {
 		this.gen = gen;
 		this.modid = modid;
@@ -151,6 +153,7 @@ public class LangMerger implements DataProvider {
 		return !split[0].equals(split2[0]);
 	}
 
+	@SuppressWarnings("removal")
 	private void collectEntries() {
 		for (LangPartial partial : langPartials)
 			addAll(partial.getDisplayName(), partial.provide()

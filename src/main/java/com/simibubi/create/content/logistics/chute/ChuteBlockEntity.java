@@ -35,6 +35,7 @@ import com.simibubi.create.infrastructure.config.AllConfigs;
 import io.github.fabricators_of_create.porting_lib.block.CustomRenderBoundingBoxBlockEntity;
 import io.github.fabricators_of_create.porting_lib.transfer.StorageProvider;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemTransferable;
 import io.github.fabricators_of_create.porting_lib.util.ItemStackUtil;
 import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
@@ -373,14 +374,21 @@ public class ChuteBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
 		if (below != null) {
 			if (level.isClientSide && !isVirtual())
 				return false;
-			ItemStack remainder = ItemHandlerHelper.insertItemStacked(capBelow.orElse(null), item, simulate);
-			ItemStack held = getItem();
-			if (!simulate)
-				setItem(remainder, itemPosition.getValue(0));
-			if (remainder.getCount() != held.getCount())
-				return true;
-			if (direction == Direction.DOWN)
-				return false;
+
+			try (Transaction t = TransferUtil.getTransaction()) {
+				long inserted = below.insert(ItemVariant.of(item), item.getCount(), t);
+				if (inserted != 0 && !simulate) t.commit();
+				ItemStack held = getItem();
+				if (!simulate) {
+					ItemStack newStack = held.copy();
+					newStack.shrink(ItemHelper.truncateLong(inserted));
+					setItem(newStack, itemPosition.getValue(0));
+				}
+				if (inserted != 0)
+					return true;
+				if (direction == Direction.DOWN)
+					return false;
+			}
 		}
 
 		if (targetChute != null) {
@@ -426,11 +434,18 @@ public class ChuteBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
 			if (above != null) {
 				if (level.isClientSide && !isVirtual() && !ChuteBlock.isChute(stateAbove))
 					return false;
-				int countBefore = item.getCount();
-				ItemStack remainder = ItemHandlerHelper.insertItemStacked(capAbove.orElse(null), item, simulate);
-				if (!simulate)
-					item = remainder;
-				return countBefore != remainder.getCount();
+
+				try (Transaction t = TransferUtil.getTransaction()) {
+					long inserted = above.insert(ItemVariant.of(item), item.getCount(), t);
+					if (!simulate) {
+						item = item.copy();
+						item.shrink(ItemHelper.truncateLong(inserted));
+						itemHandler.update();
+						sendData();
+						t.commit();
+					}
+					return inserted != 0;
+				}
 			}
 		}
 

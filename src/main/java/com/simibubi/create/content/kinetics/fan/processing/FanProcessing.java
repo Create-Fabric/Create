@@ -14,9 +14,9 @@ import net.minecraft.world.level.Level;
 
 public class FanProcessing {
 	public static boolean canProcess(ItemEntity entity, FanProcessingType type) {
-		if (entity.getPersistentData()
+		if (entity.getExtraCustomData()
 			.contains("CreateData")) {
-			CompoundTag compound = entity.getPersistentData()
+			CompoundTag compound = entity.getExtraCustomData()
 				.getCompound("CreateData");
 			if (compound.contains("Processing")) {
 				CompoundTag processing = compound.getCompound("Processing");
@@ -82,7 +82,7 @@ public class FanProcessing {
 	}
 
 	private static int decrementProcessingTime(ItemEntity entity, FanProcessingType type) {
-		CompoundTag nbt = entity.getPersistentData();
+		CompoundTag nbt = entity.getExtraCustomData();
 
 		if (!nbt.contains("CreateData"))
 			nbt.put("CreateData", new CompoundTag());

@@ -6,6 +6,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
+
+import io.github.fabricators_of_create.porting_lib.util.DamageSourceHelper;
+
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.math.Vector3f;
@@ -51,8 +58,6 @@ import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 public class AllFanProcessingTypes {
 	public static final NoneType NONE = register("none", new NoneType());
@@ -116,7 +121,7 @@ public class AllFanProcessingTypes {
 		public List<ItemStack> process(ItemStack stack, Level level) {
 			return null;
 		}
-	
+
 		@Override
 		public void spawnProcessingParticles(Level level, Vec3 pos) {
 		}
@@ -132,8 +137,7 @@ public class AllFanProcessingTypes {
 
 	public static class BlastingType implements FanProcessingType {
 		private static final RecipeWrapper RECIPE_WRAPPER = new RecipeWrapper(new ItemStackHandler(1));
-		private static final DamageSource LAVA_DAMAGE_SOURCE = new DamageSource("create.fan_lava").setScalesWithDifficulty()
-				.setIsFire();
+		private static final DamageSource LAVA_DAMAGE_SOURCE = DamageSourceHelper.port_lib$createFireDamageSource("create.fan_lava").setScalesWithDifficulty();
 
 		@Override
 		public boolean isValidAt(Level level, BlockPos pos) {
@@ -323,14 +327,14 @@ public class AllFanProcessingTypes {
 				livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 1, false, false));
 			}
 			if (entity instanceof Horse horse) {
-				int progress = horse.getPersistentData()
+				int progress = horse.getExtraCustomData()
 					.getInt("CreateHaunting");
 				if (progress < 100) {
 					if (progress % 10 == 0) {
 						level.playSound(null, entity.blockPosition(), SoundEvents.SOUL_ESCAPE, SoundSource.NEUTRAL,
 							1f, 1.5f * progress / 100f);
 					}
-					horse.getPersistentData()
+					horse.getExtraCustomData()
 						.putInt("CreateHaunting", progress + 1);
 					return;
 				}
@@ -345,7 +349,7 @@ public class AllFanProcessingTypes {
 					.isEmpty())
 					horse.spawnAtLocation(horse.getArmor());
 
-				skeletonHorse.deserializeNBT(serializeNBT);
+				NBTSerializer.deserializeNBT(skeletonHorse, serializeNBT);
 				skeletonHorse.setPos(horse.getPosition(0));
 				level.addFreshEntity(skeletonHorse);
 				horse.discard();
@@ -355,8 +359,7 @@ public class AllFanProcessingTypes {
 
 	public static class SmokingType implements FanProcessingType {
 		private static final RecipeWrapper RECIPE_WRAPPER = new RecipeWrapper(new ItemStackHandler(1));
-		private static final DamageSource FIRE_DAMAGE_SOURCE = new DamageSource("create.fan_fire").setScalesWithDifficulty()
-				.setIsFire();
+		private static final DamageSource FIRE_DAMAGE_SOURCE = DamageSourceHelper.port_lib$createFireDamageSource("create.fan_fire").setScalesWithDifficulty();
 
 		@Override
 		public boolean isValidAt(Level level, BlockPos pos) {

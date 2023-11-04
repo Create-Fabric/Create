@@ -58,7 +58,7 @@ public class ValveHandleBlock extends HandCrankBlock {
 		BlockState blockState = level.getBlockState(pos);
 
 		if (!(blockState.getBlock() instanceof ValveHandleBlock vhb))
-			return;
+			return InteractionResult.PASS;
 		if (!player.mayBuild())
 			return InteractionResult.PASS;
 		if (AllItems.WRENCH.isIn(player.getItemInHand(hand)) && player.isShiftKeyDown())

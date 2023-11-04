@@ -68,7 +68,7 @@ public class PotionFluid extends VirtualFluid {
 	public enum BottleType {
 		REGULAR, SPLASH, LINGERING;
 	}
-
+/*
 	// TODO: PORT
 	public static class PotionFluidAttributes extends FluidAttributes {
 
@@ -98,6 +98,6 @@ public class PotionFluid extends VirtualFluid {
 							.getDescriptionId() + ".effect.");
 		}
 
-	}
+	}*/
 
 }

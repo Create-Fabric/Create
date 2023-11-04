@@ -7,13 +7,13 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
 import com.simibubi.create.foundation.utility.Pair;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class FilterItemStack {
 
@@ -35,7 +35,7 @@ public class FilterItemStack {
 	public static FilterItemStack of(CompoundTag tag) {
 		return of(ItemStack.of(tag));
 	}
-	
+
 	public static FilterItemStack empty() {
 		return of(ItemStack.EMPTY);
 	}
@@ -45,18 +45,20 @@ public class FilterItemStack {
 	}
 
 	public CompoundTag serializeNBT() {
-		return filterItemStack.serializeNBT();
+		CompoundTag ret = new CompoundTag();
+		filterItemStack.save(ret);
+		return ret;
 	}
-	
+
 	public ItemStack item() {
 		return filterItemStack;
 	}
-	
+
 	public FluidStack fluid(Level level) {
 		resolveFluid(level);
 		return filterFluidStack;
 	}
-	
+
 	public boolean isFilterItem() {
 		return filterItemStack.getItem() instanceof FilterItem;
 	}
@@ -94,7 +96,7 @@ public class FilterItemStack {
 	}
 
 	//
-	
+
 	private void resolveFluid(Level world) {
 		if (!fluidExtracted) {
 			fluidExtracted = true;

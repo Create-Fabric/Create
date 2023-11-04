@@ -267,7 +267,7 @@ public class ItemVaultBlockEntity extends SmartBlockEntity implements IMultiBloc
 			}
 		}
 
-		CombinedStorage<ItemVariant, ItemStackHandler> combinedInvWrapper = new VersionedInventoryWrapper(new CombinedStorage<>(List.of(invs)));
+		Storage<ItemVariant> combinedInvWrapper = new VersionedInventoryWrapper(new CombinedStorage<>(List.of(invs)));
 		itemCapability = combinedInvWrapper;
 	}
 

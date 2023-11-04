@@ -2,6 +2,10 @@ package com.simibubi.create.foundation.events;
 
 import java.util.concurrent.Executor;
 
+import com.simibubi.create.api.event.PipeCollisionEvent;
+
+import com.simibubi.create.content.fluids.FluidReactions;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -258,6 +262,8 @@ public class CommonEvents {
 		ServerPlayConnectionEvents.JOIN.register(CommonEvents::playerLoggedIn);
 		FluidPlaceBlockCallback.EVENT.register(CommonEvents::whenFluidsMeet);
 		ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register(CommonEvents::onDatapackSync);
+		PipeCollisionEvent.FLOW.register(FluidReactions::handlePipeFlowCollisionFallback);
+		PipeCollisionEvent.SPILL.register(FluidReactions::handlePipeSpillCollisionFallback);
 		// fabric: some features using events on forge don't use events here.
 		// they've been left in this class for upstream compatibility.
 		CommonEvents.addReloadListeners();

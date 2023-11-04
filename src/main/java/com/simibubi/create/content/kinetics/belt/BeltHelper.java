@@ -1,19 +1,27 @@
 package com.simibubi.create.content.kinetics.belt;
 
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 import com.simibubi.create.AllTags.AllItemTags;
+import com.simibubi.create.Create;
 import com.simibubi.create.foundation.utility.VecHelper;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.util.LevelUtil;
 
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.util.Mth;
+import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -25,7 +33,17 @@ import net.minecraft.world.phys.Vec3;
 public class BeltHelper {
 
 	public static Map<Item, Boolean> uprightCache = new Object2BooleanOpenHashMap<>();
-	public static final ResourceManagerReloadListener LISTENER = resourceManager -> uprightCache.clear();
+	public static final IdentifiableResourceReloadListener LISTENER = new SimpleSynchronousResourceReloadListener() {
+		@Override
+		public ResourceLocation getFabricId() {
+			return Create.asResource("belt_helper");
+		}
+
+		@Override
+		public void onResourceManagerReload(ResourceManager resourceManager) {
+			uprightCache.clear();
+		}
+	};
 
 	public static boolean isItemUpright(ItemStack stack) {
 		return uprightCache.computeIfAbsent(stack.getItem(),

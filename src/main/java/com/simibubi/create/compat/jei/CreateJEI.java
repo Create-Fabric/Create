@@ -76,6 +76,7 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.fabric.constants.FabricTypes;
 import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.helpers.IPlatformFluidHelper;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
@@ -351,7 +352,7 @@ public class CreateJEI implements IModPlugin {
 	}
 
 	@Override
-	public void registerFluidSubtypes(ISubtypeRegistration registration) {
+	public <T> void registerFluidSubtypes(ISubtypeRegistration registration, IPlatformFluidHelper<T> platformFluidHelper) {
 		PotionFluidSubtypeInterpreter interpreter = new PotionFluidSubtypeInterpreter();
 		PotionFluid potionFluid = AllFluids.POTION.get();
 		registration.registerSubtypeInterpreter(FabricTypes.FLUID_STACK, potionFluid.getSource(), interpreter);

@@ -13,8 +13,8 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class CreateRecipeSerializerTagsProvider extends TagsProvider<RecipeSerializer<?>> {
-	public CreateRecipeSerializerTagsProvider(DataGenerator generator, @Nullable ExistingFileHelper existingFileHelper) {
-		super(generator, Registry.RECIPE_SERIALIZER, Create.ID, existingFileHelper);
+	public CreateRecipeSerializerTagsProvider(DataGenerator generator/*, @Nullable ExistingFileHelper existingFileHelper*/) {
+		super(generator, Registry.RECIPE_SERIALIZER/*, Create.ID, existingFileHelper*/);
 	}
 
 	@Override

@@ -18,14 +18,14 @@ import com.simibubi.create.infrastructure.debugInfo.element.DebugInfoSection;
 import com.simibubi.create.infrastructure.debugInfo.element.InfoElement;
 import com.simibubi.create.infrastructure.debugInfo.element.InfoEntry;
 
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.SharedConstants;
 import net.minecraft.SystemReport;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.forgespi.language.IModInfo;
 
 /**
  * Allows for providing easily accessible debugging information.
@@ -67,11 +67,11 @@ public class DebugInformation {
 	static {
 		DebugInfoSection.builder(Create.NAME)
 				.put("Mod Version", Create.VERSION)
-				.put("Forge Version", getVersionOfMod("forge"))
+				.put("Fabric API Version", getVersionOfMod("fabric"))
 				.put("Minecraft Version", SharedConstants.getCurrentVersion().getName())
 				.buildTo(DebugInformation::registerBothInfo);
 
-		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+		EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
 			DebugInfoSection.builder("Graphics")
 					.put("Flywheel Version", Flywheel.getVersion().toString())
 					.put("Flywheel Backend", () -> Backend.getBackendType().toString())
@@ -96,18 +96,19 @@ public class DebugInformation {
 	}
 
 	public static String getVersionOfMod(String id) {
-		return ModList.get().getModContainerById(id)
-				.map(mod -> mod.getModInfo().getVersion().toString())
+		return FabricLoader.getInstance().getModContainer(id)
+				.map(mod -> mod.getMetadata().getVersion().toString())
 				.orElse("None");
 	}
 
 	public static Collection<InfoElement> listAllOtherMods() {
 		List<InfoElement> mods = new ArrayList<>();
-		ModList.get().forEachModContainer((id, mod) -> {
+		FabricLoader.getInstance().getAllMods().forEach(mod -> {
+			ModMetadata meta = mod.getMetadata();
+			String id = meta.getId();
 			if (!id.equals(Create.ID) && !id.equals("forge") && !id.equals("minecraft") && !id.equals("flywheel")) {
-				IModInfo info = mod.getModInfo();
-				String name = info.getDisplayName();
-				String version = info.getVersion().toString();
+				String name = meta.getName();
+				String version = meta.getVersion().toString();
 				mods.add(new InfoEntry(name, version));
 			}
 		});

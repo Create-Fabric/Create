@@ -8,14 +8,13 @@ import com.simibubi.create.foundation.utility.DyeHelper;
 import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.infrastructure.debugInfo.element.DebugInfoSection;
 
+import io.github.fabricators_of_create.porting_lib.util.EnvExecutor;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.network.NetworkEvent;
 
 public class ServerDebugInfoPacket extends SimplePacketBase {
 
@@ -38,8 +37,8 @@ public class ServerDebugInfoPacket extends SimplePacketBase {
 	}
 
 	@Override
-	public boolean handle(NetworkEvent.Context context) {
-		context.enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::handleOnClient));
+	public boolean handle(Context context) {
+		context.enqueueWork(() -> EnvExecutor.runWhenOn(EnvType.CLIENT, () -> this::handleOnClient));
 		return true;
 	}
 
@@ -71,7 +70,7 @@ public class ServerDebugInfoPacket extends SimplePacketBase {
 		output.append('\n');
 	}
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	private void handleOnClient() {
 		Player player = Objects.requireNonNull(Minecraft.getInstance().player);
 		StringBuilder output = new StringBuilder();

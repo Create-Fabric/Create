@@ -8,6 +8,7 @@ import static com.simibubi.create.AllTags.NameSpace.TIC;
 import com.simibubi.create.foundation.utility.Lang;
 
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
@@ -341,7 +342,7 @@ public class AllTags {
 		AllRecipeSerializerTags(NameSpace namespace, String path, boolean optional, boolean alwaysDatagen) {
 			ResourceLocation id = new ResourceLocation(namespace.id, path == null ? Lang.asId(name()) : path);
 			if (optional) {
-				tag = optionalTag(ForgeRegistries.RECIPE_SERIALIZERS, id);
+				tag = optionalTag(Registry.RECIPE_SERIALIZER, id);
 			} else {
 				tag = TagKey.create(Registry.RECIPE_SERIALIZER_REGISTRY, id);
 			}
@@ -349,7 +350,8 @@ public class AllTags {
 		}
 
 		public boolean matches(RecipeSerializer<?> recipeSerializer) {
-			return ForgeRegistries.RECIPE_SERIALIZERS.getHolder(recipeSerializer).orElseThrow().is(tag);
+			ResourceKey<RecipeSerializer<?>> key = Registry.RECIPE_SERIALIZER.getResourceKey(recipeSerializer).orElseThrow();
+			return Registry.RECIPE_SERIALIZER.getHolder(key).orElseThrow().is(tag);
 		}
 
 		private static void init() {}
