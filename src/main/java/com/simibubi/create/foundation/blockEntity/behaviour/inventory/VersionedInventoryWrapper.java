@@ -65,8 +65,8 @@ public class VersionedInventoryWrapper implements Storage<ItemVariant> {
 	}
 
 	@Override
-	public @Nullable StorageView<ItemVariant> exactView(TransactionContext transaction, ItemVariant resource) {
-		return inventory.exactView(transaction, resource);
+	public @Nullable StorageView<ItemVariant> exactView(ItemVariant resource) {
+		return inventory.exactView(resource);
 	}
 
 	@Override
