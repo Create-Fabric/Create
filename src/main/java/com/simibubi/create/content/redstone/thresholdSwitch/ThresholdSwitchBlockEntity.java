@@ -11,6 +11,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringB
 import com.simibubi.create.foundation.blockEntity.behaviour.inventory.CapManipulationBehaviourBase.InterfaceProvider;
 import com.simibubi.create.foundation.blockEntity.behaviour.inventory.InvManipulationBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.inventory.TankManipulationBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.inventory.VersionedInventoryTrackerBehaviour;
 import com.simibubi.create.foundation.utility.BlockFace;
 
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
@@ -41,6 +42,7 @@ public class ThresholdSwitchBlockEntity extends SmartBlockEntity {
 	private FilteringBehaviour filtering;
 	private InvManipulationBehaviour observedInventory;
 	private TankManipulationBehaviour observedTank;
+	private VersionedInventoryTrackerBehaviour invVersionTracker;
 
 	public ThresholdSwitchBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
@@ -110,18 +112,26 @@ public class ThresholdSwitchBlockEntity extends SmartBlockEntity {
 //			currentLevel = StorageDrawers.getTrueFillLevel(observedInventory.getInventory(), filtering);
 		} else if (observedInventory.hasInventory() || observedTank.hasInventory()) {
 			if (observedInventory.hasInventory()) {
+
 				// Item inventory
 				try (Transaction t = TransferUtil.getTransaction()) {
 					Storage<ItemVariant> inv = observedInventory.getInventory();
-					for (StorageView<ItemVariant> view : inv) {
-						long space = view.getCapacity();
-						long count = view.getAmount();
-						if (space == 0)
-							continue;
+					if (invVersionTracker.stillWaiting(inv)) {
+						occupied = prevLevel;
+						totalSpace = 1f;
 
-						totalSpace += 1;
-						if (filtering.test(view.getResource().toStack()))
-							occupied += count * (1f / space);
+					} else {
+						invVersionTracker.awaitNewVersion(inv);
+						for (StorageView<ItemVariant> view : inv) {
+							long space = view.getCapacity();
+							long count = view.getAmount();
+							if (space == 0)
+								continue;
+
+							totalSpace += 1;
+							if (filtering.test(view.getResource().toStack()))
+								occupied += count * (1f / space);
+						}
 					}
 				}
 			}
@@ -207,7 +217,12 @@ public class ThresholdSwitchBlockEntity extends SmartBlockEntity {
 	@Override
 	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
 		behaviours.add(filtering = new FilteringBehaviour(this, new FilteredDetectorFilterSlot(true))
-			.withCallback($ -> this.updateCurrentLevel()));
+			.withCallback($ -> {
+				this.updateCurrentLevel();
+				invVersionTracker.reset();
+			}));
+
+		behaviours.add(invVersionTracker = new VersionedInventoryTrackerBehaviour(this));
 
 		InterfaceProvider towardBlockFacing =
 			(w, p, s) -> new BlockFace(p, DirectedDirectionalBlock.getTargetDirection(s));

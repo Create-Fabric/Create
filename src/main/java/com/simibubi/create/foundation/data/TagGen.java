@@ -241,7 +241,7 @@ public class TagGen {
 	}
 
 	private static void genEntityTags(RegistrateTagsProvider<EntityType<?>> prov) {
-		
+
 		// VALIDATE
 
 		for (AllEntityTags tag : AllEntityTags.values()) {

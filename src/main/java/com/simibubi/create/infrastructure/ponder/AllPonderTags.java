@@ -316,7 +316,7 @@ public class AllPonderTags {
 			.add(Blocks.TARGET);
 
 		Mods.COMPUTERCRAFT.executeIfInstalled(() -> () -> {
-			Optional<Block> computer = Registry.BLOCK.getOptional(new ResourceLocation(Mods.COMPUTERCRAFT.asId(), "computer_advanced"));
+			Optional<Block> computer = Registry.BLOCK.getOptional(Mods.COMPUTERCRAFT.rl("computer_advanced"));
 			if (computer.isPresent())
 				PonderRegistry.TAGS.forTag(DISPLAY_SOURCES).add(computer.get());
 		});

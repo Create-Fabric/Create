@@ -47,6 +47,11 @@ public class CuttingRecipe extends ProcessingRecipe<Container> implements IAssem
 	}
 
 	@Override
+	protected boolean canSpecifyDuration() {
+		return true;
+	}
+
+	@Override
 	public void addAssemblyIngredients(List<Ingredient> list) {}
 
 	@Override

@@ -23,12 +23,18 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.ponder.PonderScene;
+import com.tterrag.registrate.AbstractRegistrate;
+import com.tterrag.registrate.providers.ProviderType;
 
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.util.GsonHelper;
 
+/**
+ * @deprecated Use {@link AbstractRegistrate#addRawLang} or {@link AbstractRegistrate#addDataGenerator} with {@link ProviderType#LANG} instead.
+ */
+@Deprecated(forRemoval = true)
 public class LangMerger implements DataProvider {
 
 	static final Gson GSON = new GsonBuilder().setPrettyPrinting()
@@ -39,11 +45,13 @@ public class LangMerger implements DataProvider {
 	private DataGenerator gen;
 	private final String modid;
 	private final String displayName;
+	@SuppressWarnings("removal")
 	private final LangPartial[] langPartials;
 
 	private List<Object> mergedLangData;
 	private List<String> langIgnore;
 
+	@SuppressWarnings("removal")
 	public <T extends LangPartial> LangMerger(DataGenerator gen, String modid, String displayName, T[] langPartials) {
 		this.gen = gen;
 		this.modid = modid;
@@ -173,6 +181,7 @@ public class LangMerger implements DataProvider {
 		return !split[0].equals(split2[0]);
 	}
 
+	@SuppressWarnings("removal")
 	private void collectEntries() {
 		for (LangPartial partial : langPartials)
 			addAll(partial.getDisplayName(), partial.provide()

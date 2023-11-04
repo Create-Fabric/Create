@@ -12,6 +12,7 @@ import com.simibubi.create.AllEntityTypes;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.logistics.filter.FilterItem;
+import com.simibubi.create.content.logistics.filter.FilterItemStack;
 import com.simibubi.create.content.schematics.requirement.ISpecialEntityItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement.ItemUseType;
@@ -366,16 +367,15 @@ public class BlueprintEntity extends HangingEntity
 					Map<Integer, ItemStack> craftingGrid = new HashMap<>();
 					boolean success = true;
 
-					Search:
-					for (int i = 0; i < 9; i++) {
-						ItemStack requestedItem = items.getStackInSlot(i);
+					Search: for (int i = 0; i < 9; i++) {
+						FilterItemStack requestedItem = FilterItemStack.of(items.getStackInSlot(i));
 						if (requestedItem.isEmpty()) {
 							craftingGrid.put(i, ItemStack.EMPTY);
 							continue;
 						}
 
 						ResourceAmount<ItemVariant> resource = StorageUtil.findExtractableContent(
-								playerInv, v -> FilterItem.test(level, v.toStack(), requestedItem), t);
+								playerInv, v -> requestedItem.test(level, v.toStack()), t);
 						if (resource != null) {
 							playerInv.extract(resource.resource(), 1, t);
 							craftingGrid.put(i, resource.resource().toStack());

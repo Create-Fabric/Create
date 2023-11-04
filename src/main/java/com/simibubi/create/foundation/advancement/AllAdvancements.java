@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
@@ -17,6 +18,8 @@ import org.slf4j.Logger;
 
 import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllFluids;
@@ -327,13 +330,13 @@ public class AllAdvancements implements DataProvider {
 			.after(STEAM_ENGINE_MAXED)
 			.special(EXPERT)),
 
-		// Copper - Hidden
-
-		DIVING_SUIT_LAVA = create("diving_suit_lava", b -> b.icon(AllItems.COPPER_DIVING_HELMET)
+		DIVING_SUIT_LAVA = create("diving_suit_lava", b -> b.icon(AllItems.NETHERITE_DIVING_HELMET)
 			.title("Swimming with the Striders")
-			.description("Attempt to take a dive in lava with your diving gear")
-			.after(BACKTANK)
-			.special(SECRET)),
+			.description("Attempt to take a dive in lava with your netherite diving gear")
+			.after(FOODS)
+			.special(EXPERT)),
+
+		// Copper - Hidden
 
 		CHAINED_DRAIN = create("chained_drain", b -> b.icon(AllBlocks.ITEM_DRAIN)
 			.title("On a Roll")
@@ -386,7 +389,7 @@ public class AllAdvancements implements DataProvider {
 			.special(NOISY)),
 
 		SPEED_CONTROLLER = create("speed_controller", b -> b.icon(AllBlocks.ROTATION_SPEED_CONTROLLER)
-			.title("Engineers Hate Him!")
+			.title("Engineers hate this simple trick!")
 			.description("Fine-tune your Contraption with a Rotation Speed Controller")
 			.after(MECHANISM)),
 
@@ -652,11 +655,9 @@ public class AllAdvancements implements DataProvider {
 		return "Create's Advancements";
 	}
 
-	public static JsonObject provideLangEntries() {
-		JsonObject object = new JsonObject();
+	public static void provideLang(BiConsumer<String, String> consumer) {
 		for (CreateAdvancement advancement : ENTRIES)
-			advancement.appendToLang(object);
-		return object;
+			advancement.provideLang(consumer);
 	}
 
 	public static void register() {}
