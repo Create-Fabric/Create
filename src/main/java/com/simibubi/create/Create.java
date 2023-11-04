@@ -2,19 +2,6 @@ package com.simibubi.create;
 
 import java.util.Random;
 
-import com.simibubi.create.foundation.advancement.AllAdvancements;
-import com.simibubi.create.foundation.damageTypes.DamageTypeDataProvider;
-import com.simibubi.create.foundation.damageTypes.DamageTypeTagGen;
-import com.simibubi.create.foundation.data.AllLangPartials;
-import com.simibubi.create.foundation.ponder.FabricPonderProcessing;
-import com.simibubi.create.foundation.recipe.AllIngredients;
-
-import com.simibubi.create.infrastructure.worldgen.AllBiomeModifiers;
-
-import io.github.fabricators_of_create.porting_lib.data.ExistingFileHelper;
-
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-
 import org.slf4j.Logger;
 
 import com.google.gson.Gson;
@@ -36,10 +23,13 @@ import com.simibubi.create.content.schematics.SchematicInstances;
 import com.simibubi.create.content.schematics.ServerSchematicLoader;
 import com.simibubi.create.content.trains.GlobalRailwayManager;
 import com.simibubi.create.content.trains.bogey.BogeySizes;
+import com.simibubi.create.content.trains.track.AllPortalTracks;
+import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.advancement.AllTriggers;
 import com.simibubi.create.foundation.block.CopperRegistries;
+import com.simibubi.create.foundation.damageTypes.DamageTypeDataProvider;
+import com.simibubi.create.foundation.damageTypes.DamageTypeTagGen;
 import com.simibubi.create.foundation.data.CreateRegistrate;
-import com.simibubi.create.foundation.data.LangMerger;
 import com.simibubi.create.foundation.data.TagGen;
 import com.simibubi.create.foundation.data.TagLangGen;
 import com.simibubi.create.foundation.data.recipe.MechanicalCraftingRecipeGen;
@@ -51,16 +41,22 @@ import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipHelper.Palette;
 import com.simibubi.create.foundation.item.TooltipModifier;
+import com.simibubi.create.foundation.ponder.FabricPonderProcessing;
+import com.simibubi.create.foundation.recipe.AllIngredients;
 import com.simibubi.create.foundation.utility.AttachedRegistry;
 import com.simibubi.create.infrastructure.command.ServerLagger;
 import com.simibubi.create.infrastructure.config.AllConfigs;
+import com.simibubi.create.infrastructure.data.CreateDatagen;
+import com.simibubi.create.infrastructure.worldgen.AllBiomeModifiers;
 import com.simibubi.create.infrastructure.worldgen.AllFeatures;
 import com.simibubi.create.infrastructure.worldgen.AllPlacementModifiers;
 import com.simibubi.create.infrastructure.worldgen.WorldgenDataProvider;
 
+import io.github.fabricators_of_create.porting_lib.data.ExistingFileHelper;
 import io.github.tropheusj.milk.Milk;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -70,7 +66,7 @@ public class Create implements ModInitializer {
 
 	public static final String ID = "create";
 	public static final String NAME = "Create";
-	public static final String VERSION = "0.5.1d";
+	public static final String VERSION = "0.5.1f";
 
 	public static final Logger LOGGER = LogUtils.getLogger();
 
@@ -82,6 +78,10 @@ public class Create implements ModInitializer {
 	@Deprecated
 	public static final Random RANDOM = new Random();
 
+	/**
+	 * <b>Other mods should not use this field!</b> If you are an addon developer, create your own instance of
+	 * {@link CreateRegistrate}.
+	 */
 	public static final CreateRegistrate REGISTRATE = CreateRegistrate.create(ID);
 
 	static {
@@ -128,6 +128,7 @@ public class Create implements ModInitializer {
 
 		AllMovementBehaviours.registerDefaults();
 		AllInteractionBehaviours.registerDefaults();
+		AllPortalTracks.registerDefaults();
 		AllDisplayBehaviours.registerDefaults();
 		ContraptionMovementSetting.registerDefaults();
 		AllArmInteractionPointTypes.register();
@@ -169,6 +170,8 @@ public class Create implements ModInitializer {
 	}
 
 	public static void gatherData(FabricDataGenerator.Pack pack, ExistingFileHelper helper) {
+		CreateDatagen.addExtraRegistrateData();
+
 		TagGen.datagen();
 		TagLangGen.datagen();
 

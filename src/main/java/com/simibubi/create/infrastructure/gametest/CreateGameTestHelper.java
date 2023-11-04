@@ -9,7 +9,6 @@ import com.simibubi.create.content.contraptions.actors.contraptionControls.Contr
 import com.simibubi.create.content.contraptions.actors.contraptionControls.ContraptionControlsMovingInteraction;
 import com.simibubi.create.content.contraptions.behaviour.MovementContext;
 import com.simibubi.create.content.kinetics.gauge.SpeedGaugeBlockEntity;
-
 import com.simibubi.create.content.kinetics.gauge.StressGaugeBlockEntity;
 
 import org.apache.commons.lang3.tuple.MutablePair;

@@ -112,9 +112,9 @@ public class ContraptionRenderDispatcher {
 		ContraptionWorld contraptionWorld = c.getContraptionWorld();
 
 		BlockPos origin = c.anchor;
-		int height = contraptionWorld.getHeight();
 		int minBuildHeight = contraptionWorld.getMinBuildHeight();
-		VirtualRenderWorld renderWorld = new VirtualRenderWorld(world, origin, height, minBuildHeight) {
+		int height = contraptionWorld.getHeight();
+		VirtualRenderWorld renderWorld = new VirtualRenderWorld(world, minBuildHeight, height, origin) {
 			@Override
 			public boolean supportsFlywheel() {
 				return canInstance();
@@ -128,13 +128,13 @@ public class ContraptionRenderDispatcher {
 			// FIXME 1.20 this '0' used to be Block.UPDATE_SUPPRESS_LIGHT, yet VirtualRenderWorld didn't actually parse the flags at all
 			renderWorld.setBlock(info.pos(), info.state(), 0);
 
-		renderWorld.runLightingEngine();
+		renderWorld.runLightEngine();
 		return renderWorld;
 	}
 
 	public static void renderBlockEntities(Level world, VirtualRenderWorld renderWorld, Contraption c,
 		ContraptionMatrices matrices, MultiBufferSource buffer) {
-		BlockEntityRenderHelper.renderBlockEntities(world, renderWorld, c.getSpecialRenderedTEs(),
+		BlockEntityRenderHelper.renderBlockEntities(world, renderWorld, c.getSpecialRenderedBEs(),
 			matrices.getModelViewProjection(), matrices.getLight(), buffer);
 	}
 

@@ -86,14 +86,13 @@ public class TagGen {
 
 	private static void genBlockTags(RegistrateTagsProvider<Block> provIn) {
 		CreateTagsProvider<Block> prov = new CreateTagsProvider<>(provIn, Block::builtInRegistryHolder);
-
 		prov.tag(AllBlockTags.BRITTLE.tag)
 			.add(Blocks.BELL, Blocks.COCOA, Blocks.FLOWER_POT)
 			.addTag(BlockTags.BEDS)
 			.addTag(BlockTags.DOORS);
 		prov.tag(AllBlockTags.MOVABLE_EMPTY_COLLIDER.tag)
-				.add(Blocks.COBWEB, Blocks.POWDER_SNOW, Blocks.TRIPWIRE, Blocks.TRIPWIRE_HOOK)
-				.addTag(BlockTags.FENCE_GATES);
+			.add(Blocks.COBWEB, Blocks.POWDER_SNOW, Blocks.TRIPWIRE, Blocks.TRIPWIRE_HOOK)
+			.addTag(BlockTags.FENCE_GATES);
 
 		prov.tag(AllBlockTags.FAN_TRANSPARENT.tag)
 			.add(Blocks.IRON_BARS)
@@ -141,7 +140,6 @@ public class TagGen {
 				"connector_lv", "connector_lv_relay", "connector_mv", "connector_mv_relay",
 				"connector_hv", "connector_hv_relay", "connector_bundled", "connector_structural",
 				"connector_redstone", "connector_probe", "breaker_switch");
-		addOptional(prov.tag(AllBlockTags.NON_MOVABLE.tag), Mods.BC, "bits_block");
 
 		// VALIDATE
 
@@ -254,7 +252,6 @@ public class TagGen {
 
 	private static void genEntityTags(RegistrateTagsProvider<EntityType<?>> provIn) {
 		CreateTagsProvider<EntityType<?>> prov = new CreateTagsProvider<>(provIn, EntityType::builtInRegistryHolder);
-
 		// VALIDATE
 
 		for (AllEntityTags tag : AllEntityTags.values()) {

@@ -26,6 +26,13 @@ public enum Mods {
 	TF("twilightforest"),
 	ECO("ecologics"),
 
+	ENV("environmental"),
+	ATM("atmospheric"),
+	ATM_2("atmospheric", b -> b.omitWoodSuffix()),
+	IX("infernalexp"),
+	GOOD("goodending"),
+	BMK("biomemakeover"),
+
 	// Fabric Mods
 	TR("techreborn"),
 	MI("modern_industrialization"),

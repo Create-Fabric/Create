@@ -2,7 +2,7 @@ package com.simibubi.create.compat.emi.recipes.fan;
 
 import com.simibubi.create.compat.emi.CreateEmiAnimations;
 import com.simibubi.create.compat.emi.CreateEmiPlugin;
-import com.simibubi.create.content.kinetics.fan.SplashingRecipe;
+import com.simibubi.create.content.kinetics.fan.processing.SplashingRecipe;
 import com.simibubi.create.foundation.gui.element.GuiGameElement;
 
 import net.minecraft.client.gui.GuiGraphics;

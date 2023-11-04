@@ -2,6 +2,8 @@ package com.simibubi.create.content.decoration.copycat;
 
 import java.util.function.Supplier;
 
+import javax.annotation.Nullable;
+
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.foundation.utility.Iterate;
 
@@ -19,8 +21,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-
-import javax.annotation.Nullable;
 
 public abstract class CopycatModel extends ForwardingBakedModel implements CustomParticleIconModel {
 

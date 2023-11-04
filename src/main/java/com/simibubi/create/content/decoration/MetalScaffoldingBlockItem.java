@@ -3,9 +3,11 @@ package com.simibubi.create.content.decoration;
 import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ChatType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ScaffoldingBlockItem;
@@ -22,7 +24,7 @@ public class MetalScaffoldingBlockItem extends ScaffoldingBlockItem {
 
 	@Nullable
 	public BlockPlaceContext updatePlacementContext(BlockPlaceContext pContext) { // TODO replace with placement helper
-		BlockPos blockpos = pContext.getClickedPos();	
+		BlockPos blockpos = pContext.getClickedPos();
 		Level level = pContext.getLevel();
 		BlockState blockstate = level.getBlockState(blockpos);
 		Block block = this.getBlock();
@@ -47,7 +49,7 @@ public class MetalScaffoldingBlockItem extends ScaffoldingBlockItem {
 				int j = level.getMaxBuildHeight();
 				if (player instanceof ServerPlayer sp && blockpos$mutableblockpos.getY() >= j)
 					sp.sendSystemMessage(Component.translatable("build.tooHigh", j - 1)
-						.withStyle(ChatFormatting.RED), true);
+									.withStyle(ChatFormatting.RED), true);
 				break;
 			}
 
@@ -65,7 +67,7 @@ public class MetalScaffoldingBlockItem extends ScaffoldingBlockItem {
 				++i;
 			}
 		}
-		
+
 		return null;
 	}
 

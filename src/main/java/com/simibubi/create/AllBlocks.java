@@ -360,8 +360,7 @@ public class AllBlocks {
 
 	public static final BlockEntry<CogWheelBlock> COGWHEEL = REGISTRATE.block("cogwheel", CogWheelBlock::small)
 		.initialProperties(SharedProperties::stone)
-		.properties(p -> p.sound(SoundType.WOOD))
-		.properties(p -> p.mapColor(MapColor.DIRT))
+		.properties(p -> p.sound(SoundType.WOOD).mapColor(MapColor.DIRT))
 		.transform(BlockStressDefaults.setNoImpact())
 		.transform(axeOrPickaxe())
 		.blockstate(BlockStateGen.axisBlockProvider(false))
@@ -373,8 +372,7 @@ public class AllBlocks {
 	public static final BlockEntry<CogWheelBlock> LARGE_COGWHEEL =
 		REGISTRATE.block("large_cogwheel", CogWheelBlock::large)
 			.initialProperties(SharedProperties::stone)
-			.properties(p -> p.sound(SoundType.WOOD))
-			.properties(p -> p.mapColor(MapColor.DIRT))
+			.properties(p -> p.sound(SoundType.WOOD).mapColor(MapColor.DIRT))
 			.transform(axeOrPickaxe())
 			.transform(BlockStressDefaults.setNoImpact())
 			.blockstate(BlockStateGen.axisBlockProvider(false))
@@ -510,7 +508,7 @@ public class AllBlocks {
 			.register();
 
 	public static final BlockEntry<BeltBlock> BELT = REGISTRATE.block("belt", BeltBlock::new)
-		.properties(p -> p.sound(SoundType.WOOL)
+				.properties(p -> p.sound(SoundType.WOOL)
 			.strength(0.8f)
 			.mapColor(MapColor.COLOR_GRAY))
 		.addLayer(() -> RenderType::cutoutMipped)
@@ -699,8 +697,7 @@ public class AllBlocks {
 
 	public static final BlockEntry<BasinBlock> BASIN = REGISTRATE.block("basin", BasinBlock::new)
 		.initialProperties(SharedProperties::stone)
-		.properties(p -> p.mapColor(MapColor.COLOR_GRAY))
-		.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+		.properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.NETHERITE_BLOCK))
 		.transform(pickaxeOnly())
 		.blockstate(new BasinGenerator()::generate)
 		.addLayer(() -> RenderType::cutoutMipped)
@@ -712,11 +709,10 @@ public class AllBlocks {
 	public static final BlockEntry<BlazeBurnerBlock> BLAZE_BURNER =
 		REGISTRATE.block("blaze_burner", BlazeBurnerBlock::new)
 			.initialProperties(SharedProperties::softMetal)
-			.properties(p -> p.mapColor(MapColor.COLOR_GRAY))
-			.properties(p -> p.lightLevel(BlazeBurnerBlock::getLight))
+			.properties(p -> p.mapColor(MapColor.COLOR_GRAY).lightLevel(BlazeBurnerBlock::getLight))
 			.transform(pickaxeOnly())
 			.addLayer(() -> RenderType::cutoutMipped)
-			.tag(AllBlockTags.FAN_TRANSPARENT.tag, AllBlockTags.PASSIVE_BOILER_HEATERS.tag)
+			.tag(AllBlockTags.FAN_PROCESSING_CATALYSTS_BLASTING.tag, AllBlockTags.FAN_PROCESSING_CATALYSTS_SMOKING.tag, AllBlockTags.FAN_TRANSPARENT.tag, AllBlockTags.PASSIVE_BOILER_HEATERS.tag)
 			.loot((lt, block) -> lt.add(block, BlazeBurnerBlock.buildLootTable()))
 			.blockstate((c, p) -> p.simpleBlock(c.getEntry(), AssetLookup.partialBaseModel(c, p)))
 			.onRegister(movementBehaviour(new BlazeBurnerMovementBehaviour()))
@@ -729,11 +725,10 @@ public class AllBlocks {
 	public static final BlockEntry<LitBlazeBurnerBlock> LIT_BLAZE_BURNER =
 		REGISTRATE.block("lit_blaze_burner", LitBlazeBurnerBlock::new)
 			.initialProperties(SharedProperties::softMetal)
-			.properties(p -> p.mapColor(MapColor.COLOR_LIGHT_GRAY))
-			.properties(p -> p.lightLevel(LitBlazeBurnerBlock::getLight))
+			.properties(p -> p.mapColor(MapColor.COLOR_LIGHT_GRAY).lightLevel(LitBlazeBurnerBlock::getLight))
 			.transform(pickaxeOnly())
 			.addLayer(() -> RenderType::cutoutMipped)
-			.tag(AllBlockTags.FAN_TRANSPARENT.tag, AllBlockTags.PASSIVE_BOILER_HEATERS.tag)
+			.tag(AllBlockTags.FAN_PROCESSING_CATALYSTS_HAUNTING.tag, AllBlockTags.FAN_PROCESSING_CATALYSTS_SMOKING.tag, AllBlockTags.FAN_TRANSPARENT.tag, AllBlockTags.PASSIVE_BOILER_HEATERS.tag)
 			.loot((lt, block) -> lt.dropOther(block, AllItems.EMPTY_BLAZE_BURNER.get()))
 			.blockstate((c, p) -> p.getVariantBuilder(c.get())
 				.forAllStates(state -> ConfiguredModel.builder()
@@ -769,10 +764,8 @@ public class AllBlocks {
 			.register();
 
 	public static final BlockEntry<ChuteBlock> CHUTE = REGISTRATE.block("chute", ChuteBlock::new)
-		.addLayer(() -> RenderType::cutoutMipped)
 		.initialProperties(SharedProperties::softMetal)
-		.properties(p -> p.mapColor(MapColor.COLOR_GRAY))
-		.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+		.properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.NETHERITE_BLOCK))
 		.transform(pickaxeOnly())
 		.addLayer(() -> RenderType::cutoutMipped)
 		.blockstate(new ChuteGenerator()::generate)
@@ -781,12 +774,12 @@ public class AllBlocks {
 		.register();
 
 	public static final BlockEntry<SmartChuteBlock> SMART_CHUTE = REGISTRATE.block("smart_chute", SmartChuteBlock::new)
-		.addLayer(() -> RenderType::cutoutMipped)
 		.initialProperties(SharedProperties::softMetal)
-		.properties(p -> p.mapColor(MapColor.COLOR_GRAY))
-		.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
-		.properties(p -> p.noOcclusion())
-		.properties(p -> p.isRedstoneConductor((level, pos, state) -> false))
+		.properties(p -> p.mapColor(MapColor.COLOR_GRAY)
+			.sound(SoundType.NETHERITE_BLOCK)
+			.noOcclusion()
+			.isRedstoneConductor((level, pos, state) -> false))
+		.addLayer(() -> RenderType::cutoutMipped)
 		.transform(pickaxeOnly())
 		.blockstate((c, p) -> BlockStateGen.simpleBlock(c, p, AssetLookup.forPowered(c, p)))
 		.item()
@@ -935,8 +928,7 @@ public class AllBlocks {
 
 	public static final BlockEntry<FluidTankBlock> FLUID_TANK = REGISTRATE.block("fluid_tank", FluidTankBlock::regular)
 		.initialProperties(SharedProperties::copperMetal)
-		.properties(BlockBehaviour.Properties::noOcclusion)
-		.properties(p -> p.isRedstoneConductor((p1, p2, p3) -> true))
+		.properties(p -> p.noOcclusion().isRedstoneConductor((p1, p2, p3) -> true))
 		.transform(pickaxeOnly())
 		.blockstate(new FluidTankGenerator()::generate)
 		.onRegister(CreateRegistrate.blockModel(() -> FluidTankModel::standard))
@@ -1065,8 +1057,7 @@ public class AllBlocks {
 	public static final BlockEntry<PistonExtensionPoleBlock> PISTON_EXTENSION_POLE =
 		REGISTRATE.block("piston_extension_pole", PistonExtensionPoleBlock::new)
 			.initialProperties(() -> Blocks.PISTON_HEAD)
-			.properties(p -> p.sound(SoundType.SCAFFOLDING))
-			.properties(p -> p.mapColor(MapColor.DIRT))
+			.properties(p -> p.sound(SoundType.SCAFFOLDING).mapColor(MapColor.DIRT))
 			.properties(p -> p.pushReaction(PushReaction.NORMAL)) // fabric: inherits BLOCK from piston head, handled by a method override on forge
 			.transform(axeOrPickaxe())
 			.blockstate(BlockStateGen.directionalBlockProviderIgnoresWaterlogged(false))
@@ -1351,8 +1342,7 @@ public class AllBlocks {
 	public static final BlockEntry<ElevatorContactBlock> ELEVATOR_CONTACT =
 		REGISTRATE.block("elevator_contact", ElevatorContactBlock::new)
 			.initialProperties(SharedProperties::softMetal)
-			.properties(p -> p.mapColor(MapColor.TERRACOTTA_YELLOW))
-			.properties(p -> p.lightLevel(ElevatorContactBlock::getLight))
+			.properties(p -> p.mapColor(MapColor.TERRACOTTA_YELLOW).lightLevel(ElevatorContactBlock::getLight))
 			.transform(axeOrPickaxe())
 			.blockstate((c, p) -> p.directionalBlock(c.get(), state -> {
 				Boolean calling = state.getValue(ElevatorContactBlock.CALLING);
@@ -1407,8 +1397,8 @@ public class AllBlocks {
 
 	public static final BlockEntry<SailBlock> SAIL_FRAME = REGISTRATE.block("sail_frame", p -> SailBlock.frame(p))
 		.initialProperties(SharedProperties::wooden)
-		.properties(p -> p.mapColor(MapColor.DIRT))
-		.properties(p -> p.sound(SoundType.SCAFFOLDING)
+		.properties(p -> p.mapColor(MapColor.DIRT)
+			.sound(SoundType.SCAFFOLDING)
 			.noOcclusion())
 		.transform(axeOnly())
 		.blockstate(BlockStateGen.directionalBlockProvider(false))
@@ -1421,8 +1411,8 @@ public class AllBlocks {
 	public static final BlockEntry<SailBlock> SAIL =
 		REGISTRATE.block("white_sail", p -> SailBlock.withCanvas(p, DyeColor.WHITE))
 			.initialProperties(SharedProperties::wooden)
-			.properties(p -> p.mapColor(MapColor.SNOW))
-			.properties(p -> p.sound(SoundType.SCAFFOLDING)
+			.properties(p -> p.mapColor(MapColor.SNOW)
+				.sound(SoundType.SCAFFOLDING)
 				.noOcclusion())
 			.transform(axeOnly())
 			.blockstate(BlockStateGen.directionalBlockProvider(false))
@@ -1439,8 +1429,8 @@ public class AllBlocks {
 		String colourName = colour.getSerializedName();
 		return REGISTRATE.block(colourName + "_sail", p -> SailBlock.withCanvas(p, colour))
 			.initialProperties(SharedProperties::wooden)
-			.properties(p -> p.mapColor(colour.getMapColor()))
-			.properties(p -> p.sound(SoundType.SCAFFOLDING)
+			.properties(p -> p.mapColor(colour.getMapColor())
+				.sound(SoundType.SCAFFOLDING)
 				.noOcclusion())
 			.transform(axeOnly())
 			.blockstate((c, p) -> p.directionalBlock(c.get(), p.models()
@@ -1462,8 +1452,7 @@ public class AllBlocks {
 		.register();
 
 	public static final BlockEntry<CasingBlock> COPPER_CASING = REGISTRATE.block("copper_casing", CasingBlock::new)
-		.properties(p -> p.mapColor(MapColor.TERRACOTTA_LIGHT_GRAY))
-		.properties(p -> p.sound(SoundType.COPPER))
+		.properties(p -> p.mapColor(MapColor.TERRACOTTA_LIGHT_GRAY).sound(SoundType.COPPER))
 		.transform(BuilderTransformers.casing(() -> AllSpriteShifts.COPPER_CASING))
 		.register();
 
@@ -1581,15 +1570,13 @@ public class AllBlocks {
 	public static final BlockEntry<CasingBlock> RAILWAY_CASING = REGISTRATE.block("railway_casing", CasingBlock::new)
 		.transform(BuilderTransformers.layeredCasing(() -> AllSpriteShifts.RAILWAY_CASING_SIDE,
 			() -> AllSpriteShifts.RAILWAY_CASING))
-		.properties(p -> p.mapColor(MapColor.TERRACOTTA_CYAN))
-		.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+		.properties(p -> p.mapColor(MapColor.TERRACOTTA_CYAN).sound(SoundType.NETHERITE_BLOCK))
 		.lang("Train Casing")
 		.register();
 
 	public static final BlockEntry<StationBlock> TRACK_STATION = REGISTRATE.block("track_station", StationBlock::new)
 		.initialProperties(SharedProperties::softMetal)
-		.properties(p -> p.mapColor(MapColor.PODZOL))
-		.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+		.properties(p -> p.mapColor(MapColor.PODZOL).sound(SoundType.NETHERITE_BLOCK))
 		.transform(pickaxeOnly())
 		.blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.partialBaseModel(c, p)))
 		.onRegister(assignDataBehaviour(new StationSummaryDisplaySource(), "station_summary"))
@@ -1601,9 +1588,9 @@ public class AllBlocks {
 
 	public static final BlockEntry<SignalBlock> TRACK_SIGNAL = REGISTRATE.block("track_signal", SignalBlock::new)
 		.initialProperties(SharedProperties::softMetal)
-		.properties(p -> p.mapColor(MapColor.PODZOL))
-		.properties(p -> p.noOcclusion())
-		.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+		.properties(p -> p.mapColor(MapColor.PODZOL)
+			.noOcclusion()
+			.sound(SoundType.NETHERITE_BLOCK))
 		.transform(pickaxeOnly())
 		.blockstate((c, p) -> p.getVariantBuilder(c.get())
 			.forAllStates(state -> ConfiguredModel.builder()
@@ -1618,9 +1605,9 @@ public class AllBlocks {
 	public static final BlockEntry<TrackObserverBlock> TRACK_OBSERVER =
 		REGISTRATE.block("track_observer", TrackObserverBlock::new)
 			.initialProperties(SharedProperties::softMetal)
-			.properties(p -> p.mapColor(MapColor.PODZOL))
-			.properties(p -> p.noOcclusion())
-			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.properties(p -> p.mapColor(MapColor.PODZOL)
+				.noOcclusion()
+				.sound(SoundType.NETHERITE_BLOCK))
 			.blockstate((c, p) -> BlockStateGen.simpleBlock(c, p, AssetLookup.forPowered(c, p)))
 			.transform(pickaxeOnly())
 			.onRegister(assignDataBehaviour(new ObservedTrainNameSource(), "observed_train_name"))
@@ -1643,8 +1630,7 @@ public class AllBlocks {
 
 	public static final BlockEntry<ControlsBlock> TRAIN_CONTROLS = REGISTRATE.block("controls", ControlsBlock::new)
 		.initialProperties(SharedProperties::softMetal)
-		.properties(p -> p.mapColor(MapColor.TERRACOTTA_BROWN))
-		.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+		.properties(p -> p.mapColor(MapColor.TERRACOTTA_BROWN).sound(SoundType.NETHERITE_BLOCK))
 		.addLayer(() -> RenderType::cutoutMipped)
 		.transform(pickaxeOnly())
 		.blockstate((c, p) -> p.horizontalBlock(c.get(),
@@ -1659,8 +1645,8 @@ public class AllBlocks {
 
 	public static final BlockEntry<ItemVaultBlock> ITEM_VAULT = REGISTRATE.block("item_vault", ItemVaultBlock::new)
 		.initialProperties(SharedProperties::softMetal)
-		.properties(p -> p.mapColor(MapColor.TERRACOTTA_BLUE))
-		.properties(p -> p.sound(SoundType.NETHERITE_BLOCK)
+		.properties(p -> p.mapColor(MapColor.TERRACOTTA_BLUE)
+			.sound(SoundType.NETHERITE_BLOCK)
 			.explosionResistance(1200))
 		.transform(pickaxeOnly())
 		.blockstate((c, p) -> p.getVariantBuilder(c.get())
@@ -1806,8 +1792,7 @@ public class AllBlocks {
 	public static final BlockEntry<NixieTubeBlock> ORANGE_NIXIE_TUBE =
 		REGISTRATE.block("nixie_tube", p -> new NixieTubeBlock(p, DyeColor.ORANGE))
 			.initialProperties(SharedProperties::softMetal)
-			.properties(p -> p.lightLevel($ -> 5))
-			.properties(p -> p.mapColor(DyeColor.ORANGE))
+			.properties(p -> p.lightLevel($ -> 5).mapColor(DyeColor.ORANGE))
 			.transform(pickaxeOnly())
 			.blockstate(new NixieTubeGenerator()::generate)
 			.addLayer(() -> RenderType::translucent)
@@ -1957,8 +1942,7 @@ public class AllBlocks {
 		String colourName = colour.getSerializedName();
 		return REGISTRATE.block(colourName + "_toolbox", p -> new ToolboxBlock(p, colour))
 			.initialProperties(SharedProperties::wooden)
-			.properties(p -> p.sound(SoundType.WOOD))
-			.properties(p -> p.mapColor(colour))
+			.properties(p -> p.sound(SoundType.WOOD).mapColor(colour))
 			.addLayer(() -> RenderType::cutoutMipped)
 			.loot((lt, block) -> {
 				Builder builder = LootTable.lootTable();
@@ -2209,8 +2193,8 @@ public class AllBlocks {
 
 	public static final BlockEntry<Block> ZINC_ORE = REGISTRATE.block("zinc_ore", Block::new)
 		.initialProperties(() -> Blocks.GOLD_ORE)
-		.properties(p -> p.mapColor(MapColor.METAL))
-		.properties(p -> p.requiresCorrectToolForDrops()
+		.properties(p -> p.mapColor(MapColor.METAL)
+			.requiresCorrectToolForDrops()
 			.sound(SoundType.STONE))
 		.transform(pickaxeOnly())
 		.loot((lt, b) -> lt.add(b,
@@ -2226,8 +2210,8 @@ public class AllBlocks {
 
 	public static final BlockEntry<Block> DEEPSLATE_ZINC_ORE = REGISTRATE.block("deepslate_zinc_ore", Block::new)
 		.initialProperties(() -> Blocks.DEEPSLATE_GOLD_ORE)
-		.properties(p -> p.mapColor(MapColor.STONE))
-		.properties(p -> p.requiresCorrectToolForDrops()
+		.properties(p -> p.mapColor(MapColor.STONE)
+			.requiresCorrectToolForDrops()
 			.sound(SoundType.DEEPSLATE))
 		.transform(pickaxeOnly())
 		.loot((lt, b) -> lt.add(b,
@@ -2243,8 +2227,7 @@ public class AllBlocks {
 
 	public static final BlockEntry<Block> RAW_ZINC_BLOCK = REGISTRATE.block("raw_zinc_block", Block::new)
 		.initialProperties(() -> Blocks.RAW_GOLD_BLOCK)
-		.properties(p -> p.mapColor(MapColor.GLOW_LICHEN))
-		.properties(p -> p.requiresCorrectToolForDrops())
+		.properties(p -> p.mapColor(MapColor.GLOW_LICHEN).requiresCorrectToolForDrops())
 		.transform(pickaxeOnly())
 		.tag(Tags.Blocks.STORAGE_BLOCKS)
 		.tag(BlockTags.NEEDS_IRON_TOOL)
@@ -2256,8 +2239,7 @@ public class AllBlocks {
 
 	public static final BlockEntry<Block> ZINC_BLOCK = REGISTRATE.block("zinc_block", Block::new)
 			.initialProperties(() -> Blocks.IRON_BLOCK)
-			.properties(p -> p.mapColor(MapColor.GLOW_LICHEN))
-		.properties(p -> p.requiresCorrectToolForDrops())
+			.properties(p -> p.mapColor(MapColor.GLOW_LICHEN).requiresCorrectToolForDrops())
 			.transform(pickaxeOnly())
 			.tag(BlockTags.NEEDS_IRON_TOOL)
 			.tag(Tags.Blocks.STORAGE_BLOCKS)
@@ -2270,8 +2252,7 @@ public class AllBlocks {
 
 	public static final BlockEntry<Block> ANDESITE_ALLOY_BLOCK = REGISTRATE.block("andesite_alloy_block", Block::new)
 		.initialProperties(() -> Blocks.ANDESITE)
-		.properties(p -> p.mapColor(MapColor.STONE))
-		.properties(p -> p.requiresCorrectToolForDrops())
+		.properties(p -> p.mapColor(MapColor.STONE).requiresCorrectToolForDrops())
 		.transform(pickaxeOnly())
 		.blockstate(simpleCubeAll("andesite_block"))
 		.tag(Tags.Blocks.STORAGE_BLOCKS)
@@ -2283,9 +2264,9 @@ public class AllBlocks {
 
 	public static final BlockEntry<Block> INDUSTRIAL_IRON_BLOCK = REGISTRATE.block("industrial_iron_block", Block::new)
 		.initialProperties(SharedProperties::softMetal)
-		.properties(p -> p.mapColor(MapColor.COLOR_GRAY))
-		.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
-		.properties(p -> p.requiresCorrectToolForDrops())
+		.properties(p -> p.mapColor(MapColor.COLOR_GRAY)
+			.sound(SoundType.NETHERITE_BLOCK)
+			.requiresCorrectToolForDrops())
 		.transform(pickaxeOnly())
 		.blockstate((c, p) -> p.simpleBlock(c.get(), p.models()
 			.cubeColumn(c.getName(), p.modLoc("block/industrial_iron_block"),
@@ -2299,8 +2280,7 @@ public class AllBlocks {
 
 	public static final BlockEntry<Block> BRASS_BLOCK = REGISTRATE.block("brass_block", Block::new)
 			.initialProperties(() -> Blocks.IRON_BLOCK)
-			.properties(p -> p.mapColor(MapColor.TERRACOTTA_YELLOW))
-		.properties(p -> p.requiresCorrectToolForDrops())
+			.properties(p -> p.mapColor(MapColor.TERRACOTTA_YELLOW).requiresCorrectToolForDrops())
 			.transform(pickaxeOnly())
 			.blockstate(simpleCubeAll("brass_block"))
 			.tag(BlockTags.NEEDS_IRON_TOOL)
@@ -2310,15 +2290,17 @@ public class AllBlocks {
 			.tag(Tags.Items.STORAGE_BLOCKS)
 			.build()
 			.lang("Block of Brass")
-			.register();public static final BlockEntry<ExperienceBlock> EXPERIENCE_BLOCK =
+			.register();
+
+	public static final BlockEntry<ExperienceBlock> EXPERIENCE_BLOCK =
 		REGISTRATE.block("experience_block", ExperienceBlock::new)
 			.initialProperties(SharedProperties::softMetal)
-			.properties(p -> p.mapColor(MapColor.PLANT))
-			.properties(p -> p.sound(new SoundType(1, .5f, SoundEvents.AMETHYST_BLOCK_BREAK,
+			.properties(p -> p.mapColor(MapColor.PLANT)
+				.sound(new SoundType(1, .5f, SoundEvents.AMETHYST_BLOCK_BREAK,
 				SoundEvents.AMETHYST_BLOCK_STEP, SoundEvents.AMETHYST_BLOCK_PLACE,
-				SoundEvents.AMETHYST_BLOCK_HIT, SoundEvents.AMETHYST_BLOCK_FALL)))
-			.properties(p -> p.requiresCorrectToolForDrops())
-			.properties(p -> p.lightLevel(s -> 15))
+				SoundEvents.AMETHYST_BLOCK_HIT, SoundEvents.AMETHYST_BLOCK_FALL))
+				.requiresCorrectToolForDrops()
+				.lightLevel(s -> 15))
 			.blockstate((c, p) -> p.simpleBlock(c.get(), AssetLookup.standardModel(c, p)))
 			.transform(pickaxeOnly())
 			.lang("Block of Experience")
@@ -2347,8 +2329,7 @@ public class AllBlocks {
 
 	public static final BlockEntry<Block> ROSE_QUARTZ_TILES = REGISTRATE.block("rose_quartz_tiles", Block::new)
 		.initialProperties(() -> Blocks.DEEPSLATE)
-		.properties(p -> p.mapColor(MapColor.TERRACOTTA_PINK))
-		.properties(p -> p.requiresCorrectToolForDrops())
+		.properties(p -> p.mapColor(MapColor.TERRACOTTA_PINK).requiresCorrectToolForDrops())
 		.transform(pickaxeOnly())
 		.blockstate(simpleCubeAll("palettes/rose_quartz_tiles"))
 		.recipe((c, p) -> p.stonecutting(DataIngredient.items(AllItems.POLISHED_ROSE_QUARTZ.get()),
@@ -2359,8 +2340,7 @@ public class AllBlocks {
 	public static final BlockEntry<Block> SMALL_ROSE_QUARTZ_TILES =
 		REGISTRATE.block("small_rose_quartz_tiles", Block::new)
 			.initialProperties(() -> Blocks.DEEPSLATE)
-			.properties(p -> p.mapColor(MapColor.TERRACOTTA_PINK))
-			.properties(p -> p.requiresCorrectToolForDrops())
+			.properties(p -> p.mapColor(MapColor.TERRACOTTA_PINK).requiresCorrectToolForDrops())
 			.transform(pickaxeOnly())
 			.blockstate(simpleCubeAll("palettes/small_rose_quartz_tiles"))
 			.recipe((c, p) -> p.stonecutting(DataIngredient.items(AllItems.POLISHED_ROSE_QUARTZ.get()),

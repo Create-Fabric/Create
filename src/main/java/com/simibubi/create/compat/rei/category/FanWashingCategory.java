@@ -1,10 +1,11 @@
 package com.simibubi.create.compat.rei.category;
 
+import com.simibubi.create.content.kinetics.fan.processing.SplashingRecipe;
+
 import org.jetbrains.annotations.NotNull;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.compat.rei.category.animations.AnimatedKinetics;
-import com.simibubi.create.content.kinetics.fan.SplashingRecipe;
 import com.simibubi.create.foundation.gui.element.GuiGameElement;
 
 import net.minecraft.client.gui.GuiGraphics;

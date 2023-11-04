@@ -5,11 +5,5 @@ No formatting, just plain text. CurseForge support for it is terrible.
 
 Change logging starts below:
 ----------
-- updated to 1.20.1 and patch D
-- hopefully fix overlays rendering out of order (#783)
-- fix overlays rendering twice, noticeable with Double Hotbar (#790)
-- stop the rogue Deployer uprising, for now (#1013)
-- fix plant-ness not being checked properly in some places (#1032)
-- fix debug stick (#831)
-- fix crash breaking blocks with wand of symmetry (#1048)
-- fix performance issues with pipe connections (#935)
+- update to patch F
+

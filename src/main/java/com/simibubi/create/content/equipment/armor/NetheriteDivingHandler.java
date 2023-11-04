@@ -1,6 +1,6 @@
 package com.simibubi.create.content.equipment.armor;
 
-import com.simibubi.create.AllItems;
+import com.simibubi.create.AllTags.AllItemTags;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -21,13 +21,13 @@ public final class NetheriteDivingHandler {
 		}
 
 		if (slot == EquipmentSlot.HEAD) {
-			if (AllItems.NETHERITE_DIVING_HELMET.isIn(to)) {
+			if (isNetheriteDivingHelmet(to)) {
 				setBit(entity, slot);
 			} else {
 				clearBit(entity, slot);
 			}
 		} else if (slot == EquipmentSlot.CHEST) {
-			if (AllItems.NETHERITE_BACKTANK.isIn(to) && BacktankUtil.hasAirRemaining(to)) {
+			if (isNetheriteBacktank(to) && BacktankUtil.hasAirRemaining(to)) {
 				setBit(entity, slot);
 			} else {
 				clearBit(entity, slot);
@@ -41,6 +41,14 @@ public final class NetheriteDivingHandler {
 		}
 	}
 
+	public static boolean isNetheriteDivingHelmet(ItemStack stack) {
+		return stack.getItem() instanceof DivingHelmetItem && isNetheriteArmor(stack);
+	}
+	
+	public static boolean isNetheriteBacktank(ItemStack stack) {
+		return stack.is(AllItemTags.PRESSURIZED_AIR_SOURCES.tag) && isNetheriteArmor(stack);
+	}
+	
 	public static boolean isNetheriteArmor(ItemStack stack) {
 		return stack.getItem() instanceof ArmorItem armorItem && armorItem.getMaterial() == ArmorMaterials.NETHERITE;
 	}
