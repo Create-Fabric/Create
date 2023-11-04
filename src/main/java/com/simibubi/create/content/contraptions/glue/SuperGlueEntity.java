@@ -299,9 +299,12 @@ public class SuperGlueEntity extends Entity
 		return PushReaction.IGNORE;
 	}
 
+	public void setPortalEntrancePos() {
+		portalEntrancePos = blockPosition();
+	}
+
 	@Override
 	public PortalInfo findDimensionEntryPoint(ServerLevel pDestination) {
-		portalEntrancePos = blockPosition();
 		return super.findDimensionEntryPoint(pDestination);
 	}
 

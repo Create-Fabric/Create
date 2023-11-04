@@ -40,11 +40,6 @@ public class VersionedInventoryWrapper implements Storage<ItemVariant> {
 	}
 
 	@Override
-	public Iterator<? extends StorageView<ItemVariant>> iterator(TransactionContext transaction) {
-		return inventory.iterator(transaction);
-	}
-
-	@Override
 	public boolean supportsInsertion() {
 		return inventory.supportsInsertion();
 	}
@@ -65,8 +60,8 @@ public class VersionedInventoryWrapper implements Storage<ItemVariant> {
 	}
 
 	@Override
-	public Iterable<? extends StorageView<ItemVariant>> iterable(TransactionContext transaction) {
-		return inventory.iterable(transaction);
+	public Iterator<StorageView<ItemVariant>> iterator() {
+		return inventory.iterator();
 	}
 
 	@Override

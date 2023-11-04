@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Random;
 
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
@@ -37,6 +36,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -127,7 +127,7 @@ public class AllFanProcessingTypes {
 		}
 
 		@Override
-		public void morphAirFlow(AirFlowParticleAccess particleAccess, Random random) {
+		public void morphAirFlow(AirFlowParticleAccess particleAccess, RandomSource random) {
 		}
 
 		@Override
@@ -216,7 +216,7 @@ public class AllFanProcessingTypes {
 		}
 
 		@Override
-		public void morphAirFlow(AirFlowParticleAccess particleAccess, Random random) {
+		public void morphAirFlow(AirFlowParticleAccess particleAccess, RandomSource random) {
 			particleAccess.setColor(Color.mixColors(0xFF4400, 0xFF8855, random.nextFloat()));
 			particleAccess.setAlpha(.5f);
 			if (random.nextFloat() < 1 / 32f)
@@ -295,7 +295,7 @@ public class AllFanProcessingTypes {
 		}
 
 		@Override
-		public void morphAirFlow(AirFlowParticleAccess particleAccess, Random random) {
+		public void morphAirFlow(AirFlowParticleAccess particleAccess, RandomSource random) {
 			particleAccess.setColor(Color.mixColors(0x0, 0x126568, random.nextFloat()));
 			particleAccess.setAlpha(1f);
 			if (random.nextFloat() < 1 / 128f)
@@ -417,7 +417,7 @@ public class AllFanProcessingTypes {
 		}
 
 		@Override
-		public void morphAirFlow(AirFlowParticleAccess particleAccess, Random random) {
+		public void morphAirFlow(AirFlowParticleAccess particleAccess, RandomSource random) {
 			particleAccess.setColor(Color.mixColors(0x0, 0x555555, random.nextFloat()));
 			particleAccess.setAlpha(1f);
 			if (random.nextFloat() < 1 / 32f)
@@ -488,7 +488,7 @@ public class AllFanProcessingTypes {
 		}
 
 		@Override
-		public void morphAirFlow(AirFlowParticleAccess particleAccess, Random random) {
+		public void morphAirFlow(AirFlowParticleAccess particleAccess, RandomSource random) {
 			particleAccess.setColor(Color.mixColors(0x4499FF, 0x2277FF, random.nextFloat()));
 			particleAccess.setAlpha(1f);
 			if (random.nextFloat() < 1 / 32f)

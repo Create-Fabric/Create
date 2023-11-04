@@ -72,60 +72,55 @@ public class TagGen {
 		Create.REGISTRATE.addDataGenerator(ProviderType.ENTITY_TAGS, TagGen::genEntityTags);
 	}
 
-	// fabric: addTag -> forceAddTag
-	// tag gen checks that all added tags are part of the generator
-	// vanilla tags of course aren't. This is supposed to be supported based on javadoc, but doesn't work.
-	// forge mitigates it with an extra filter using ExistingFileHelper
-	// here, since we know these tags will always exist, just force them
-
 	private static void genBlockTags(RegistrateTagsProvider<Block> prov) {
 		prov.tag(AllBlockTags.BRITTLE.tag)
 			.add(Blocks.BELL, Blocks.COCOA, Blocks.FLOWER_POT)
-			.forceAddTag(BlockTags.BEDS)
-			.forceAddTag(BlockTags.DOORS);
+			.addTag(BlockTags.BEDS)
+			.addTag(BlockTags.DOORS);
+
 		prov.tag(AllBlockTags.MOVABLE_EMPTY_COLLIDER.tag)
-				.add(Blocks.COBWEB, Blocks.POWDER_SNOW, Blocks.TRIPWIRE, Blocks.TRIPWIRE_HOOK)
-				.forceAddTag(BlockTags.FENCE_GATES);
+			.add(Blocks.COBWEB, Blocks.POWDER_SNOW, Blocks.TRIPWIRE, Blocks.TRIPWIRE_HOOK)
+			.addTag(BlockTags.FENCE_GATES);
 
 		prov.tag(AllBlockTags.FAN_TRANSPARENT.tag)
 			.add(Blocks.IRON_BARS)
 			.add(Blocks.MANGROVE_ROOTS)
-			.forceAddTag(BlockTags.CAMPFIRES)
-			.forceAddTag(BlockTags.FENCES)
-			.forceAddTag(BlockTags.LEAVES);
+			.addTag(BlockTags.CAMPFIRES)
+			.addTag(BlockTags.FENCES)
+			.addTag(BlockTags.LEAVES);
 
 		prov.tag(AllBlockTags.ORE_OVERRIDE_STONE.tag)
-			.forceAddTag(BlockTags.STONE_ORE_REPLACEABLES);
+			.addTag(BlockTags.STONE_ORE_REPLACEABLES);
 
 		prov.tag(AllBlockTags.PASSIVE_BOILER_HEATERS.tag)
 			.add(Blocks.MAGMA_BLOCK, Blocks.LAVA)
-			.forceAddTag(BlockTags.CAMPFIRES)
-			.forceAddTag(BlockTags.FIRE);
+			.addTag(BlockTags.CAMPFIRES)
+			.addTag(BlockTags.FIRE);
 
 		prov.tag(AllBlockTags.SAFE_NBT.tag)
-			.forceAddTag(BlockTags.BANNERS)
-			.forceAddTag(BlockTags.SIGNS);
+			.addTag(BlockTags.BANNERS)
+			.addTag(BlockTags.SIGNS);
 
 		prov.tag(AllBlockTags.TREE_ATTACHMENTS.tag)
 			.add(Blocks.BEE_NEST, Blocks.COCOA, Blocks.MANGROVE_PROPAGULE, Blocks.MOSS_CARPET, Blocks.SHROOMLIGHT, Blocks.VINE);
 
 		prov.tag(AllBlockTags.WINDMILL_SAILS.tag)
-			.forceAddTag(BlockTags.WOOL);
+			.addTag(BlockTags.WOOL);
 
 		prov.tag(AllBlockTags.WRENCH_PICKUP.tag)
 			.add(Blocks.REDSTONE_WIRE, Blocks.REDSTONE_TORCH, Blocks.REPEATER, Blocks.LEVER,
 					Blocks.COMPARATOR, Blocks.OBSERVER, Blocks.REDSTONE_WALL_TORCH, Blocks.PISTON, Blocks.STICKY_PISTON,
 					Blocks.TRIPWIRE, Blocks.TRIPWIRE_HOOK, Blocks.DAYLIGHT_DETECTOR, Blocks.TARGET, Blocks.HOPPER)
-			.forceAddTag(BlockTags.BUTTONS)
-			.forceAddTag(BlockTags.PRESSURE_PLATES)
-			.forceAddTag(BlockTags.RAILS);
+			.addTag(BlockTags.BUTTONS)
+			.addTag(BlockTags.PRESSURE_PLATES)
+			.addTag(BlockTags.RAILS);
 
 		prov.tag(AllBlockTags.COPYCAT_ALLOW.tag)
 			.add(Blocks.BARREL);
 		prov.tag(AllBlockTags.COPYCAT_DENY.tag)
-			.forceAddTag(BlockTags.CAULDRONS)
-			.forceAddTag(BlockTags.SAPLINGS)
-			.forceAddTag(BlockTags.CLIMBABLE);
+			.addTag(BlockTags.CAULDRONS)
+			.addTag(BlockTags.SAPLINGS)
+			.addTag(BlockTags.CLIMBABLE);
 
 		// COMPAT
 
@@ -133,7 +128,6 @@ public class TagGen {
 				"connector_lv", "connector_lv_relay", "connector_mv", "connector_mv_relay",
 				"connector_hv", "connector_hv_relay", "connector_bundled", "connector_structural",
 				"connector_redstone", "connector_probe", "breaker_switch");
-		addOptional(prov.tag(AllBlockTags.NON_MOVABLE.tag), Mods.BC, "bits_block");
 
 		// VALIDATE
 
@@ -149,12 +143,12 @@ public class TagGen {
 			.add(Items.STONE_SLAB, Items.SMOOTH_STONE_SLAB, Items.ANDESITE_SLAB);
 
 		prov.tag(AllItemTags.STRIPPED_LOGS.tag)
-			.forceAddTag(AllItemTags.VANILLA_STRIPPED_LOGS.tag)
-			.forceAddTag(AllItemTags.MODDED_STRIPPED_LOGS.tag);
+			.addTag(AllItemTags.VANILLA_STRIPPED_LOGS.tag)
+			.addTag(AllItemTags.MODDED_STRIPPED_LOGS.tag);
 
 		prov.tag(AllItemTags.STRIPPED_WOOD.tag)
-			.forceAddTag(AllItemTags.VANILLA_STRIPPED_WOOD.tag)
-			.forceAddTag(AllItemTags.MODDED_STRIPPED_WOOD.tag);
+			.addTag(AllItemTags.VANILLA_STRIPPED_WOOD.tag)
+			.addTag(AllItemTags.MODDED_STRIPPED_WOOD.tag);
 
 		prov.tag(AllItemTags.DEPLOYABLE_DRINK.tag)
 			.add(Items.MILK_BUCKET, Items.POTION);
@@ -177,10 +171,10 @@ public class TagGen {
 					Items.STRIPPED_OAK_WOOD, Items.STRIPPED_SPRUCE_WOOD, Items.STRIPPED_WARPED_HYPHAE);
 
 		prov.tag(ItemTags.BEACON_PAYMENT_ITEMS)
-			.forceAddTag(AllItemTags.CREATE_INGOTS.tag);
+			.addTag(AllItemTags.CREATE_INGOTS.tag);
 
 		prov.tag(Tags.Items.INGOTS)
-			.forceAddTag(AllItemTags.CREATE_INGOTS.tag);
+			.addTag(AllItemTags.CREATE_INGOTS.tag);
 
 		// COMPAT
 
@@ -228,9 +222,6 @@ public class TagGen {
 		prov.tag(AllFluidTags.BOTTOMLESS_ALLOW.tag)
 			.add(Fluids.WATER, Fluids.LAVA);
 
-		prov.tag(AllFluidTags.DIVING_FLUIDS.tag)
-				.forceAddTag(FluidTags.WATER);
-
 		// VALIDATE
 
 		for (AllFluidTags tag : AllFluidTags.values()) {
@@ -269,5 +260,4 @@ public class TagGen {
 			}
 		}
 	}
-
 }

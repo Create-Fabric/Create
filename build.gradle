@@ -37,6 +37,8 @@ repositories {
     }
     maven { url = "https://maven.ladysnake.org/releases" } // CCA, for Trinkets
     maven { url = "https://jitpack.io/" } // for Porting Lib: Mixin Extras, Fabric ASM
+    // fixme Temp until flywheel builds get on the tterag maven
+    maven { url = "https://maven.ithundxr.dev/hidden" }
 }
 
 configurations.configureEach {

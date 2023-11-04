@@ -23,6 +23,7 @@ public enum Mods {
 	XLPACKETS,
 	CONNECTIVITY,
 	OCCULTISM,
+	PACKETFIXER,
 
 	// fabric mods
 	SANDWICHABLE,

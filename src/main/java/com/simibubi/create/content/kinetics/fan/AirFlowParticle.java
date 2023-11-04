@@ -33,7 +33,7 @@ public class AirFlowParticle extends SimpleAnimatedParticle {
 		this.lifetime = 40;
 		hasPhysics = false;
 		selectSprite(7);
-		Vec3 offset = VecHelper.offsetRandomly(Vec3.ZERO, world.random, .25f);
+		Vec3 offset = VecHelper.offsetRandomly(Vec3.ZERO, random, .25f);
 		this.setPos(x + offset.x, y + offset.y, z + offset.z);
 		this.xo = this.x;
 		this.yo = this.y;
