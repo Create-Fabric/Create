@@ -1,27 +1,22 @@
 package com.simibubi.create.infrastructure.data;
 
-import org.jetbrains.annotations.Nullable;
-
 import com.simibubi.create.AllTags.AllRecipeSerializerTags;
-import com.simibubi.create.Create;
-import com.simibubi.create.compat.Mods;
 
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class CreateRecipeSerializerTagsProvider extends TagsProvider<RecipeSerializer<?>> {
-	public CreateRecipeSerializerTagsProvider(DataGenerator generator/*, @Nullable ExistingFileHelper existingFileHelper*/) {
-		super(generator, Registry.RECIPE_SERIALIZER/*, Create.ID, existingFileHelper*/);
+	public CreateRecipeSerializerTagsProvider(DataGenerator generator) {
+		super(generator, Registry.RECIPE_SERIALIZER);
 	}
 
 	@Override
 	protected void addTags() {
-		tag(AllRecipeSerializerTags.AUTOMATION_IGNORE.tag)
-			.addOptional(Mods.OCCULTISM.rl("spirit_trade"))
-			.addOptional(Mods.OCCULTISM.rl("ritual"));
+//		tag(AllRecipeSerializerTags.AUTOMATION_IGNORE.tag)
+//			.addOptional(Mods.OCCULTISM.rl("spirit_trade"))
+//			.addOptional(Mods.OCCULTISM.rl("ritual"));
 
 		// VALIDATE
 

@@ -2,6 +2,8 @@ package com.simibubi.create;
 
 import java.util.Random;
 
+import com.simibubi.create.infrastructure.data.CreateRecipeSerializerTagsProvider;
+
 import org.slf4j.Logger;
 
 import com.google.gson.Gson;
@@ -171,6 +173,7 @@ public class Create implements ModInitializer {
 		TagLangGen.datagen();
 
 		gen.addProvider(AllSoundEvents.provider(gen));
+		gen.addProvider(new CreateRecipeSerializerTagsProvider(gen));
 		gen.addProvider(new AllAdvancements(gen));
 		gen.addProvider(new StandardRecipeGen(gen));
 		gen.addProvider(new MechanicalCraftingRecipeGen(gen));

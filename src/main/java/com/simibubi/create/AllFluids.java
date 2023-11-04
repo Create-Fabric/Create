@@ -53,6 +53,7 @@ public class AllFluids {
 	// we can't make a block take 108000, since then it can't fit in the basin
 	public static final long HONEY_BOTTLE_AMOUNT = FluidConstants.BLOCK / 4;
 
+	//fixme see if this needs changes
 	public static final FluidEntry<PotionFluid> POTION =
 			REGISTRATE.virtualFluid("potion", /*PotionFluidAttributes::new,*/ PotionFluid::new)
 					.lang("Potion")
