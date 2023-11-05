@@ -20,6 +20,7 @@
     "accessor.LivingEntityAccessor",
     "accessor.NbtAccounterAccessor",
     "accessor.ServerLevelAccessor",
+    "accessor.SystemReportAccessor",
     "fabric.AbstractMinecartMixin",
     "fabric.EntityAccessor",
     "fabric.EntityMixin",

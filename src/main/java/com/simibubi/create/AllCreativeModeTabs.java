@@ -13,7 +13,9 @@ import com.simibubi.create.content.decoration.palettes.AllPaletteBlocks;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import com.simibubi.create.content.equipment.toolbox.ToolboxBlock;
 import com.simibubi.create.content.kinetics.crank.ValveHandleBlock;
+import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.TagDependentIngredientItem;
+import com.simibubi.create.foundation.utility.Components;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
@@ -25,8 +27,12 @@ import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import it.unimi.dsi.fastutil.objects.ReferenceLinkedOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -44,6 +50,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+
+import org.apache.commons.lang3.mutable.MutableObject;
 
 public class AllCreativeModeTabs {
 
@@ -78,7 +86,7 @@ public class AllCreativeModeTabs {
 
 		static {
 			MutableObject<Predicate<Item>> isItem3d = new MutableObject<>(item -> false);
-			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+			EnvExecutor.runWhenOn(EnvType.CLIENT, () -> () -> {
 				isItem3d.setValue(item -> {
 					ItemRenderer itemRenderer = Minecraft.getInstance()
 						.getItemRenderer();
@@ -89,7 +97,7 @@ public class AllCreativeModeTabs {
 			IS_ITEM_3D_PREDICATE = isItem3d.getValue();
 		}
 
-		@OnlyIn(Dist.CLIENT)
+		@Environment(EnvType.CLIENT)
 		private static Predicate<Item> makeClient3dItemPredicate() {
 			return item -> {
 				ItemRenderer itemRenderer = Minecraft.getInstance()
@@ -100,9 +108,9 @@ public class AllCreativeModeTabs {
 		}
 
 		private final boolean addItems;
-		private final RegistryObject<CreativeModeTab> tabFilter;
+		private final TabInfo tabFilter;
 
-		public RegistrateDisplayItemsGenerator(boolean addItems, RegistryObject<CreativeModeTab> tabFilter) {
+		public RegistrateDisplayItemsGenerator(boolean addItems, TabInfo tabFilter) {
 			this.addItems = addItems;
 			this.tabFilter = tabFilter;
 		}
@@ -276,7 +284,7 @@ public class AllCreativeModeTabs {
 		private List<Item> collectBlocks(Predicate<Item> exclusionPredicate) {
 			List<Item> items = new ReferenceArrayList<>();
 			for (RegistryEntry<Block> entry : Create.REGISTRATE.getAll(Registries.BLOCK)) {
-				if (!CreateRegistrate.isInCreativeTab(entry, tabFilter))
+				if (!CreateRegistrate.isInCreativeTab(entry, tabFilter.key))
 					continue;
 				Item item = entry.get()
 					.asItem();
@@ -292,7 +300,7 @@ public class AllCreativeModeTabs {
 		private List<Item> collectItems(Predicate<Item> exclusionPredicate) {
 			List<Item> items = new ReferenceArrayList<>();
 			for (RegistryEntry<Item> entry : Create.REGISTRATE.getAll(Registries.ITEM)) {
-				if (!CreateRegistrate.isInCreativeTab(entry, tabFilter))
+				if (!CreateRegistrate.isInCreativeTab(entry, tabFilter.key))
 					continue;
 				Item item = entry.get();
 				if (item instanceof BlockItem)

@@ -20,6 +20,8 @@ import com.tterrag.registrate.util.nullness.NonNullFunction;
 import io.github.fabricators_of_create.porting_lib.tags.Tags;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 
+import net.minecraft.core.HolderLookup;
+
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.Holder;
@@ -294,6 +296,10 @@ public class TagGen {
 		public CreateTagAppender<T> tag(TagKey<T> tag) {
 			FabricTagProvider<T>.FabricTagBuilder fabricBuilder = provider.addTag(tag);
 			return new CreateTagAppender<>(fabricBuilder, keyExtractor);
+		}
+
+		public TagBuilder getOrCreateRawBuilder(TagKey<T> tag) {
+			return provider.addTag(tag).builder;
 		}
 	}
 

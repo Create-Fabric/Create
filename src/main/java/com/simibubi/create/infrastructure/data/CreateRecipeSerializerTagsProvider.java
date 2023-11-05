@@ -2,16 +2,23 @@ package com.simibubi.create.infrastructure.data;
 
 import com.simibubi.create.AllTags.AllRecipeSerializerTags;
 
+import com.simibubi.create.Create;
+
+import io.github.fabricators_of_create.porting_lib.data.ExistingFileHelper;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderLookup.Provider;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
+import java.util.concurrent.CompletableFuture;
+
 public class CreateRecipeSerializerTagsProvider extends TagsProvider<RecipeSerializer<?>> {
-	public CreateRecipeSerializerTagsProvider(DataGenerator generator) {
-		super(generator, Registry.RECIPE_SERIALIZER);
+	public CreateRecipeSerializerTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+		super(output, Registries.RECIPE_SERIALIZER, lookupProvider);
 	}
 
 	@Override

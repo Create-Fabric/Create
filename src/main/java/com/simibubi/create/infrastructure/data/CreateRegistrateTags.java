@@ -11,7 +11,7 @@ import com.simibubi.create.foundation.data.recipe.Mods;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.RegistrateTagsProvider;
 
-import me.alphamode.forgetags.Tags;
+import io.github.fabricators_of_create.porting_lib.tags.Tags;
 import net.minecraft.data.tags.TagsProvider.TagAppender;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -33,7 +33,7 @@ public class CreateRegistrateTags {
 
 	private static void genBlockTags(RegistrateTagsProvider<Block> provIn) {
 		CreateTagsProvider<Block> prov = new CreateTagsProvider<>(provIn, Block::builtInRegistryHolder);
-		
+
 		prov.tag(AllBlockTags.BRITTLE.tag)
 			.add(Blocks.BELL, Blocks.COCOA, Blocks.FLOWER_POT)
 			.addTag(BlockTags.BEDS)
@@ -110,7 +110,7 @@ public class CreateRegistrateTags {
 
 	private static void genItemTags(RegistrateTagsProvider<Item> provIn) {
 		CreateTagsProvider<Item> prov = new CreateTagsProvider<>(provIn, Item::builtInRegistryHolder);
-		
+
 		prov.tag(AllItemTags.SLEEPERS.tag)
 			.add(Items.STONE_SLAB, Items.SMOOTH_STONE_SLAB, Items.ANDESITE_SLAB);
 
@@ -199,7 +199,7 @@ public class CreateRegistrateTags {
 
 	private static void genFluidTags(RegistrateTagsProvider<Fluid> provIn) {
 		CreateTagsProvider<Fluid> prov = new CreateTagsProvider<>(provIn, Fluid::builtInRegistryHolder);
-		
+
 		prov.tag(AllFluidTags.BOTTOMLESS_ALLOW.tag)
 			.add(Fluids.WATER, Fluids.LAVA);
 
@@ -220,7 +220,7 @@ public class CreateRegistrateTags {
 
 	private static void genEntityTags(RegistrateTagsProvider<EntityType<?>> provIn) {
 		CreateTagsProvider<EntityType<?>> prov = new CreateTagsProvider<>(provIn, EntityType::builtInRegistryHolder);
-		
+
 		prov.tag(AllEntityTags.BLAZE_BURNER_CAPTURABLE.tag)
 			.add(EntityType.BLAZE);
 

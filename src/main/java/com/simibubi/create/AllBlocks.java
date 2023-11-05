@@ -312,7 +312,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 public class AllBlocks {
 
 	static {
-		REGISTRATE.setCreativeTab(AllCreativeModeTabs.BASE_CREATIVE_TAB);
+		REGISTRATE.setCreativeTab(AllCreativeModeTabs.BASE_CREATIVE_TAB.key());
 	}
 
 	// Schematics
@@ -1972,7 +1972,7 @@ public class AllBlocks {
 	// Materials
 
 	static {
-		REGISTRATE.setCreativeTab(AllCreativeModeTabs.PALETTES_CREATIVE_TAB);
+		REGISTRATE.setCreativeTab(AllCreativeModeTabs.PALETTES_CREATIVE_TAB.key());
 	}
 
 	public static final BlockEntry<MetalLadderBlock> ANDESITE_LADDER =

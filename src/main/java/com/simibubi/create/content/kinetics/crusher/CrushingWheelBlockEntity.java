@@ -55,14 +55,16 @@ public class CrushingWheelBlockEntity extends KineticBlockEntity {
 	}
 
 	public static int crushingIsFortunate(DamageSource source, LivingEntity target, int currentLevel, boolean recentlyHit) {
-		if (!AllDamageTypes.CRUSH.is(source))
-			return 0;
+		//fixme
+//		if (!AllDamageTypes.CRUSH.is(source))
+//			return 0;
 		return 2;		//This does not currently increase mob drops. It seems like this only works for damage done by an entity.
 	}
 
 	public static boolean handleCrushedMobDrops(LivingEntity target, DamageSource source, Collection<ItemEntity> drops, int lootingLevel, boolean recentlyHit) {
-		if (!AllDamageTypes.CRUSH.is(source))
-			return false;
+		//fixme
+//		if (!AllDamageTypes.CRUSH.is(source))
+//			return false;
 		Vec3 outSpeed = Vec3.ZERO;
 		for (ItemEntity outputItem : drops) {
 			outputItem.setDeltaMovement(outSpeed);

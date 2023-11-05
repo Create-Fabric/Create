@@ -5,13 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
-import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
-
-import io.github.fabricators_of_create.porting_lib.util.DamageSourceHelper;
-
-import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
-
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -28,6 +21,9 @@ import com.simibubi.create.foundation.recipe.RecipeApplier;
 import com.simibubi.create.foundation.utility.Color;
 import com.simibubi.create.foundation.utility.VecHelper;
 
+import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
+import io.github.fabricators_of_create.porting_lib.transfer.item.RecipeWrapper;
+import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 import it.unimi.dsi.fastutil.objects.Object2ReferenceOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
@@ -328,14 +324,14 @@ public class AllFanProcessingTypes {
 				livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 1, false, false));
 			}
 			if (entity instanceof Horse horse) {
-				int progress = horse.getExtraCustomData()
+				int progress = horse.getCustomData()
 					.getInt("CreateHaunting");
 				if (progress < 100) {
 					if (progress % 10 == 0) {
 						level.playSound(null, entity.blockPosition(), SoundEvents.SOUL_ESCAPE, SoundSource.NEUTRAL,
 							1f, 1.5f * progress / 100f);
 					}
-					horse.getExtraCustomData()
+					horse.getCustomData()
 						.putInt("CreateHaunting", progress + 1);
 					return;
 				}

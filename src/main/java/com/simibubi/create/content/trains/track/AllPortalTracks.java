@@ -3,17 +3,14 @@ package com.simibubi.create.content.trains.track;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
-import com.simibubi.create.compat.Mods;
 import com.simibubi.create.content.contraptions.glue.SuperGlueEntity;
 import com.simibubi.create.foundation.utility.AttachedRegistry;
 import com.simibubi.create.foundation.utility.BlockFace;
 import com.simibubi.create.foundation.utility.Pair;
 
-import io.github.fabricators_of_create.porting_lib.extensions.ITeleporter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -38,7 +35,7 @@ public class AllPortalTracks {
 	};
 
 	private static final AttachedRegistry<Block, PortalTrackProvider> PORTAL_BEHAVIOURS =
-		new AttachedRegistry<>(Registry.BLOCK);
+		new AttachedRegistry<>(BuiltInRegistries.BLOCK);
 
 	public static void registerIntegration(ResourceLocation block, PortalTrackProvider provider) {
 		PORTAL_BEHAVIOURS.register(block, provider);
@@ -88,7 +85,7 @@ public static Pair<ServerLevel, BlockFace> standardPortalProvider(Pair<ServerLev
 		BlockPos portalPos = inboundTrack.getConnectedPos();
 		BlockState portalState = level.getBlockState(portalPos);
 		//fixme
-//		ITeleporter teleporter = customPortalForcer.apply(otherLevel);
+		//ITeleporter teleporter = customPortalForcer.apply(otherLevel);
 
 		SuperGlueEntity probe = new SuperGlueEntity(level, new AABB(portalPos));
 		probe.setYRot(inboundTrack.getFace()

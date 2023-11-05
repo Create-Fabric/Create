@@ -54,12 +54,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class CreateRegistrate extends AbstractRegistrate<CreateRegistrate> {
-	private static final Map<RegistryEntry<?>, RegistryObject<CreativeModeTab>> TAB_LOOKUP = new IdentityHashMap<>();
+	private static final Map<RegistryEntry<?>, ResourceKey<CreativeModeTab>> TAB_LOOKUP = new IdentityHashMap<>();
 
 	@Nullable
 	protected Function<Item, TooltipModifier> currentTooltipModifierFactory;
 	@Nullable
-	protected RegistryObject<CreativeModeTab> currentTab;
+	protected ResourceKey<CreativeModeTab> currentTab;
 
 	protected CreateRegistrate(String modid) {
 		super(modid);
@@ -69,7 +69,7 @@ public class CreateRegistrate extends AbstractRegistrate<CreateRegistrate> {
 		return new CreateRegistrate(modid);
 	}
 
-	public static boolean isInCreativeTab(RegistryEntry<?> entry, RegistryObject<CreativeModeTab> tab) {
+	public static boolean isInCreativeTab(RegistryEntry<?> entry, ResourceKey<CreativeModeTab> tab) {
 		return TAB_LOOKUP.get(entry) == tab;
 	}
 
@@ -84,15 +84,10 @@ public class CreateRegistrate extends AbstractRegistrate<CreateRegistrate> {
 	}
 
 	private static Map<RegistryEntry<?>, ResourceKey<CreativeModeTab>> tabLookup = new IdentityHashMap<>();
-	private ResourceKey<CreativeModeTab> currentTab;
 
 	public CreateRegistrate setCreativeTab(ResourceKey<CreativeModeTab> tab) {
 		this.currentTab = tab;
 		return this;
-	}
-
-	public boolean isInCreativeTab(RegistryEntry<?> entry, ResourceKey<CreativeModeTab> tab) {
-		return tabLookup.get(entry) == tab;
 	}
 
 	@Override

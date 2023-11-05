@@ -646,11 +646,9 @@ public class AllAdvancements implements DataProvider {
 		return "Create's Advancements";
 	}
 
-	public static JsonObject provideLangEntries() {
-		JsonObject object = new JsonObject();
+	public static void provideLang(BiConsumer<String, String> consumer) {
 		for (CreateAdvancement advancement : ENTRIES)
-			advancement.appendToLang(object);
-		return object;
+			advancement.provideLang(consumer);
 	}
 
 	public static void register() {}

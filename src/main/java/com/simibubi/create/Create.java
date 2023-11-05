@@ -27,9 +27,8 @@ import com.simibubi.create.content.trains.track.AllPortalTracks;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.advancement.AllTriggers;
 import com.simibubi.create.foundation.block.CopperRegistries;
-import com.simibubi.create.foundation.damageTypes.DamageTypeDataProvider;
-import com.simibubi.create.foundation.damageTypes.DamageTypeTagGen;
 import com.simibubi.create.foundation.data.CreateRegistrate;
+import com.simibubi.create.foundation.data.DamageTypeTagGen;
 import com.simibubi.create.foundation.data.TagGen;
 import com.simibubi.create.foundation.data.TagLangGen;
 import com.simibubi.create.foundation.data.recipe.MechanicalCraftingRecipeGen;
@@ -47,6 +46,8 @@ import com.simibubi.create.foundation.utility.AttachedRegistry;
 import com.simibubi.create.infrastructure.command.ServerLagger;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.data.CreateDatagen;
+import com.simibubi.create.infrastructure.data.CreateRecipeSerializerTagsProvider;
+import com.simibubi.create.infrastructure.data.GeneratedEntriesProvider;
 import com.simibubi.create.infrastructure.worldgen.AllBiomeModifiers;
 import com.simibubi.create.infrastructure.worldgen.AllFeatures;
 import com.simibubi.create.infrastructure.worldgen.AllPlacementModifiers;
@@ -55,7 +56,6 @@ import io.github.fabricators_of_create.porting_lib.data.ExistingFileHelper;
 import io.github.tropheusj.milk.Milk;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -175,16 +175,15 @@ public class Create implements ModInitializer {
 		TagLangGen.datagen();
 
 		pack.addProvider(AllSoundEvents::provider);
-		pack.addProvider((FabricDataOutput output) -> new LangMerger(output, ID, NAME, AllLangPartials.values()));
 
 		pack.addProvider(AllAdvancements::new);
 		pack.addProvider(StandardRecipeGen::new);
 		pack.addProvider(MechanicalCraftingRecipeGen::new);
 		pack.addProvider(SequencedAssemblyRecipeGen::new);
 		pack.addProvider(ProcessingRecipeGen::registerAll);
-		pack.addProvider(WorldgenDataProvider::new);
-		pack.addProvider(DamageTypeDataProvider::new);
+		pack.addProvider(GeneratedEntriesProvider::new);
 		pack.addProvider(DamageTypeTagGen::new);
+		pack.addProvider(CreateRecipeSerializerTagsProvider::new);
 	}
 
 	public static ResourceLocation asResource(String path) {
