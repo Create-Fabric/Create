@@ -1,6 +1,7 @@
 package com.simibubi.create.infrastructure.data;
 
 import java.util.Map.Entry;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 import com.google.gson.JsonElement;

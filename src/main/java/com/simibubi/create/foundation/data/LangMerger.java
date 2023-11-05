@@ -11,8 +11,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
@@ -31,7 +29,6 @@ import com.tterrag.registrate.providers.ProviderType;
 
 import net.minecraft.Util;
 import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -60,7 +57,7 @@ public class LangMerger implements DataProvider {
 
 	@SuppressWarnings("removal")
 	public <T extends LangPartial> LangMerger(PackOutput output, String modid, String displayName,
-		AllLangPartials[] allLangPartials) {
+		T[] allLangPartials) {
 		this.output = output;
 		this.modid = modid;
 		this.displayName = displayName;

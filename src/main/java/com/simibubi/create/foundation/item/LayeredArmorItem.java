@@ -53,12 +53,11 @@ public interface LayeredArmorItem extends CustomRenderedArmorItem {
 		renderModel(poseStack, bufferSource, light, item, outerModel, glint, 1.0F, 1.0F, 1.0F, location1);
 	}
 
-	// fabric: forge patches! yay!
-	@Environment(EnvType.CLIENT)
-	private static void renderModel(PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, ArmorItem pArmorItem,
-									Model pModel, boolean pWithGlint, float pRed, float pGreen, float pBlue, ResourceLocation armorResource) {
-		VertexConsumer vertexconsumer = pBuffer.getBuffer(RenderType.armorCutoutNoCull(armorResource));
-		pModel.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, pRed, pGreen, pBlue, 1.0F);
+	// from HumanoidArmorLayer.renderModel
+	private void renderModel(PoseStack poseStack, MultiBufferSource bufferSource, int light, ArmorItem item,
+		Model model, boolean glint, float red, float green, float blue, ResourceLocation armorResource) {
+		VertexConsumer vertexconsumer = bufferSource.getBuffer(RenderType.armorCutoutNoCull(armorResource));
+		model.renderToBuffer(poseStack, vertexconsumer, light, OverlayTexture.NO_OVERLAY, red, green, blue, 1.0F);
 	}
 
 	String getArmorTextureLocation(LivingEntity entity, EquipmentSlot slot, ItemStack stack, int layer);

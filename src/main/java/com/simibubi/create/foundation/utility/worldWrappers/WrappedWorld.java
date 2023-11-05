@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
-import com.simibubi.create.foundation.mixin.fabric.EntityAccessor;
+import com.simibubi.create.foundation.mixin.accessor.EntityAccessor;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -148,7 +148,7 @@ public class WrappedWorld extends Level {
 
 	@Override
 	public boolean addFreshEntity(Entity entityIn) {
-		((EntityAccessor) entityIn).invokeSetLevel(world);
+		((EntityAccessor) entityIn).create$callSetLevel(world);
 		return world.addFreshEntity(entityIn);
 	}
 

@@ -5,11 +5,10 @@ import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import com.simibubi.create.foundation.mixin.fabric.EntityAccessor;
+import com.simibubi.create.foundation.mixin.accessor.EntityAccessor;
 
 import io.github.fabricators_of_create.porting_lib.mixin.accessors.common.accessor.MinecraftServerAccessor;
 import io.github.fabricators_of_create.porting_lib.util.BiomeManagerHelper;
-
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -98,7 +97,7 @@ public class WrappedServerWorld extends ServerLevel {
 
 	@Override
 	public boolean addFreshEntity(Entity entityIn) {
-		((EntityAccessor) entityIn).invokeSetLevel(world);
+		((EntityAccessor) entityIn).create$callSetLevel(world);
 		return world.addFreshEntity(entityIn);
 	}
 

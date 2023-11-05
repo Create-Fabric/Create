@@ -9,11 +9,11 @@ import com.simibubi.create.foundation.utility.AttachedRegistry;
 import com.simibubi.create.foundation.utility.BlockFace;
 import com.simibubi.create.foundation.utility.Pair;
 
-import dev.architectury.registry.registries.Registries;
 import io.github.fabricators_of_create.porting_lib.extensions.ITeleporter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -101,7 +101,7 @@ public static Pair<ServerLevel, BlockFace> standardPortalProvider(Pair<ServerLev
 //		if (portalinfo == null)
 //			return null;
 
-		BlockPos otherPortalPos = new BlockPos(portalinfo.pos);
+		BlockPos otherPortalPos = BlockPos.containing(portalinfo.pos);
 		BlockState otherPortalState = otherLevel.getBlockState(otherPortalPos);
 		if (otherPortalState.getBlock() != portalState.getBlock())
 			return null;

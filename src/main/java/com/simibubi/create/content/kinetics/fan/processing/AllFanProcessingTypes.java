@@ -13,8 +13,8 @@ import io.github.fabricators_of_create.porting_lib.util.DamageSourceHelper;
 import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
-import com.mojang.math.Vector3f;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.AllTags.AllBlockTags;
 import com.simibubi.create.AllTags.AllFluidTags;
@@ -23,12 +23,14 @@ import com.simibubi.create.content.kinetics.fan.processing.HauntingRecipe.Haunti
 import com.simibubi.create.content.kinetics.fan.processing.SplashingRecipe.SplashingWrapper;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.burner.LitBlazeBurnerBlock;
+import com.simibubi.create.foundation.damageTypes.CreateDamageSources;
 import com.simibubi.create.foundation.recipe.RecipeApplier;
 import com.simibubi.create.foundation.utility.Color;
 import com.simibubi.create.foundation.utility.VecHelper;
 
 import it.unimi.dsi.fastutil.objects.Object2ReferenceOpenHashMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -37,7 +39,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -137,7 +138,6 @@ public class AllFanProcessingTypes {
 
 	public static class BlastingType implements FanProcessingType {
 		private static final RecipeWrapper RECIPE_WRAPPER = new RecipeWrapper(new ItemStackHandler(1));
-		private static final DamageSource LAVA_DAMAGE_SOURCE = DamageSourceHelper.port_lib$createFireDamageSource("create.fan_lava").setScalesWithDifficulty();
 
 		@Override
 		public boolean isValidAt(Level level, BlockPos pos) {
@@ -197,11 +197,12 @@ public class AllFanProcessingTypes {
 			}
 
 			if (smeltingRecipe.isPresent()) {
-				if (!smokingRecipe.isPresent() || !ItemStack.isSame(smokingRecipe.get()
-					.getResultItem(),
+				RegistryAccess registryAccess = level.registryAccess();
+				if (!smokingRecipe.isPresent() || !ItemStack.isSameItem(smokingRecipe.get()
+					.getResultItem(registryAccess),
 					smeltingRecipe.get()
-						.getResultItem())) {
-					return RecipeApplier.applyRecipeOn(stack, smeltingRecipe.get());
+						.getResultItem(registryAccess))) {
+					return RecipeApplier.applyRecipeOn(level, stack, smeltingRecipe.get());
 				}
 			}
 
@@ -232,7 +233,7 @@ public class AllFanProcessingTypes {
 
 			if (!entity.fireImmune()) {
 				entity.setSecondsOnFire(10);
-				entity.hurt(LAVA_DAMAGE_SOURCE, 4);
+				entity.hurt(CreateDamageSources.fanLava(level), 4);
 			}
 		}
 	}
@@ -277,7 +278,7 @@ public class AllFanProcessingTypes {
 			HAUNTING_WRAPPER.setItem(0, stack);
 			Optional<HauntingRecipe> recipe = AllRecipeTypes.HAUNTING.find(HAUNTING_WRAPPER, level);
 			if (recipe.isPresent())
-				return RecipeApplier.applyRecipeOn(stack, recipe.get());
+				return RecipeApplier.applyRecipeOn(level, stack, recipe.get());
 			return null;
 		}
 
@@ -359,7 +360,6 @@ public class AllFanProcessingTypes {
 
 	public static class SmokingType implements FanProcessingType {
 		private static final RecipeWrapper RECIPE_WRAPPER = new RecipeWrapper(new ItemStackHandler(1));
-		private static final DamageSource FIRE_DAMAGE_SOURCE = DamageSourceHelper.port_lib$createFireDamageSource("create.fan_fire").setScalesWithDifficulty();
 
 		@Override
 		public boolean isValidAt(Level level, BlockPos pos) {
@@ -404,7 +404,7 @@ public class AllFanProcessingTypes {
 				.getRecipeFor(RecipeType.SMOKING, RECIPE_WRAPPER, level);
 
 			if (smokingRecipe.isPresent())
-				return RecipeApplier.applyRecipeOn(stack, smokingRecipe.get());
+				return RecipeApplier.applyRecipeOn(level, stack, smokingRecipe.get());
 
 			return null;
 		}
@@ -433,7 +433,7 @@ public class AllFanProcessingTypes {
 
 			if (!entity.fireImmune()) {
 				entity.setSecondsOnFire(2);
-				entity.hurt(FIRE_DAMAGE_SOURCE, 2);
+				entity.hurt(CreateDamageSources.fanFire(level), 2);
 			}
 		}
 	}
@@ -472,7 +472,7 @@ public class AllFanProcessingTypes {
 			SPLASHING_WRAPPER.setItem(0, stack);
 			Optional<SplashingRecipe> recipe = AllRecipeTypes.SPLASHING.find(SPLASHING_WRAPPER, level);
 			if (recipe.isPresent())
-				return RecipeApplier.applyRecipeOn(stack, recipe.get());
+				return RecipeApplier.applyRecipeOn(level, stack, recipe.get());
 			return null;
 		}
 
@@ -504,7 +504,7 @@ public class AllFanProcessingTypes {
 
 			if (entity instanceof EnderMan || entity.getType() == EntityType.SNOW_GOLEM
 				|| entity.getType() == EntityType.BLAZE) {
-				entity.hurt(DamageSource.DROWN, 2);
+				entity.hurt(entity.damageSources().drown(), 2);
 			}
 			if (entity.isOnFire()) {
 				entity.clearFire();

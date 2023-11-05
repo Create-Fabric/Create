@@ -3,7 +3,6 @@ package com.simibubi.create.foundation.gui.widget;
 import javax.annotation.Nonnull;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.foundation.utility.Components;
 
 import net.minecraft.client.Minecraft;
@@ -72,7 +71,7 @@ public class Label extends AbstractSimiWidget {
 	}
 
 	@Override
-	protected void renderButton(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+	protected void doRender(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
 		if (text == null || text.getString().isEmpty())
 			return;
 

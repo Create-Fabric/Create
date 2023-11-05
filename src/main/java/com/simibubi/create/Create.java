@@ -50,7 +50,6 @@ import com.simibubi.create.infrastructure.data.CreateDatagen;
 import com.simibubi.create.infrastructure.worldgen.AllBiomeModifiers;
 import com.simibubi.create.infrastructure.worldgen.AllFeatures;
 import com.simibubi.create.infrastructure.worldgen.AllPlacementModifiers;
-import com.simibubi.create.infrastructure.worldgen.WorldgenDataProvider;
 
 import io.github.fabricators_of_create.porting_lib.data.ExistingFileHelper;
 import io.github.tropheusj.milk.Milk;
