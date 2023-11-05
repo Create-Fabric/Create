@@ -10,6 +10,7 @@
     "EntityMixin",
     "LavaSwimmingMixin",
     "MapItemSavedDataMixin",
+    "PortalForcerMixin",
     "TestCommandMixin",
     "WaterWheelFluidSpreadMixin",
     "accessor.AbstractProjectileDispenseBehaviorAccessor",
