@@ -76,7 +76,8 @@
 
   "custom": {
     "loom:injected_interfaces": {
-      "net/minecraft/class_1688": [ "com/simibubi/create/foundation/utility/fabric/AbstractMinecartExtensions" ]
+      "net/minecraft/class_1688": [ "com/simibubi/create/foundation/utility/fabric/AbstractMinecartExtensions" ],
+      "net/minecraft/class_1946": [ "io/github/fabricators_of_create/porting_lib/extensions/ITeleporter" ]
     }
   }
 }

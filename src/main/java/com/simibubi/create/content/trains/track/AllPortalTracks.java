@@ -62,7 +62,7 @@ public class AllPortalTracks {
 	}
 
 	private static Pair<ServerLevel, BlockFace> nether(Pair<ServerLevel, BlockFace> inbound) {
-		return standardPortalProvider(inbound, Level.OVERWORLD, Level.NETHER, (serverLevel) -> (ITeleporter) serverLevel.getPortalForcer());
+		return standardPortalProvider(inbound, Level.OVERWORLD, Level.NETHER, ServerLevel::getPortalForcer);
 	}
 
 	public static Pair<ServerLevel, BlockFace> standardPortalProvider(Pair<ServerLevel, BlockFace> inbound,
