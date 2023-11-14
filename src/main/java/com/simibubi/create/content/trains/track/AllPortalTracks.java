@@ -8,6 +8,7 @@ import com.simibubi.create.foundation.utility.AttachedRegistry;
 import com.simibubi.create.foundation.utility.BlockFace;
 import com.simibubi.create.foundation.utility.Pair;
 
+import io.github.fabricators_of_create.porting_lib.extensions.ITeleporter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -20,10 +21,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.portal.PortalForcer;
 import net.minecraft.world.level.portal.PortalInfo;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 
 public class AllPortalTracks {
 
@@ -63,16 +62,12 @@ public class AllPortalTracks {
 	}
 
 	private static Pair<ServerLevel, BlockFace> nether(Pair<ServerLevel, BlockFace> inbound) {
-		//fixme
 		return standardPortalProvider(inbound, Level.OVERWORLD, Level.NETHER, ServerLevel::getPortalForcer);
 	}
 
-//	public static Pair<ServerLevel, BlockFace> standardPortalProvider(Pair<ServerLevel, BlockFace> inbound,
-//		ResourceKey<Level> firstDimension, ResourceKey<Level> secondDimension,
-//		Function<ServerLevel, ITeleporter> customPortalForcer) {
-public static Pair<ServerLevel, BlockFace> standardPortalProvider(Pair<ServerLevel, BlockFace> inbound,
-	ResourceKey<Level> firstDimension, ResourceKey<Level> secondDimension,
-	Function<ServerLevel, PortalForcer> customPortalForcer) {
+	public static Pair<ServerLevel, BlockFace> standardPortalProvider(Pair<ServerLevel, BlockFace> inbound,
+		ResourceKey<Level> firstDimension, ResourceKey<Level> secondDimension,
+		Function<ServerLevel, ITeleporter> customPortalForcer) {
 		ServerLevel level = inbound.getFirst();
 		ResourceKey<Level> resourcekey = level.dimension() == secondDimension ? firstDimension : secondDimension;
 		MinecraftServer minecraftserver = level.getServer();
@@ -84,19 +79,16 @@ public static Pair<ServerLevel, BlockFace> standardPortalProvider(Pair<ServerLev
 		BlockFace inboundTrack = inbound.getSecond();
 		BlockPos portalPos = inboundTrack.getConnectedPos();
 		BlockState portalState = level.getBlockState(portalPos);
-		//fixme
-		//ITeleporter teleporter = customPortalForcer.apply(otherLevel);
+		ITeleporter teleporter = customPortalForcer.apply(otherLevel);
 
 		SuperGlueEntity probe = new SuperGlueEntity(level, new AABB(portalPos));
 		probe.setYRot(inboundTrack.getFace()
 			.toYRot());
 		probe.setPortalEntrancePos();
 
-		//fixme
-		//PortalInfo portalinfo = teleporter.getPortalInfo(probe, otherLevel, probe::findDimensionEntryPoint);
-		PortalInfo portalinfo = new PortalInfo(probe.position(), Vec3.ZERO, probe.getYRot(), probe.getXRot());
-//		if (portalinfo == null)
-//			return null;
+		PortalInfo portalinfo = teleporter.getPortalInfo(probe, otherLevel, probe::findDimensionEntryPoint);
+		if (portalinfo == null)
+			return null;
 
 		BlockPos otherPortalPos = BlockPos.containing(portalinfo.pos);
 		BlockState otherPortalState = otherLevel.getBlockState(otherPortalPos);
