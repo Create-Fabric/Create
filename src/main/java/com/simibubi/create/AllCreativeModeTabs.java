@@ -59,14 +59,14 @@ public class AllCreativeModeTabs {
 		() -> FabricItemGroup.builder()
 			.title(Components.translatable("itemGroup.create.base"))
 			.icon(() -> AllBlocks.COGWHEEL.asStack())
-			.displayItems(new RegistrateDisplayItemsGenerator(true, AllCreativeModeTabs.BASE_CREATIVE_TAB))
+			.displayItems(new RegistrateDisplayItemsGenerator(true, true))
 			.build());
 
 	public static final TabInfo PALETTES_CREATIVE_TAB = register("palettes",
 		() -> FabricItemGroup.builder()
 			.title(Components.translatable("itemGroup.create.palettes"))
 			.icon(() -> AllPaletteBlocks.ORNATE_IRON_WINDOW.asStack())
-			.displayItems(new RegistrateDisplayItemsGenerator(false, AllCreativeModeTabs.PALETTES_CREATIVE_TAB))
+			.displayItems(new RegistrateDisplayItemsGenerator(false, false))
 			.build());
 
 	private static TabInfo register(String name, Supplier<CreativeModeTab> supplier) {
@@ -108,11 +108,11 @@ public class AllCreativeModeTabs {
 		}
 
 		private final boolean addItems;
-		private final TabInfo tabFilter;
+		private final boolean mainTab;
 
-		public RegistrateDisplayItemsGenerator(boolean addItems, TabInfo tabFilter) {
+		public RegistrateDisplayItemsGenerator(boolean addItems, boolean mainTab) {
 			this.addItems = addItems;
-			this.tabFilter = tabFilter;
+			this.mainTab = mainTab;
 		}
 
 		private static Predicate<Item> makeExclusionPredicate() {
@@ -267,24 +267,25 @@ public class AllCreativeModeTabs {
 			List<ItemOrdering> orderings = makeOrderings();
 			Function<Item, ItemStack> stackFunc = makeStackFunc();
 			Function<Item, TabVisibility> visibilityFunc = makeVisibilityFunc();
+			ResourceKey<CreativeModeTab> tab = mainTab ? BASE_CREATIVE_TAB.key : PALETTES_CREATIVE_TAB.key;
 
 			List<Item> items = new LinkedList<>();
 			if (addItems) {
-				items.addAll(collectItems(exclusionPredicate.or(IS_ITEM_3D_PREDICATE.negate())));
+				items.addAll(collectItems(tab, exclusionPredicate.or(IS_ITEM_3D_PREDICATE.negate())));
 			}
-			items.addAll(collectBlocks(exclusionPredicate));
+			items.addAll(collectBlocks(tab, exclusionPredicate));
 			if (addItems) {
-				items.addAll(collectItems(exclusionPredicate.or(IS_ITEM_3D_PREDICATE)));
+				items.addAll(collectItems(tab, exclusionPredicate.or(IS_ITEM_3D_PREDICATE)));
 			}
 
 			applyOrderings(items, orderings);
 			outputAll(output, items, stackFunc, visibilityFunc);
 		}
 
-		private List<Item> collectBlocks(Predicate<Item> exclusionPredicate) {
+		private List<Item> collectBlocks(ResourceKey<CreativeModeTab> tab, Predicate<Item> exclusionPredicate) {
 			List<Item> items = new ReferenceArrayList<>();
 			for (RegistryEntry<Block> entry : Create.REGISTRATE.getAll(Registries.BLOCK)) {
-				if (!CreateRegistrate.isInCreativeTab(entry, tabFilter.key))
+				if (!CreateRegistrate.isInCreativeTab(entry, tab))
 					continue;
 				Item item = entry.get()
 					.asItem();
@@ -297,10 +298,10 @@ public class AllCreativeModeTabs {
 			return items;
 		}
 
-		private List<Item> collectItems(Predicate<Item> exclusionPredicate) {
+		private List<Item> collectItems(ResourceKey<CreativeModeTab> tab, Predicate<Item> exclusionPredicate) {
 			List<Item> items = new ReferenceArrayList<>();
 			for (RegistryEntry<Item> entry : Create.REGISTRATE.getAll(Registries.ITEM)) {
-				if (!CreateRegistrate.isInCreativeTab(entry, tabFilter.key))
+				if (!CreateRegistrate.isInCreativeTab(entry, tab))
 					continue;
 				Item item = entry.get();
 				if (item instanceof BlockItem)
