@@ -39,7 +39,7 @@ repositories {
     }
     maven { url = "https://maven.ladysnake.org/releases" } // CCA, for Trinkets
     // fixme Temp until flywheel builds get on the tterag maven
-    maven { url = "https://maven.ithundxr.dev/hidden" }
+    maven { url = "https://maven.ithundxr.dev/snapshots" }
 }
 
 configurations.configureEach {
