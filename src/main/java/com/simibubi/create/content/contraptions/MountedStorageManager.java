@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+
+import com.mojang.logging.LogUtils;
 import com.simibubi.create.content.contraptions.Contraption.ContraptionInvWrapper;
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
@@ -45,7 +48,7 @@ public class MountedStorageManager {
 	protected CombinedTankWrapper fluidInventory;
 	protected Map<BlockPos, MountedStorage> storage;
 	protected Map<BlockPos, MountedFluidStorage> fluidStorage;
-
+	private Logger LOGGER = LogUtils.getLogger();
 	public MountedStorageManager() {
 		storage = new HashMap<>();
 		fluidStorage = new HashMap<>();
@@ -186,7 +189,11 @@ public class MountedStorageManager {
 	public void clear() {
 		for (Storage<ItemVariant> storage : inventory.parts) {
 			if (!(storage instanceof ContraptionInvWrapper wrapper) || !wrapper.isExternal) {
+				try{
 				TransferUtil.clearStorage(storage);
+				}catch(IllegalArgumentException ex){
+					LOGGER.debug("Storage wasn't cleared because it's blank\n Storage hashcode: " + storage.hashCode());
+				}
 			}
 		}
 		TransferUtil.clearStorage(fluidInventory);
