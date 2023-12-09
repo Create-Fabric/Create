@@ -204,6 +204,7 @@ public class DeployerHandler {
 			}
 
 			List<ItemEntity> capturedDrops = entity.finishCapturingDrops();
+			if (capturedDrops == null) capturedDrops = new ArrayList<>();
 			capturedDrops.forEach(e -> player.getInventory()
 				.placeItemBackInInventory(e.getItem()));
 			if (success)
