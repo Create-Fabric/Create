@@ -1,8 +1,7 @@
 //file:noinspection GrMethodMayBeStatic
 plugins {
-    id "fabric-loom" version "1.3.+"
+    id "fabric-loom" version "1.4.+"
 
-    id "io.github.juuxel.loom-vineflower" version "1.+" // Vineflower, a better decompiler
     id "io.github.p03w.machete" version "1.1.4" // automatic jar compressing on build
 
     id "com.modrinth.minotaur" version "2.+" // modrinth publishing
@@ -43,15 +42,6 @@ repositories {
     maven { url = "https://maven.ladysnake.org/releases" } // CCA, for Trinkets
     // fixme Temp until flywheel builds get on the tterag maven
     maven { url = "https://maven.ithundxr.dev/snapshots" }
-}
-
-configurations.configureEach {
-    resolutionStrategy.eachDependency {
-        switch (requested.module.name) { // some dependencies pull in broken, outdated versions of these.
-            case "fabric-loader": useVersion(loader_version); break
-            case "fabric-api": useVersion(fabric_version); break
-        }
-    }
 }
 
 dependencies {
