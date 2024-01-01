@@ -1,8 +1,7 @@
 //file:noinspection GrMethodMayBeStatic
 plugins {
-    id "fabric-loom" version "1.2.+"
+    id "fabric-loom" version "1.4.+"
 
-    id "io.github.juuxel.loom-quiltflower" version "1.+" // Quiltflower, a better decompiler
     id "io.github.p03w.machete" version "1.1.4" // automatic jar compressing on build
 
     id "com.modrinth.minotaur" version "2.+" // modrinth publishing
@@ -37,14 +36,6 @@ repositories {
     }
     maven { url = "https://maven.ladysnake.org/releases" } // CCA, for Trinkets
     maven { url = "https://jitpack.io/" } // for Porting Lib: Mixin Extras, Fabric ASM
-}
-
-configurations.configureEach {
-    resolutionStrategy.eachDependency {
-        if (requested.module.name == "fabric-loader") {
-            useVersion(loader_version)
-        }
-    }
 }
 
 dependencies {
