@@ -39,6 +39,12 @@ repositories {
     maven { url = "https://maven.ladysnake.org/releases" } // CCA, for Trinkets
 }
 
+configurations.configureEach {
+    resolutionStrategy {
+        force("net.fabricmc:fabric-loader:$loader_version")
+    }
+}
+
 dependencies {
     setup(dependencies)
     devEnv(dependencies)
