@@ -38,6 +38,12 @@ repositories {
     maven { url = "https://jitpack.io/" } // for Porting Lib: Mixin Extras, Fabric ASM
 }
 
+configurations.configureEach {
+    resolutionStrategy {
+        force("net.fabricmc:fabric-loader:$loader_version")
+    }
+}
+
 dependencies {
     setup(dependencies)
     devEnv(dependencies)
