@@ -1,7 +1,6 @@
 package com.simibubi.create.content.kinetics.deployer;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -157,11 +156,13 @@ public class DeployerHandler {
 		if (!entities.isEmpty()) {
 			Entity entity = entities.get(world.random.nextInt(entities.size()));
 			boolean success = false;
+			entity.startCapturingDrops();
 
 			// Use on entity
 			if (mode == Mode.USE) {
 				InteractionResult cancelResult = UseEntityCallback.EVENT.invoker().interact(player, world, hand, entity, new EntityHitResult(entity));
 				if (cancelResult == InteractionResult.FAIL) {
+					entity.finishCapturingDrops();
 					return;
 				}
 				if (cancelResult == null || cancelResult == InteractionResult.PASS) {
@@ -202,7 +203,7 @@ public class DeployerHandler {
 				success = true;
 			}
 
-			Collection<ItemEntity> capturedDrops = entity.captureDrops();
+			List<ItemEntity> capturedDrops = entity.finishCapturingDrops();
 			capturedDrops.forEach(e -> player.getInventory()
 				.placeItemBackInInventory(e.getItem()));
 			if (success)
