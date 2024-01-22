@@ -333,7 +333,7 @@ public class CreateEmiPlugin implements EmiPlugin {
 					// This will miss fluid containers that hold a minimum of over 1000 L, but perhaps that's preferable.
 					FluidStack fs = new FluidStack(fluid, FluidConstants.BUCKET);
 					ItemStack copy = is.copy();
-					ContainerItemContext ctx = ContainerItemContext.withInitial(copy);
+					ContainerItemContext ctx = ContainerItemContext.withConstant(copy);
 					Storage<FluidVariant> storage = ctx.find(FluidStorage.ITEM);
 					if (storage != null && GenericItemFilling.isFluidHandlerValid(copy, storage)) {
 						long inserted = 0;
@@ -358,7 +358,7 @@ public class CreateEmiPlugin implements EmiPlugin {
 					}
 				}
 				ItemStack copy = is.copy();
-				ContainerItemContext ctx = ContainerItemContext.withInitial(copy);
+				ContainerItemContext ctx = ContainerItemContext.withConstant(copy);
 				Storage<FluidVariant> storage = ctx.find(FluidStorage.ITEM);
 				if (storage != null) {
 					FluidStack extracted = TransferUtil.extractAnyFluid(storage, FluidConstants.BUCKET);

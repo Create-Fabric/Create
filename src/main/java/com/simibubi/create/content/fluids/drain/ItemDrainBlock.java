@@ -47,7 +47,7 @@ public class ItemDrainBlock extends Block implements IWrenchable, IBE<ItemDrainB
 		ItemStack heldItem = player.getItemInHand(handIn);
 
 		if (heldItem.getItem() instanceof BlockItem
-			&& ContainerItemContext.withInitial(heldItem).find(FluidStorage.ITEM) == null)
+			&& ContainerItemContext.withConstant(heldItem).find(FluidStorage.ITEM) == null)
 			return InteractionResult.PASS;
 
 		return onBlockEntityUse(worldIn, pos, be -> {

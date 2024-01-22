@@ -59,7 +59,7 @@ public class GenericItemEmptying {
 
 		ItemStack split = stack.copy();
 		split.setCount(1);
-		ContainerItemContext ctx = ContainerItemContext.withInitial(split);
+		ContainerItemContext ctx = ContainerItemContext.withConstant(split);
 		Storage<FluidVariant> tank = FluidStorage.ITEM.find(split, ctx);
 		if (tank == null)
 			return Pair.of(resultingFluid, resultingItem);

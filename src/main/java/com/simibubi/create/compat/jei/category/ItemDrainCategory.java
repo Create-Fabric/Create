@@ -58,13 +58,13 @@ public class ItemDrainCategory extends CreateRecipeCategory<EmptyingRecipe> {
 				continue;
 			}
 
-			ContainerItemContext testCtx = ContainerItemContext.withInitial(stack);
+			ContainerItemContext testCtx = ContainerItemContext.withConstant(stack);
 			Storage<FluidVariant> testStorage = testCtx.find(FluidStorage.ITEM);
 			if (testStorage == null)
 				continue;
 
 			ItemStack copy = stack.copy();
-			ContainerItemContext ctx = ContainerItemContext.withInitial(copy);
+			ContainerItemContext ctx = ContainerItemContext.withConstant(copy);
 			Storage<FluidVariant> storage = ctx.find(FluidStorage.ITEM);
 			FluidStack extracted = TransferUtil.extractAnyFluid(storage, FluidConstants.BUCKET);
 			ItemVariant result = ctx.getItemVariant();

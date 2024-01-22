@@ -68,7 +68,7 @@ public class ItemDrainCategory extends CreateRecipeCategory<EmptyingRecipe> {
 			}
 
 			ItemStack copy = stack.copy();
-			ContainerItemContext ctx = ContainerItemContext.withInitial(copy);
+			ContainerItemContext ctx = ContainerItemContext.withConstant(copy);
 			Storage<FluidVariant> handler = ctx.find(FluidStorage.ITEM);
 
 			if (handler == null)

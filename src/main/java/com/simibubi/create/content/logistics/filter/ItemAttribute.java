@@ -133,7 +133,7 @@ public interface ItemAttribute {
 		DUMMY(s -> false),
 		PLACEABLE(s -> s.getItem() instanceof BlockItem),
 		CONSUMABLE(ItemStack::isEdible),
-		FLUID_CONTAINER(s -> ContainerItemContext.withInitial(s).find(FluidStorage.ITEM) != null),
+		FLUID_CONTAINER(s -> ContainerItemContext.withConstant(s).find(FluidStorage.ITEM) != null),
 		ENCHANTED(ItemStack::isEnchanted),
 		MAX_ENCHANTED(StandardTraits::maxEnchanted),
 		RENAMED(ItemStack::hasCustomHoverName),
