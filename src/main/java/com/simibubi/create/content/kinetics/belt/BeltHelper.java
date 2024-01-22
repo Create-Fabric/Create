@@ -45,7 +45,7 @@ public class BeltHelper {
 
 	public static boolean isItemUpright(ItemStack stack) {
 		return uprightCache.computeIfAbsent(stack.getItem(),
-			item -> ContainerItemContext.withInitial(stack).find(FluidStorage.ITEM) != null
+			item -> ContainerItemContext.withConstant(stack).find(FluidStorage.ITEM) != null
 				|| AllItemTags.UPRIGHT_ON_BELT.matches(stack));
 	}
 

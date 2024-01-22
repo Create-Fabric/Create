@@ -2,6 +2,15 @@ package com.simibubi.create.foundation.events;
 
 import java.util.concurrent.Executor;
 
+import io.github.fabricators_of_create.porting_lib.entity.events.AdditionalEntityTrackingEvents;
+
+import io.github.fabricators_of_create.porting_lib.entity.events.EntityMoveEvents;
+
+import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingEntityDamageEvents;
+import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingEntityEvents;
+
+import io.github.fabricators_of_create.porting_lib.entity.events.living.LivingEntityLootEvents;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -52,8 +61,6 @@ import com.simibubi.create.infrastructure.command.AllCommands;
 import io.github.fabricators_of_create.porting_lib.entity.events.EntityDataEvents;
 import io.github.fabricators_of_create.porting_lib.entity.events.EntityEvents;
 import io.github.fabricators_of_create.porting_lib.entity.events.EntityMountEvents;
-import io.github.fabricators_of_create.porting_lib.entity.events.LivingEntityEvents;
-import io.github.fabricators_of_create.porting_lib.entity.events.ProjectileImpactCallback;
 import io.github.fabricators_of_create.porting_lib.event.common.BlockEvents;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
@@ -145,7 +152,7 @@ public class CommonEvents {
 		AllCommands.register(dispatcher);
 	}
 
-	public static void onEntityEnterSection(ChunkSectionChangeContext ctx) {
+	public static void onEntityEnterSection(EntityMoveEvents.ChunkSectionChangeContext ctx) {
 		CarriageEntityHandler.onEntityEnterSection(ctx.entity(), ctx.oldPackedPos(), ctx.newPackedPos());
 	}
 

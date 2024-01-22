@@ -56,7 +56,7 @@ public class GenericItemFilling {
 		if (stack.getItem() == Items.MILK_BUCKET)
 			return false;
 
-		Storage<FluidVariant> tank = FluidStorage.ITEM.find(stack, ContainerItemContext.withInitial(stack));
+		Storage<FluidVariant> tank = FluidStorage.ITEM.find(stack, ContainerItemContext.withConstant(stack));
 		if (tank == null)
 			return false;
 		if (!isFluidHandlerValid(stack, tank))
@@ -70,7 +70,7 @@ public class GenericItemFilling {
 		if (stack.getItem() == Items.BUCKET && canFillBucketInternally(availableFluid))
 			return FluidConstants.BUCKET;
 
-		Storage<FluidVariant> tank = FluidStorage.ITEM.find(stack, ContainerItemContext.withInitial(stack));
+		Storage<FluidVariant> tank = FluidStorage.ITEM.find(stack, ContainerItemContext.withConstant(stack));
 		if (tank == null)
 			return -1;
 
@@ -126,7 +126,7 @@ public class GenericItemFilling {
 
 		ItemStack split = stack.copy();
 		split.setCount(1);
-		ContainerItemContext ctx = ContainerItemContext.withInitial(split);
+		ContainerItemContext ctx = ContainerItemContext.withConstant(split);
 		Storage<FluidVariant> tank = FluidStorage.ITEM.find(split, ctx);
 		if (tank == null)
 			return ItemStack.EMPTY;

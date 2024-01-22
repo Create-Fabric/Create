@@ -73,7 +73,7 @@ public class SpoutCategory extends CreateRecipeCategory<FillingRecipe> {
 			for (EntryStack<dev.architectury.fluid.FluidStack> fluidEntry: fluidStacks) {
 				FluidStack fluidStack = new FluidStack(fluidEntry.getValue().getFluid(), fluidEntry.getValue().getAmount(), fluidEntry.getValue().getTag());
 				ItemStack copy = stack.copy();
-				ContainerItemContext ctx = ContainerItemContext.withInitial(copy);
+				ContainerItemContext ctx = ContainerItemContext.withConstant(copy);
 				Storage<FluidVariant> fhi = ctx.find(FluidStorage.ITEM);
 				if(fhi != null) {
 					if (!GenericItemFilling.isFluidHandlerValid(copy, fhi))
