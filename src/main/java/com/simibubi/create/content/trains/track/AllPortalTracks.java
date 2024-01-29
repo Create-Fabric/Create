@@ -8,7 +8,7 @@ import com.simibubi.create.foundation.utility.AttachedRegistry;
 import com.simibubi.create.foundation.utility.BlockFace;
 import com.simibubi.create.foundation.utility.Pair;
 
-import io.github.fabricators_of_create.porting_lib.extensions.extensions.ITeleporter;
+import io.github.fabricators_of_create.porting_lib.entity.ITeleporter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;

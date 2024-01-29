@@ -2,7 +2,7 @@ package com.simibubi.create.content.contraptions.sync;
 
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.foundation.networking.SimplePacketBase;
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;

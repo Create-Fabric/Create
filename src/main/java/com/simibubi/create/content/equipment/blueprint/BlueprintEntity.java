@@ -6,6 +6,10 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import io.github.fabricators_of_create.porting_lib.entity.IEntityAdditionalSpawnData;
+
+import net.fabricmc.fabric.api.entity.FakePlayer;
+
 import org.apache.commons.lang3.Validate;
 
 import com.simibubi.create.AllEntityTypes;
@@ -21,7 +25,6 @@ import com.simibubi.create.foundation.utility.IInteractionChecker;
 import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.foundation.utility.fabric.ReachUtil;
 
-import io.github.fabricators_of_create.porting_lib.entity.ExtraSpawnDataEntity;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemStackHandler;
 import io.github.fabricators_of_create.porting_lib.util.NetworkHooks;
@@ -73,7 +76,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public class BlueprintEntity extends HangingEntity
-	implements ExtraSpawnDataEntity, ISpecialEntityItemRequirement, ISyncPersistentData, IInteractionChecker {
+	implements IEntityAdditionalSpawnData, ISpecialEntityItemRequirement, ISyncPersistentData, IInteractionChecker {
 
 	protected int size;
 	protected Direction verticalOrientation;
@@ -340,7 +343,7 @@ public class BlueprintEntity extends HangingEntity
 
 	@Override
 	public InteractionResult interactAt(Player player, Vec3 vec, InteractionHand hand) {
-		if (player.isFake())
+		if (player instanceof FakePlayer)
 			return InteractionResult.PASS;
 
 		boolean holdingWrench = AllItems.WRENCH.isIn(player.getItemInHand(hand));

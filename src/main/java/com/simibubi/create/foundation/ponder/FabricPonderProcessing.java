@@ -7,7 +7,7 @@ import com.mojang.serialization.Codec;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.Create;
 
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 

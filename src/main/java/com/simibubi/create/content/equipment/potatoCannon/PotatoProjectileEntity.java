@@ -1,5 +1,7 @@
 package com.simibubi.create.content.equipment.potatoCannon;
 
+import io.github.fabricators_of_create.porting_lib.entity.IEntityAdditionalSpawnData;
+
 import org.jetbrains.annotations.NotNull;
 
 import com.simibubi.create.AllEnchantments;
@@ -8,7 +10,6 @@ import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.damageTypes.CreateDamageSources;
 import com.simibubi.create.foundation.particle.AirParticleData;
 import com.simibubi.create.foundation.utility.VecHelper;
-import io.github.fabricators_of_create.porting_lib.entity.ExtraSpawnDataEntity;
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
@@ -42,7 +43,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class PotatoProjectileEntity extends AbstractHurtingProjectile implements ExtraSpawnDataEntity {
+public class PotatoProjectileEntity extends AbstractHurtingProjectile implements IEntityAdditionalSpawnData {
 
 	protected PotatoCannonProjectileType type;
 	protected ItemStack stack = ItemStack.EMPTY;

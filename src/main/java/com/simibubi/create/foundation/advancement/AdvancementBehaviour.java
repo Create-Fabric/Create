@@ -8,6 +8,7 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
+import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -122,7 +123,7 @@ public class AdvancementBehaviour extends BlockEntityBehaviour {
 		AdvancementBehaviour behaviour = BlockEntityBehaviour.get(worldIn, pos, TYPE);
 		if (behaviour == null)
 			return;
-		if (placer instanceof ServerPlayer player && !player.isFake())
+		if (placer instanceof ServerPlayer player && !(player instanceof FakePlayer))
 			behaviour.setPlayer(placer.getUUID());
 	}
 

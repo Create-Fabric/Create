@@ -57,7 +57,6 @@
     "porting_lib_base": ">=${port_lib_base_version}",
     "porting_lib_entity": ">=${port_lib_entity_version}",
     "porting_lib_extensions": ">=${port_lib_extensions_version}",
-    "porting_lib_fake_players": ">=${port_lib_fake_players_version}",
     "porting_lib_networking": ">=${port_lib_networking_version}",
     "porting_lib_obj_loader": ">=${port_lib_obj_loader_version}",
     "porting_lib_tags": ">=${port_lib_tags_version}",
@@ -79,7 +78,7 @@
   "custom": {
     "loom:injected_interfaces": {
       "net/minecraft/class_1688": [ "com/simibubi/create/foundation/utility/fabric/AbstractMinecartExtensions" ],
-      "net/minecraft/class_1946": [ "io/github/fabricators_of_create/porting_lib/extensions/extensions/ITeleporter" ]
+      "net/minecraft/class_1946": [ "io/github/fabricators_of_create/porting_lib/entity/ITeleporter" ]
     }
   }
 }

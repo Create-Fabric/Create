@@ -21,7 +21,7 @@ import com.simibubi.create.foundation.utility.NBTHelper;
 import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
@@ -225,7 +225,7 @@ public abstract class FluidManipulationBehaviour extends BlockEntityBehaviour {
 	protected void playEffect(Level world, BlockPos pos, Fluid fluid, boolean fillSound) {
 		if (fluid == null)
 			return;
-		
+
 		BlockPos splooshPos = pos == null ? blockEntity.getBlockPos() : pos;
 		FluidStack stack = new FluidStack(fluid, 1);
 

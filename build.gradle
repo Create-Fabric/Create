@@ -24,7 +24,10 @@ repositories {
     maven { url = "https://maven.parchmentmc.org" } // Parchment
     maven { url = "https://maven.fabricmc.net/" } // FAPI, Loader
     maven { url = "https://mvn.devos.one/snapshots/" } // Registrate, Porting Lib, Forge Tags, Milk Lib
-    maven { url = "https://jitpack.io/" } // for Porting Lib: Mixin Extras, Fabric ASM
+    maven { // for Porting Lib: Mixin Extras, Fabric ASM
+        url = "https://jitpack.io/"
+        content { includeGroupAndSubgroups("com.github") }
+    }
     maven { url = "https://cursemaven.com" } // Forge Config API Port
     maven { url = "https://maven.tterrag.com/" } // Flywheel
     maven { url = "https://maven.shedaniel.me/" } // REI and deps

@@ -12,6 +12,7 @@ import com.simibubi.create.foundation.utility.BlockHelper;
 
 import io.github.fabricators_of_create.porting_lib.util.NetworkHooks;
 import io.github.fabricators_of_create.porting_lib.util.TagUtil;
+import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -87,7 +88,7 @@ public class ToolboxBlock extends HorizontalDirectionalBlock implements SimpleWa
 
 	@Override
 	public void attack(BlockState state, Level world, BlockPos pos, Player player) {
-		if (player.isFake())
+		if (player instanceof FakePlayer)
 			return;
 		if (world.isClientSide)
 			return;
@@ -148,7 +149,7 @@ public class ToolboxBlock extends HorizontalDirectionalBlock implements SimpleWa
 			return InteractionResult.SUCCESS;
 		}
 
-		if (player.isFake())
+		if (player instanceof FakePlayer)
 			return InteractionResult.PASS;
 		if (world.isClientSide)
 			return InteractionResult.SUCCESS;

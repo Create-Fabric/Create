@@ -75,7 +75,7 @@ import com.simibubi.create.infrastructure.gui.OpenCreateMenuButton;
 
 import io.github.fabricators_of_create.porting_lib.client_events.event.client.RenderArmCallback;
 import io.github.fabricators_of_create.porting_lib.entity.events.EntityMountEvents;
-import io.github.fabricators_of_create.porting_lib.entity.events.player.PlayerTickEvents;
+import io.github.fabricators_of_create.porting_lib.entity.events.PlayerTickEvents;
 import io.github.fabricators_of_create.porting_lib.event.client.CameraSetupCallback;
 import io.github.fabricators_of_create.porting_lib.event.client.CameraSetupCallback.CameraInfo;
 import io.github.fabricators_of_create.porting_lib.event.client.ClientWorldEvents;

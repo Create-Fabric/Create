@@ -15,9 +15,8 @@ import com.simibubi.create.foundation.utility.WorldAttached;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
 import io.github.fabricators_of_create.porting_lib.common.util.IPlantable;
-import io.github.fabricators_of_create.porting_lib.entity.events.EntityMoveEvents;
-import io.github.fabricators_of_create.porting_lib.entity.events.EntityMoveEvents.EntityTeleportEvent;
-import io.github.fabricators_of_create.porting_lib.fake_players.FakePlayer;
+import io.github.fabricators_of_create.porting_lib.entity.events.EntityEvents;
+import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -409,8 +408,8 @@ public class BuiltinPotatoProjectileTypes {
 				double teleportZ = entityZ + (livingEntity.getRandom()
 					.nextDouble() - 0.5D) * teleportDiameter;
 
-				EntityTeleportEvent event = new EntityTeleportEvent(livingEntity, teleportX, teleportY, teleportZ);
-				EntityMoveEvents.TELEPORT.invoker().onTeleport(event);
+				EntityEvents.Teleport.EntityTeleportEvent event = new EntityEvents.Teleport.EntityTeleportEvent(livingEntity, teleportX, teleportY, teleportZ);
+				EntityEvents.TELEPORT.invoker().onTeleport(event);
 				if (event.isCanceled())
 					return false;
 				if (livingEntity.randomTeleport(teleportX, teleportY, teleportZ, true)) {

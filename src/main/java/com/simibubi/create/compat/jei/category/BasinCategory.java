@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import mezz.jei.api.fabric.constants.FabricTypes;
 
 import org.apache.commons.lang3.mutable.MutableInt;

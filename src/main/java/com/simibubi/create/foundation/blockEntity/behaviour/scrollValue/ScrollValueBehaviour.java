@@ -17,7 +17,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringB
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.VecHelper;
 
-import io.github.fabricators_of_create.porting_lib.fake_players.FakePlayer;
+import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -183,7 +183,7 @@ public class ScrollValueBehaviour extends BlockEntityBehaviour implements ValueS
 
 	@Override
 	public void onShortInteract(Player player, InteractionHand hand, Direction side) {
-		if (player.isFake())
+		if (player instanceof FakePlayer)
 			blockEntity.getBlockState()
 				.use(getWorld(), player, hand,
 					new BlockHitResult(VecHelper.getCenterOf(getPos()), side, getPos(), true));

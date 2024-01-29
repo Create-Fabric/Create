@@ -8,8 +8,7 @@ import com.simibubi.create.foundation.utility.LangBuilder;
 
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
-import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import io.github.fabricators_of_create.porting_lib.util.FluidTextUtil;
 import io.github.fabricators_of_create.porting_lib.util.FluidUnit;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;

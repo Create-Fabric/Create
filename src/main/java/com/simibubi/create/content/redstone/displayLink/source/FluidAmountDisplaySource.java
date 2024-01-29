@@ -11,7 +11,7 @@ import com.simibubi.create.foundation.utility.FluidFormatter;
 import com.simibubi.create.foundation.utility.Lang;
 
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import io.github.fabricators_of_create.porting_lib.util.FluidUnit;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

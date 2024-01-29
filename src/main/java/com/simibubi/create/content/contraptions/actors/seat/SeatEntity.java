@@ -2,7 +2,8 @@ package com.simibubi.create.content.contraptions.actors.seat;
 
 import com.simibubi.create.AllEntityTypes;
 
-import io.github.fabricators_of_create.porting_lib.entity.ExtraSpawnDataEntity;
+import io.github.fabricators_of_create.porting_lib.entity.IEntityAdditionalSpawnData;
+import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -30,7 +31,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public class SeatEntity extends Entity implements ExtraSpawnDataEntity {
+public class SeatEntity extends Entity implements IEntityAdditionalSpawnData {
 
 	public SeatEntity(EntityType<?> p_i48580_1_, Level p_i48580_2_) {
 		super(p_i48580_1_, p_i48580_2_);
@@ -99,7 +100,7 @@ public class SeatEntity extends Entity implements ExtraSpawnDataEntity {
 	protected boolean canRide(Entity entity) {
 		// Fake Players (tested with deployers) have a BUNCH of weird issues, don't let
 		// them ride seats
-		return !(entity instanceof Player player && player.isFake());
+		return !(entity instanceof Player player && player instanceof FakePlayer);
 	}
 
 	@Override

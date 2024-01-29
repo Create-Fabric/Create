@@ -1,5 +1,6 @@
 package com.simibubi.create.content.processing.burner;
 
+import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.minecraft.util.RandomSource;
 
 import javax.annotation.Nullable;
@@ -145,7 +146,7 @@ public class BlazeBurnerBlock extends HorizontalDirectionalBlock implements IBE<
 		}
 
 		boolean doNotConsume = player.isCreative();
-		boolean forceOverflow = !(player.isFake());
+		boolean forceOverflow = !(player instanceof FakePlayer);
 		try (Transaction t = TransferUtil.getTransaction()) {
 			InteractionResultHolder<ItemStack> res =
 					tryInsert(state, world, pos, heldItem, doNotConsume, forceOverflow, t);

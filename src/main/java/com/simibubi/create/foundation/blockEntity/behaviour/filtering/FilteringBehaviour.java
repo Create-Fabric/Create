@@ -26,7 +26,7 @@ import com.simibubi.create.foundation.utility.VecHelper;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 
 import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 import net.fabricmc.fabric.api.transfer.v1.item.PlayerInventoryStorage;
 
@@ -56,7 +56,7 @@ public class FilteringBehaviour extends BlockEntityBehaviour implements ValueSet
 	boolean showCount;
 
 	private FilterItemStack filter;
-	
+
 	public int count;
 	public boolean upTo;
 	private Predicate<ItemStack> predicate;

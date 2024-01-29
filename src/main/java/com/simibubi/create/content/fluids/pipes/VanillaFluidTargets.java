@@ -4,7 +4,7 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
 
 import com.simibubi.create.AllFluids;
 
-import io.github.fabricators_of_create.porting_lib.util.FluidStack;
+import io.github.fabricators_of_create.porting_lib.fluids.FluidStack;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
