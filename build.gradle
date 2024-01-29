@@ -37,8 +37,6 @@ repositories {
         content { includeGroup("com.jamieswhiteshirt") }
     }
     maven { url = "https://maven.ladysnake.org/releases" } // CCA, for Trinkets
-    // fixme Temp until flywheel builds get on the tterag maven
-    maven { url = "https://maven.ithundxr.dev/snapshots" }
 }
 
 dependencies {
