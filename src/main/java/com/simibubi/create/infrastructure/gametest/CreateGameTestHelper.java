@@ -351,10 +351,12 @@ public class CreateGameTestHelper extends GameTestHelper {
 	public void assertAnyContained(BlockPos pos, Item... items) {
 		Storage<ItemVariant> storage = itemStorageAt(pos);
 		boolean noneFound = true;
-		for (Item item : items) {
-			if (storage.extract(ItemVariant.of(item), 1, null) > 0) {
-				noneFound = false;
-				break;
+		try (Transaction t = TransferUtil.getTransaction()) {
+			for (Item item : items) {
+				if (storage.extract(ItemVariant.of(item), 1, t) > 0) {
+					noneFound = false;
+					break;
+				}
 			}
 		}
 		if (noneFound)
