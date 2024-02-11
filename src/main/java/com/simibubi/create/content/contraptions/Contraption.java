@@ -396,6 +396,8 @@ public abstract class Contraption {
 		for (Direction offset : Iterate.directions) {
 			BlockPos offsetPos = pos.relative(offset);
 			BlockState blockState = world.getBlockState(offsetPos);
+			if (isPistonHead(blockState))
+				continue;
 			if (isAnchoringBlockAt(offsetPos))
 				continue;
 			if (!movementAllowed(blockState, world, offsetPos)) {
