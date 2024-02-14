@@ -100,7 +100,7 @@ public class TrackObserver extends SingleBlockEntityEdgePoint {
 	public void write(CompoundTag nbt, DimensionPalette dimensions) {
 		super.write(nbt, dimensions);
 		nbt.putInt("Activated", activated);
-		nbt.put("Filter", NBTSerializer.serializeNBTCompound(filter));
+		nbt.put("Filter", filter.serializeNBT());
 		if (currentTrain != null)
 			nbt.putUUID("TrainId", currentTrain);
 	}
