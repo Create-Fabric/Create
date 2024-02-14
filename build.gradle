@@ -79,8 +79,6 @@ def setup(DependencyHandler deps) {
         it.officialMojangMappings { nameSyntheticMembers = false }
     })
     deps.modImplementation("net.fabricmc:fabric-loader:$loader_version")
-
-    deps.implementation(deps.annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.3.5"))
 }
 
 // setup mods that enhance development

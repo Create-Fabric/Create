@@ -59,14 +59,14 @@ public class AllCreativeModeTabs {
 		() -> FabricItemGroup.builder()
 			.title(Components.translatable("itemGroup.create.base"))
 			.icon(() -> AllBlocks.COGWHEEL.asStack())
-			.displayItems(new RegistrateDisplayItemsGenerator(true, Tabs.BASE))
+			.displayItems(new RegistrateDisplayItemsGenerator(true, () -> AllCreativeModeTabs.BASE_CREATIVE_TAB))
 			.build());
 
 	public static final TabInfo PALETTES_CREATIVE_TAB = register("palettes",
 		() -> FabricItemGroup.builder()
 			.title(Components.translatable("itemGroup.create.palettes"))
 			.icon(() -> AllPaletteBlocks.ORNATE_IRON_WINDOW.asStack())
-			.displayItems(new RegistrateDisplayItemsGenerator(false, Tabs.PALETTES))
+			.displayItems(new RegistrateDisplayItemsGenerator(false, () -> AllCreativeModeTabs.PALETTES_CREATIVE_TAB))
 			.build());
 
 	private static TabInfo register(String name, Supplier<CreativeModeTab> supplier) {
@@ -79,29 +79,6 @@ public class AllCreativeModeTabs {
 
 	public static void register() {
 		// fabric: just load the class
-	}
-
-	public static ResourceKey<CreativeModeTab> getBaseTabKey() {
-		return BASE_CREATIVE_TAB.key();
-	}
-
-	public static ResourceKey<CreativeModeTab> getPalettesTabKey() {
-		return PALETTES_CREATIVE_TAB.key();
-	}
-
-	public enum Tabs {
-		BASE(AllCreativeModeTabs::getBaseTabKey),
-		PALETTES(AllCreativeModeTabs::getPalettesTabKey);
-
-		private final Supplier<ResourceKey<CreativeModeTab>> keySupplier;
-
-		Tabs(Supplier<ResourceKey<CreativeModeTab>> keySupplier) {
-			this.keySupplier = keySupplier;
-		}
-
-		public ResourceKey<CreativeModeTab> getKey() {
-			return keySupplier.get();
-		}
 	}
 
 	private static class RegistrateDisplayItemsGenerator implements DisplayItemsGenerator {
@@ -131,9 +108,9 @@ public class AllCreativeModeTabs {
 		}
 
 		private final boolean addItems;
-		private final Tabs tabFilter;
+		private final Supplier<TabInfo> tabFilter;
 
-		public RegistrateDisplayItemsGenerator(boolean addItems, Tabs tabFilter) {
+		public RegistrateDisplayItemsGenerator(boolean addItems, Supplier<TabInfo> tabFilter) {
 			this.addItems = addItems;
 			this.tabFilter = tabFilter;
 		}
@@ -307,7 +284,7 @@ public class AllCreativeModeTabs {
 		private List<Item> collectBlocks(Predicate<Item> exclusionPredicate) {
 			List<Item> items = new ReferenceArrayList<>();
 			for (RegistryEntry<Block> entry : Create.REGISTRATE.getAll(Registries.BLOCK)) {
-				if (!CreateRegistrate.isInCreativeTab(entry, tabFilter.getKey()))
+				if (!CreateRegistrate.isInCreativeTab(entry, tabFilter.get().key()))
 					continue;
 				Item item = entry.get()
 					.asItem();
@@ -323,7 +300,7 @@ public class AllCreativeModeTabs {
 		private List<Item> collectItems(Predicate<Item> exclusionPredicate) {
 			List<Item> items = new ReferenceArrayList<>();
 			for (RegistryEntry<Item> entry : Create.REGISTRATE.getAll(Registries.ITEM)) {
-				if (!CreateRegistrate.isInCreativeTab(entry, tabFilter.getKey()))
+				if (!CreateRegistrate.isInCreativeTab(entry, tabFilter.get().key()))
 					continue;
 				Item item = entry.get();
 				if (item instanceof BlockItem)
