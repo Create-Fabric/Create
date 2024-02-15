@@ -389,10 +389,11 @@ public class ChuteBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
 				}
 				if (inserted != 0)
 					return true;
-				invVersionTracker.awaitNewVersion(inv);
 				if (direction == Direction.DOWN)
 					return false;
 			}
+
+			invVersionTracker.awaitNewVersion(inv);
 		}
 
 		if (targetChute != null) {
