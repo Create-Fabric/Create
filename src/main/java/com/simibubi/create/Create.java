@@ -31,7 +31,6 @@ import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.advancement.AllTriggers;
 import com.simibubi.create.foundation.block.CopperRegistries;
 import com.simibubi.create.foundation.data.CreateRegistrate;
-import com.simibubi.create.foundation.data.TagGen;
 import com.simibubi.create.foundation.data.TagLangGen;
 import com.simibubi.create.foundation.data.recipe.MechanicalCraftingRecipeGen;
 import com.simibubi.create.foundation.data.recipe.ProcessingRecipeGen;
@@ -172,7 +171,6 @@ public class Create implements ModInitializer {
 	public static void gatherData(FabricDataGenerator gen, ExistingFileHelper helper) {
 		CreateDatagen.addExtraRegistrateData();
 
-		TagGen.datagen();
 		TagLangGen.datagen();
 
 		gen.addProvider(AllSoundEvents.provider(gen));

@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     "create:lit_blaze_burner",
     "minecraft:soul_fire",

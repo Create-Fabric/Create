@@ -33,16 +33,16 @@ public class CreateRegistrateTags {
 	private static void genBlockTags(RegistrateTagsProvider<Block> prov) {
 		prov.tag(AllBlockTags.BRITTLE.tag)
 			.add(Blocks.BELL, Blocks.COCOA, Blocks.FLOWER_POT)
-			.addTag(BlockTags.BEDS)
-			.addTag(BlockTags.DOORS);
+			.forceAddTag(BlockTags.BEDS)
+			.forceAddTag(BlockTags.DOORS);
 
 		prov.tag(AllBlockTags.COPYCAT_ALLOW.tag)
 			.add(Blocks.BARREL);
 
 		prov.tag(AllBlockTags.COPYCAT_DENY.tag)
-			.addTag(BlockTags.CAULDRONS)
-			.addTag(BlockTags.SAPLINGS)
-			.addTag(BlockTags.CLIMBABLE);
+			.forceAddTag(BlockTags.CAULDRONS)
+			.forceAddTag(BlockTags.SAPLINGS)
+			.forceAddTag(BlockTags.CLIMBABLE);
 
 		prov.tag(AllBlockTags.FAN_PROCESSING_CATALYSTS_HAUNTING.tag)
 			.add(Blocks.SOUL_FIRE)
@@ -55,39 +55,39 @@ public class CreateRegistrateTags {
 		prov.tag(AllBlockTags.FAN_TRANSPARENT.tag)
 			.add(Blocks.IRON_BARS)
 			.add(Blocks.MANGROVE_ROOTS)
-			.addTag(BlockTags.CAMPFIRES)
-			.addTag(BlockTags.FENCES)
-			.addTag(BlockTags.LEAVES);
+			.forceAddTag(BlockTags.CAMPFIRES)
+			.forceAddTag(BlockTags.FENCES)
+			.forceAddTag(BlockTags.LEAVES);
 
 		prov.tag(AllBlockTags.MOVABLE_EMPTY_COLLIDER.tag)
 			.add(Blocks.COBWEB, Blocks.POWDER_SNOW, Blocks.TRIPWIRE, Blocks.TRIPWIRE_HOOK)
-			.addTag(BlockTags.FENCE_GATES);
+			.forceAddTag(BlockTags.FENCE_GATES);
 
 		prov.tag(AllBlockTags.ORE_OVERRIDE_STONE.tag)
-			.addTag(BlockTags.STONE_ORE_REPLACEABLES);
+			.forceAddTag(BlockTags.STONE_ORE_REPLACEABLES);
 
 		prov.tag(AllBlockTags.PASSIVE_BOILER_HEATERS.tag)
 			.add(Blocks.MAGMA_BLOCK, Blocks.LAVA)
-			.addTag(BlockTags.CAMPFIRES)
-			.addTag(BlockTags.FIRE);
+			.forceAddTag(BlockTags.CAMPFIRES)
+			.forceAddTag(BlockTags.FIRE);
 
 		prov.tag(AllBlockTags.SAFE_NBT.tag)
-			.addTag(BlockTags.BANNERS)
-			.addTag(BlockTags.SIGNS);
+			.forceAddTag(BlockTags.BANNERS)
+			.forceAddTag(BlockTags.SIGNS);
 
 		prov.tag(AllBlockTags.TREE_ATTACHMENTS.tag)
 			.add(Blocks.BEE_NEST, Blocks.COCOA, Blocks.MANGROVE_PROPAGULE, Blocks.MOSS_CARPET, Blocks.SHROOMLIGHT, Blocks.VINE);
 
 		prov.tag(AllBlockTags.WINDMILL_SAILS.tag)
-			.addTag(BlockTags.WOOL);
+			.forceAddTag(BlockTags.WOOL);
 
 		prov.tag(AllBlockTags.WRENCH_PICKUP.tag)
 			.add(Blocks.REDSTONE_WIRE, Blocks.REDSTONE_TORCH, Blocks.REPEATER, Blocks.LEVER,
 					Blocks.COMPARATOR, Blocks.OBSERVER, Blocks.REDSTONE_WALL_TORCH, Blocks.PISTON, Blocks.STICKY_PISTON,
 					Blocks.TRIPWIRE, Blocks.TRIPWIRE_HOOK, Blocks.DAYLIGHT_DETECTOR, Blocks.TARGET, Blocks.HOPPER)
-			.addTag(BlockTags.BUTTONS)
-			.addTag(BlockTags.PRESSURE_PLATES)
-			.addTag(BlockTags.RAILS);
+			.forceAddTag(BlockTags.BUTTONS)
+			.forceAddTag(BlockTags.PRESSURE_PLATES)
+			.forceAddTag(BlockTags.RAILS);
 
 		// COMPAT
 
@@ -110,12 +110,12 @@ public class CreateRegistrateTags {
 			.add(Items.STONE_SLAB, Items.SMOOTH_STONE_SLAB, Items.ANDESITE_SLAB);
 
 		prov.tag(AllItemTags.STRIPPED_LOGS.tag)
-			.addTag(AllItemTags.VANILLA_STRIPPED_LOGS.tag)
-			.addTag(AllItemTags.MODDED_STRIPPED_LOGS.tag);
+			.forceAddTag(AllItemTags.VANILLA_STRIPPED_LOGS.tag)
+			.forceAddTag(AllItemTags.MODDED_STRIPPED_LOGS.tag);
 
 		prov.tag(AllItemTags.STRIPPED_WOOD.tag)
-			.addTag(AllItemTags.VANILLA_STRIPPED_WOOD.tag)
-			.addTag(AllItemTags.MODDED_STRIPPED_WOOD.tag);
+			.forceAddTag(AllItemTags.VANILLA_STRIPPED_WOOD.tag)
+			.forceAddTag(AllItemTags.MODDED_STRIPPED_WOOD.tag);
 
 		prov.tag(AllItemTags.DEPLOYABLE_DRINK.tag)
 			.add(Items.MILK_BUCKET, Items.POTION);
@@ -138,10 +138,10 @@ public class CreateRegistrateTags {
 				Items.STRIPPED_OAK_WOOD, Items.STRIPPED_SPRUCE_WOOD, Items.STRIPPED_WARPED_HYPHAE);
 
 		prov.tag(ItemTags.BEACON_PAYMENT_ITEMS)
-			.addTag(AllItemTags.CREATE_INGOTS.tag);
+			.forceAddTag(AllItemTags.CREATE_INGOTS.tag);
 
 		prov.tag(Tags.Items.INGOTS)
-			.addTag(AllItemTags.CREATE_INGOTS.tag);
+			.forceAddTag(AllItemTags.CREATE_INGOTS.tag);
 
 		// COMPAT
 
@@ -201,6 +201,10 @@ public class CreateRegistrateTags {
 
 		prov.tag(AllFluidTags.FAN_PROCESSING_CATALYSTS_SPLASHING.tag)
 			.add(Fluids.WATER, Fluids.FLOWING_WATER);
+
+		// fabric: extra tag for diving helmet behavior
+		prov.tag(AllFluidTags.DIVING_FLUIDS.tag)
+			.add(Fluids.WATER);
 
 		// VALIDATE
 

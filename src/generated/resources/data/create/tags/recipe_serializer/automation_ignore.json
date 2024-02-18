@@ -1,12 +1,4 @@
 {
-  "values": [
-    {
-      "id": "occultism:spirit_trade",
-      "required": false
-    },
-    {
-      "id": "occultism:ritual",
-      "required": false
-    }
-  ]
+  "replace": false,
+  "values": []
 }
