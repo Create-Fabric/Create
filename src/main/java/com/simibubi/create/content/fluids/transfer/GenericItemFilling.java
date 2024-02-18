@@ -4,6 +4,8 @@ import com.simibubi.create.AllFluids;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.fluids.potion.PotionFluidHandler;
 import com.simibubi.create.foundation.fluid.FluidHelper;
+
+import io.github.fabricators_of_create.porting_lib.transfer.MutableContainerItemContext;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 
@@ -126,7 +128,7 @@ public class GenericItemFilling {
 
 		ItemStack split = stack.copy();
 		split.setCount(1);
-		ContainerItemContext ctx = ContainerItemContext.withConstant(split);
+		MutableContainerItemContext ctx = new MutableContainerItemContext(split);
 		Storage<FluidVariant> tank = FluidStorage.ITEM.find(split, ctx);
 		if (tank == null)
 			return ItemStack.EMPTY;
