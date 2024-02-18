@@ -13,6 +13,7 @@ import com.tterrag.registrate.providers.RegistrateTagsProvider;
 import me.alphamode.forgetags.Tags;
 import net.minecraft.data.tags.TagsProvider.TagAppender;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -22,6 +23,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 
+// fabric: all uses of addTag must be replaced with forceAddTag.
 public class CreateRegistrateTags {
 	public static void addGenerators() {
 		Create.REGISTRATE.addDataGenerator(ProviderType.BLOCK_TAGS, CreateRegistrateTags::genBlockTags);
@@ -94,7 +96,8 @@ public class CreateRegistrateTags {
 		TagGen.addOptional(prov.tag(AllBlockTags.NON_MOVABLE.tag), Mods.IE,
 				"connector_lv", "connector_lv_relay", "connector_mv", "connector_mv_relay",
 				"connector_hv", "connector_hv_relay", "connector_bundled", "connector_structural",
-				"connector_redstone", "connector_probe", "breaker_switch");
+						"connector_redstone", "connector_probe", "breaker_switch")
+				.addOptional(Mods.BC.asResource("bits_block")); // fabric: Causes Problems last I checked. TODO: re-evaluate
 
 		// VALIDATE
 
@@ -202,9 +205,10 @@ public class CreateRegistrateTags {
 		prov.tag(AllFluidTags.FAN_PROCESSING_CATALYSTS_SPLASHING.tag)
 			.add(Fluids.WATER, Fluids.FLOWING_WATER);
 
-		// fabric: extra tag for diving helmet behavior
+		// fabric: this was requested by TelepathicGrunt for swimming in Bumblezone honey.
+		// This is not needed on Forge as FluidType is sufficient.
 		prov.tag(AllFluidTags.DIVING_FLUIDS.tag)
-			.add(Fluids.WATER);
+				.forceAddTag(FluidTags.WATER);
 
 		// VALIDATE
 
