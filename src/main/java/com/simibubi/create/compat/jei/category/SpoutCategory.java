@@ -65,7 +65,7 @@ public class SpoutCategory extends CreateRecipeCategory<FillingRecipe> {
 				continue;
 			}
 
-			MutableContainerItemContext testCtx = new MutableContainerItemContext(stack);
+			ContainerItemContext testCtx = ContainerItemContext.withConstant(stack);
 			Storage<FluidVariant> testStorage = testCtx.find(FluidStorage.ITEM);
 			if (testStorage == null)
 				continue;
@@ -73,7 +73,7 @@ public class SpoutCategory extends CreateRecipeCategory<FillingRecipe> {
 			for (IJeiFluidIngredient ingredient : fluidStacks) {
 				FluidStack fluidStack = fromJei(ingredient);
 				ItemStack copy = stack.copy();
-				ContainerItemContext ctx = ContainerItemContext.withConstant(copy);
+				MutableContainerItemContext ctx = new MutableContainerItemContext(copy);
 				Storage<FluidVariant> storage = ctx.find(FluidStorage.ITEM);
 				if (!GenericItemFilling.isFluidHandlerValid(copy, storage))
 					continue;
