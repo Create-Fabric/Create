@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "create:cuckoo_surprise"
+    {
+      "id": "create:cuckoo_surprise",
+      "required": false
+    }
   ]
 }

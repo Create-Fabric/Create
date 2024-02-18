@@ -2025,6 +2025,7 @@ public class AllBlocks {
 		.initialProperties(SharedProperties::softMetal)
 		.properties(p -> p.mapColor(MapColor.COLOR_GRAY).sound(SoundType.NETHERITE_BLOCK))
 		.transform(pickaxeOnly())
+		.blockstate(GirderBlockStateGenerator::blockState)
 		.onRegister(CreateRegistrate.blockModel(() -> ConnectedGirderModel::new))
 		.item()
 		.transform(customItemModel())

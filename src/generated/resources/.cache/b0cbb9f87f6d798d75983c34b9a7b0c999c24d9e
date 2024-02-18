@@ -1,0 +1,4 @@
+// 1.20.1	2024-02-18T11:41:16.252297573	Create/Create's Damage Type Tags
+5d63720dedceac08ff2b3254ed9c4e115a0e58bd data/minecraft/tags/damage_type/bypasses_armor.json
+26ff06a2186b8ea8773c6e958e11ce9aafa45792 data/minecraft/tags/damage_type/is_fire.json
+d17cbaf115b5714550eb14a9155b5b34f32471f3 data/minecraft/tags/damage_type/is_explosion.json
