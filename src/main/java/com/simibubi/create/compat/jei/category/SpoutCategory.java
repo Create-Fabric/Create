@@ -18,6 +18,7 @@ import com.simibubi.create.foundation.utility.RegisteredObjects;
 
 import com.simibubi.create.foundation.item.ItemHelper;
 
+import io.github.fabricators_of_create.porting_lib.transfer.MutableContainerItemContext;
 import io.github.fabricators_of_create.porting_lib.transfer.TransferUtil;
 import io.github.fabricators_of_create.porting_lib.util.FluidStack;
 import mezz.jei.api.constants.VanillaTypes;
@@ -63,7 +64,7 @@ public class SpoutCategory extends CreateRecipeCategory<FillingRecipe> {
 				continue;
 			}
 
-			ContainerItemContext testCtx = ContainerItemContext.withConstant(stack);
+			MutableContainerItemContext testCtx = new MutableContainerItemContext(stack);
 			Storage<FluidVariant> testStorage = testCtx.find(FluidStorage.ITEM);
 			if (testStorage == null)
 				continue;
