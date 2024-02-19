@@ -67,8 +67,8 @@ public class CrushingWheelControllerBlockEntity extends SmartBlockEntity impleme
 		inventory = new ProcessingInventory(this::itemInserted) {
 
 			@Override
-			public boolean isItemValid(int slot, ItemVariant stack) {
-				return super.isItemValid(slot, stack) && processingEntity == null;
+			public boolean isItemValid(int slot, ItemVariant stack, int amount) {
+				return super.isItemValid(slot, stack, amount) && processingEntity == null;
 			}
 
 		};

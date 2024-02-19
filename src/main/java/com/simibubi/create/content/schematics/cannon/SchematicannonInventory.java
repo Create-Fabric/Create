@@ -23,7 +23,7 @@ public class SchematicannonInventory extends ItemStackHandler {
 	}
 
 	@Override
-	public boolean isItemValid(int slot, ItemVariant stack) {
+	public boolean isItemValid(int slot, ItemVariant stack, int count) {
 		switch (slot) {
 		case 0: // Blueprint Slot
 			return AllItems.SCHEMATIC.get() == stack.getItem();
@@ -37,7 +37,7 @@ public class SchematicannonInventory extends ItemStackHandler {
 		case 4: // Gunpowder
 			return stack.isOf(Items.GUNPOWDER);
 		default:
-			return super.isItemValid(slot, stack);
+			return super.isItemValid(slot, stack, count);
 		}
 	}
 }
