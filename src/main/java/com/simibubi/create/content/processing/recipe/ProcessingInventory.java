@@ -82,7 +82,7 @@ public class ProcessingInventory extends ItemStackHandlerContainer {
 	}
 
 	@Override
-	public boolean isItemValid(int slot, ItemVariant resource) {
+	public boolean isItemValid(int slot, ItemVariant resource, int count) {
 		return slot == 0 && isEmpty();
 	}
 
