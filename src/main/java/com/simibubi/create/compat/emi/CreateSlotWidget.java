@@ -35,7 +35,7 @@ public class CreateSlotWidget extends SlotWidget {
 		List<ClientTooltipComponent> tooltip = super.getTooltip(mouseX, mouseY);
 		if (stack instanceof EmiStack emiStack && emiStack.getKey() instanceof Fluid fluid) {
 			// add custom fluid tooltip
-			FluidVariant variant = FluidVariant.of(fluid);
+			FluidVariant variant = FluidVariant.of(fluid, emiStack.getNbt());
 			addCreateAmount(tooltip, variant);
 			removeEmiAmount(tooltip, variant);
 		}
