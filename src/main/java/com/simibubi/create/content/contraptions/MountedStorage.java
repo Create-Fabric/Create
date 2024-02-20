@@ -168,7 +168,8 @@ public class MountedStorage {
 				// we need to remove whatever is in there to fill with our modified contents
 				TransferUtil.clearStorage(teHandler);
 				for (StorageView<ItemVariant> view : handler.nonEmptyViews()) {
-					teHandler.insert(view.getResource(), view.getAmount(), t);
+					if (!view.getResource().isBlank() && view.getResource() != ItemVariant.blank())
+						teHandler.insert(view.getResource(), view.getAmount(), t);
 				}
 				t.commit();
 			}
