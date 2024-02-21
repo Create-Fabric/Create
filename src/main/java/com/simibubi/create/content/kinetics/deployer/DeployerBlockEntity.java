@@ -193,6 +193,10 @@ public class DeployerBlockEntity extends KineticBlockEntity implements SidedStor
 		if (level.isClientSide)
 			return;
 
+		// fabric: https://github.com/Fabricators-of-Create/Create/issues/1139
+		if (player == null)
+			return;
+
 		ItemStack stack = player.getMainHandItem();
 		if (state == State.WAITING) {
 			if (!overflowItems.isEmpty()) {
