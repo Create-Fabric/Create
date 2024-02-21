@@ -301,8 +301,8 @@ public class CommonEvents {
 		LivingEntityEvents.DROPS.register(DeployerFakePlayer::deployerCollectsDropsFromKilledEntities);
 		LivingEntityEvents.EQUIPMENT_CHANGE.register(NetheriteDivingHandler::onLivingEquipmentChange);
 		EntityEvents.EYE_HEIGHT.register(DeployerFakePlayer::deployerHasEyesOnHisFeet);
-		BlockEvents.AFTER_PLACE.register(SymmetryHandler::onBlockPlaced);
-		BlockEvents.AFTER_PLACE.register(SuperGlueHandler::glueListensForBlockPlacement);
+		BlockEvents.POST_PROCESS_PLACE.register(SymmetryHandler::onBlockPlaced);
+		BlockEvents.POST_PROCESS_PLACE.register(SuperGlueHandler::glueListensForBlockPlacement);
 		ProjectileImpactCallback.EVENT.register(BlazeBurnerHandler::onThrowableImpact);
 		EntityReadExtraDataCallback.EVENT.register(ExtendoGripItem::addReachToJoiningPlayersHoldingExtendo);
 		MinecartEvents.SPAWN.register(AbstractMinecartExtensions::minecartSpawn);
