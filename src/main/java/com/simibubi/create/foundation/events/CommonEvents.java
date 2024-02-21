@@ -263,8 +263,8 @@ public class CommonEvents {
 		LivingEntityEvents.DROPS.register(DeployerFakePlayer::deployerCollectsDropsFromKilledEntities);
 		ServerEntityEvents.EQUIPMENT_CHANGE.register(NetheriteDivingHandler::onLivingEquipmentChange);
 		EntityEvents.SIZE.register(DeployerFakePlayer::deployerHasEyesOnHisFeet);
-		BlockEvents.AFTER_PLACE.register(SymmetryHandler::onBlockPlaced);
-		BlockEvents.AFTER_PLACE.register(SuperGlueHandler::glueListensForBlockPlacement);
+		BlockEvents.POST_PROCESS_PLACE.register(SymmetryHandler::onBlockPlaced);
+		BlockEvents.POST_PROCESS_PLACE.register(SuperGlueHandler::glueListensForBlockPlacement);
 		EntityEvents.PROJECTILE_IMPACT.register(BlazeBurnerHandler::onThrowableImpact);
 		EntityDataEvents.LOAD.register(ExtendoGripItem::addReachToJoiningPlayersHoldingExtendo);
 		PlayerBlockBreakEvents.BEFORE.register(SymmetryHandler::onBlockDestroyed);

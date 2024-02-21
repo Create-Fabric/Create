@@ -47,13 +47,13 @@ public class SymmetryHandler {
 	private static int tickCounter = 0;
 	private static boolean handlingSymmetry = false; // fabric: prevent infinite recursion in break event listening
 
-	public static void onBlockPlaced(BlockPlaceContext context) {
+	public static void onBlockPlaced(BlockPlaceContext context, BlockPos pos, BlockState state) {
 		if (context.getLevel()
 			.isClientSide())
 			return;
 
 		Item held = context.getItemInHand().getItem();
-		if (!(held instanceof BlockItem block))
+		if (!(held instanceof BlockItem))
 			return;
 
 		Player player = context.getPlayer();
@@ -65,7 +65,7 @@ public class SymmetryHandler {
 				.isEmpty()
 				&& inv.getItem(i)
 					.getItem() == AllItems.WAND_OF_SYMMETRY.get()) {
-				SymmetryWandItem.apply(player.level(), inv.getItem(i), player, context.getClickedPos(), block.getBlock().getStateForPlacement(context));
+				SymmetryWandItem.apply(player.level(), inv.getItem(i), player, pos, state);
 			}
 		}
 	}

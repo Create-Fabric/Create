@@ -30,10 +30,9 @@ import net.minecraft.world.phys.Vec3;
 
 public class SuperGlueHandler {
 
-	public static void glueListensForBlockPlacement(BlockPlaceContext context) {
+	public static void glueListensForBlockPlacement(BlockPlaceContext context, BlockPos pos, BlockState state) {
 		LevelAccessor world = context.getLevel();
 		Player entity = context.getPlayer();
-		BlockPos pos = context.getClickedPos();
 
 		if (entity == null || AdventureUtil.isAdventure(entity))
 			return;
