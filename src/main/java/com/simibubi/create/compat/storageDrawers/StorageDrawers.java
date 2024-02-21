@@ -2,23 +2,21 @@
 //
 //import com.simibubi.create.compat.Mods;
 //import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
+//import com.simibubi.create.foundation.utility.RegisteredObjects;
 //
-//import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-//import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 //import net.minecraft.world.item.ItemStack;
 //import net.minecraft.world.level.block.entity.BlockEntity;
-//import net.minecraft.world.level.block.entity.BlockEntityType;
 //import net.minecraftforge.items.IItemHandler;
 //
 //public class StorageDrawers {
 //
 //	public static boolean isDrawer(BlockEntity be) {
 //		return be != null && Mods.STORAGEDRAWERS.id()
-//				.equals(BlockEntityType.getKey(be.getType())
-//						.getNamespace());
+//			.equals(RegisteredObjects.getKeyOrThrow(be.getType())
+//				.getNamespace());
 //	}
 //
-//	public static float getTrueFillLevel(Storage<ItemVariant> inv, FilteringBehaviour filtering) {
+//	public static float getTrueFillLevel(IItemHandler inv, FilteringBehaviour filtering) {
 //		float occupied = 0;
 //		float totalSpace = 0;
 //

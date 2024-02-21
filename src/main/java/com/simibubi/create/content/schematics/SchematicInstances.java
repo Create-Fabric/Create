@@ -27,8 +27,6 @@ public class SchematicInstances {
 			.expireAfterAccess(5, TimeUnit.MINUTES)
 			.build());
 
-	public static void register() {}
-
 	@Nullable
 	public static SchematicWorld get(Level world, ItemStack schematic) {
 		Cache<Integer, SchematicWorld> map = LOADED_SCHEMATICS.get(world);

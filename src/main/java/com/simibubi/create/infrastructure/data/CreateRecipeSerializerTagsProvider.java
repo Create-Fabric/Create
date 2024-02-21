@@ -1,6 +1,7 @@
 package com.simibubi.create.infrastructure.data;
 
 import com.simibubi.create.AllTags.AllRecipeSerializerTags;
+import com.simibubi.create.compat.Mods;
 
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
@@ -14,9 +15,9 @@ public class CreateRecipeSerializerTagsProvider extends TagsProvider<RecipeSeria
 
 	@Override
 	protected void addTags() {
-//		tag(AllRecipeSerializerTags.AUTOMATION_IGNORE.tag)
-//			.addOptional(Mods.OCCULTISM.rl("spirit_trade"))
-//			.addOptional(Mods.OCCULTISM.rl("ritual"));
+		tag(AllRecipeSerializerTags.AUTOMATION_IGNORE.tag)
+			.addOptional(Mods.OCCULTISM.rl("spirit_trade"))
+			.addOptional(Mods.OCCULTISM.rl("ritual"));
 
 		// VALIDATE
 

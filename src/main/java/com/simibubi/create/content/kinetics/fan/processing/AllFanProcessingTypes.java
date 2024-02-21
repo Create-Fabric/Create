@@ -12,6 +12,8 @@ import io.github.fabricators_of_create.porting_lib.util.DamageSourceHelper;
 
 import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 
+import net.minecraft.util.RandomSource;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.math.Vector3f;

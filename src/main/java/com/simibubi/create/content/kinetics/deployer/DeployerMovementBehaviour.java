@@ -152,9 +152,6 @@ public class DeployerMovementBehaviour implements MovementBehaviour {
 				// if we get here all requirements were met
 				t.commit();
 			}
-			for (ItemRequirement.StackRequirement required : requiredItems)
-				contextStack = ItemHelper.extract(itemHandler, required::matches,
-					ExtractionCountMode.EXACTLY, required.stack.getCount(), false);
 		}
 
 		CompoundTag data = BlockHelper.prepareBlockEntityData(blockState, schematicWorld.getBlockEntity(pos));

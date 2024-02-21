@@ -3,13 +3,12 @@ package com.simibubi.create.foundation.blockEntity.behaviour.inventory;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import io.github.fabricators_of_create.porting_lib.transfer.item.ItemHandlerHelper;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.minecraft.world.item.ItemStack;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class VersionedInventoryWrapper implements Storage<ItemVariant> {
@@ -30,6 +29,13 @@ public class VersionedInventoryWrapper implements Storage<ItemVariant> {
 	}
 
 	@Override
+	public long getVersion() {
+		return inventory.getVersion();
+	}
+
+	//
+
+	@Override
 	public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction) {
 		return inventory.insert(resource, maxAmount, transaction);
 	}
@@ -37,6 +43,12 @@ public class VersionedInventoryWrapper implements Storage<ItemVariant> {
 	@Override
 	public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction) {
 		return inventory.extract(resource, maxAmount, transaction);
+	}
+
+	@Override
+	@NotNull
+	public Iterator<StorageView<ItemVariant>> iterator() {
+		return inventory.iterator();
 	}
 
 	@Override
@@ -60,17 +72,8 @@ public class VersionedInventoryWrapper implements Storage<ItemVariant> {
 	}
 
 	@Override
-	public Iterator<StorageView<ItemVariant>> iterator() {
-		return inventory.iterator();
-	}
-
-	@Override
-	public @Nullable StorageView<ItemVariant> exactView(ItemVariant resource) {
+	@Nullable
+	public StorageView<ItemVariant> exactView(ItemVariant resource) {
 		return inventory.exactView(resource);
-	}
-
-	@Override
-	public long getVersion() {
-		return inventory.getVersion();
 	}
 }

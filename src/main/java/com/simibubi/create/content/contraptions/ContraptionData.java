@@ -20,6 +20,10 @@ public class ContraptionData {
 	 */
 	public static final int CONNECTIVITY_LIMIT = Integer.MAX_VALUE;
 	/**
+	 * Packet Fixer expands the NBT packet limit to 200 MB.
+	 */
+	public static final int PACKET_FIXER_LIMIT = 209_715_200;
+	/**
 	 * XL Packets expands the NBT packet limit to 2 GB.
 	 */
 	public static final int XL_PACKETS_LIMIT = 2_000_000_000;
@@ -44,8 +48,11 @@ public class ContraptionData {
 		if (Mods.XLPACKETS.isLoaded()) {
 			limit = XL_PACKETS_LIMIT;
 		}
+		if (Mods.PACKETFIXER.isLoaded()) {
+			limit = PACKET_FIXER_LIMIT;
+		}
 
-        PICKUP_LIMIT = limit;
+		PICKUP_LIMIT = limit;
 	}
 
 	/**

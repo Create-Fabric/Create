@@ -26,7 +26,7 @@
       "com.simibubi.create.CreateClient"
     ],
     "fabric-datagen": [
-      "com.simibubi.create.CreateData"
+      "com.simibubi.create.infrastructure.data.CreateDatagen"
     ],
     "fabric-gametest": [
       "com.simibubi.create.infrastructure.gametest.CreateGameTests"

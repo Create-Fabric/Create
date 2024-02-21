@@ -15,6 +15,8 @@ import javax.annotation.Nullable;
 
 import com.simibubi.create.content.trains.graph.DiscoveredPath;
 
+import com.simibubi.create.content.trains.graph.DiscoveredPath;
+
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllPackets;

@@ -8,6 +8,11 @@ import com.google.gson.JsonObject;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
+import com.simibubi.create.foundation.data.TagLangGen;
+import com.simibubi.create.foundation.data.recipe.MechanicalCraftingRecipeGen;
+import com.simibubi.create.foundation.data.recipe.ProcessingRecipeGen;
+import com.simibubi.create.foundation.data.recipe.SequencedAssemblyRecipeGen;
+import com.simibubi.create.foundation.data.recipe.StandardRecipeGen;
 import com.simibubi.create.foundation.ponder.PonderLocalization;
 import com.simibubi.create.foundation.utility.FilesHelper;
 import com.simibubi.create.infrastructure.ponder.AllPonderTags;
@@ -16,8 +21,43 @@ import com.simibubi.create.infrastructure.ponder.PonderIndex;
 import com.simibubi.create.infrastructure.ponder.SharedText;
 import com.tterrag.registrate.providers.ProviderType;
 
-public class CreateDatagen {
-	public static void addExtraRegistrateData() {
+import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.minecraftforge.common.data.ExistingFileHelper;
+
+public class CreateDatagen implements DataGeneratorEntrypoint {
+	@Override
+	public void onInitializeDataGenerator(FabricDataGenerator generator) {
+		ExistingFileHelper helper = ExistingFileHelper.withResourcesFromArg();
+		Create.REGISTRATE.setupDatagen(generator, helper);
+		gatherData(generator, helper);
+	}
+
+	public static void gatherData(FabricDataGenerator generator, ExistingFileHelper existingFileHelper) {
+		addExtraRegistrateData();
+
+		// fabric: tag lang
+		TagLangGen.datagen();
+
+//		if (event.includeClient()) {
+			generator.addProvider(true, AllSoundEvents.provider(generator));
+//		}
+
+//		if (event.includeServer()) {
+			generator.addProvider(true, new CreateRecipeSerializerTagsProvider(generator));
+
+			generator.addProvider(true, new AllAdvancements(generator));
+
+			generator.addProvider(true, new StandardRecipeGen(generator));
+			generator.addProvider(true, new MechanicalCraftingRecipeGen(generator));
+			generator.addProvider(true, new SequencedAssemblyRecipeGen(generator));
+			ProcessingRecipeGen.registerAll(generator);
+
+//			AllOreFeatureConfigEntries.gatherData(event);
+//		}
+	}
+
+	private static void addExtraRegistrateData() {
 		CreateRegistrateTags.addGenerators();
 
 		Create.REGISTRATE.addDataGenerator(ProviderType.LANG, provider -> {

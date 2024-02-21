@@ -302,7 +302,6 @@ public class SuperGlueEntity extends Entity
 	public void setPortalEntrancePos() {
 		portalEntrancePos = blockPosition();
 	}
-
 	@Override
 	public PortalInfo findDimensionEntryPoint(ServerLevel pDestination) {
 		return super.findDimensionEntryPoint(pDestination);

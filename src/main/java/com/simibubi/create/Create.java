@@ -2,8 +2,8 @@ package com.simibubi.create;
 
 import java.util.Random;
 
-import com.simibubi.create.infrastructure.data.CreateRecipeSerializerTagsProvider;
 import com.simibubi.create.foundation.recipe.AllIngredients;
+import com.simibubi.create.infrastructure.data.CreateRecipeSerializerTagsProvider;
 
 import org.slf4j.Logger;
 
@@ -19,10 +19,10 @@ import com.simibubi.create.content.decoration.palettes.AllPaletteBlocks;
 import com.simibubi.create.content.equipment.potatoCannon.BuiltinPotatoProjectileTypes;
 import com.simibubi.create.content.fluids.tank.BoilerHeaters;
 import com.simibubi.create.content.kinetics.TorquePropagator;
+import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.mechanicalArm.AllArmInteractionPointTypes;
 import com.simibubi.create.content.redstone.displayLink.AllDisplayBehaviours;
 import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler;
-import com.simibubi.create.content.schematics.SchematicInstances;
 import com.simibubi.create.content.schematics.ServerSchematicLoader;
 import com.simibubi.create.content.trains.GlobalRailwayManager;
 import com.simibubi.create.content.trains.bogey.BogeySizes;
@@ -117,29 +117,34 @@ public class Create implements ModInitializer {
 		AllParticleTypes.register();
 		AllStructureProcessorTypes.register();
 		AllEntityDataSerializers.register();
+		AllPackets.registerPackets();
 		AllOreFeatureConfigEntries.init();
 		AllFeatures.register();
 		AllPlacementModifiers.register();
 		BuiltinRegistration.register();
-		BogeySizes.init();
-		AllBogeyStyles.register();
 
 		AllConfigs.register();
 
+		// FIXME: some of these registrations are not thread-safe
 		AllMovementBehaviours.registerDefaults();
 		AllInteractionBehaviours.registerDefaults();
 		AllPortalTracks.registerDefaults();
 		AllDisplayBehaviours.registerDefaults();
 		ContraptionMovementSetting.registerDefaults();
 		AllArmInteractionPointTypes.register();
+		AllFanProcessingTypes.register();
 		BlockSpoutingBehaviour.registerDefaults();
+		BogeySizes.init();
+		AllBogeyStyles.register();
+		// ----
+
 		ComputerCraftProxy.register();
 
 		Milk.enableMilkFluid();
 		CopperRegistries.inject();
 
 		Create.init();
-//		modEventBus.addListener(EventPriority.LOWEST, Create::gatherData); // CreateData entrypoint
+//		modEventBus.addListener(EventPriority.LOWEST, CreateDatagen::gatherData); // CreateData entrypoint
 		AllSoundEvents.register();
 
 		// causes class loading issues or something
@@ -153,34 +158,22 @@ public class Create implements ModInitializer {
 	}
 
 	public static void init() {
-		AllPackets.registerPackets();
-		SchematicInstances.register();
-		BuiltinPotatoProjectileTypes.register();
+		AllFluids.registerFluidInteractions();
 
 //		event.enqueueWork(() -> {
-			AllAdvancements.register();
-			AllTriggers.register();
+			// TODO: custom registration should all happen in one place
+			// Most registration happens in the constructor.
+			// These registrations use Create's registered objects directly so they must run after registration has finished.
+			BuiltinPotatoProjectileTypes.register();
 			BoilerHeaters.registerDefaults();
 			AllFluids.registerFluidInteractions();
+//		--
+
+			// fabric: registration not done yet, do it later
+			ServerLifecycleEvents.SERVER_STARTING.register(server -> AttachedRegistry.unwrapAll());
+			AllAdvancements.register();
+			AllTriggers.register();
 //		});
-
-		// fabric: registration not done yet, do it later
-		ServerLifecycleEvents.SERVER_STARTING.register(server -> AttachedRegistry.unwrapAll());
-	}
-
-	public static void gatherData(FabricDataGenerator gen, ExistingFileHelper helper) {
-		CreateDatagen.addExtraRegistrateData();
-
-		TagLangGen.datagen();
-
-		gen.addProvider(AllSoundEvents.provider(gen));
-		gen.addProvider(new CreateRecipeSerializerTagsProvider(gen));
-		gen.addProvider(new AllAdvancements(gen));
-		gen.addProvider(new StandardRecipeGen(gen));
-		gen.addProvider(new MechanicalCraftingRecipeGen(gen));
-		gen.addProvider(new SequencedAssemblyRecipeGen(gen));
-		ProcessingRecipeGen.registerAll(gen);
-//		AllOreFeatureConfigEntries.gatherData(gen);
 	}
 
 	public static ResourceLocation asResource(String path) {

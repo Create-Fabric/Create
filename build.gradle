@@ -24,7 +24,8 @@ repositories {
     maven { url = "https://maven.parchmentmc.org" } // Parchment
     maven { url = "https://maven.fabricmc.net/" } // FAPI, Loader
     maven { url = "https://mvn.devos.one/snapshots/" } // Registrate, Porting Lib, Forge Tags, Milk Lib
-    maven { url = "https://cursemaven.com" } // Forge Config API Port
+    maven { url = "https://jitpack.io/" } // for Porting Lib: Mixin Extras, Fabric ASM
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" } // Forge Config API Port
     maven { url = "https://maven.tterrag.com/" } // Flywheel
     maven { url = "https://maven.shedaniel.me/" } // REI and deps
     maven { url = "https://api.modrinth.com/maven" } // LazyDFU, Sodium, Sandwichable
@@ -65,7 +66,7 @@ def dependencies(DependencyHandler deps) {
 
     deps.modApi(deps.include("com.electronwill.night-config:core:$night_config_version"))
     deps.modApi(deps.include("com.electronwill.night-config:toml:$night_config_version"))
-    deps.modApi(deps.include("curse.maven:forge-config-api-port-fabric-547434:$config_api_id"))
+    deps.modApi(deps.include("net.minecraftforge:forgeconfigapiport-fabric:$forge_config_api_port_version"))
     deps.modApi(deps.include("com.jozufozu.flywheel:flywheel-fabric-$flywheel_minecraft_version:$flywheel_version"))
     deps.modApi(deps.include("com.jamieswhiteshirt:reach-entity-attributes:$reach_entity_attributes_version"))
     deps.modApi(deps.include("io.github.tropheusj:milk-lib:$milk_lib_version"))

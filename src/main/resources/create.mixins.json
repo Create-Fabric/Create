@@ -1,5 +1,6 @@
 {
   "required": true,
+  "minVersion": "0.8",
   "priority": 1100,
   "package": "com.simibubi.create.foundation.mixin",
   "compatibilityLevel": "JAVA_17",
@@ -19,6 +20,7 @@
     "accessor.LivingEntityAccessor",
     "accessor.NbtAccounterAccessor",
     "accessor.ServerLevelAccessor",
+    "accessor.SystemReportAccessor",
     "fabric.AbstractMinecartMixin",
     "fabric.EntityMixin",
     "fabric.ServerGamePacketListenerImplAccessor",
@@ -45,6 +47,5 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "minVersion": "0.8"
+  }
 }
