@@ -193,7 +193,9 @@ public class DeployerBlockEntity extends KineticBlockEntity implements SidedStor
 		if (level.isClientSide)
 			return;
 
-		// fabric: https://github.com/Fabricators-of-Create/Create/issues/1139
+		// https://github.com/Fabricators-of-Create/Create/issues/1139
+		// Somehow when paired with Jade player becomes null because owner is null (which shouldn't ever happen)
+		// This allows the block to actually break and drop but not crash the game
 		if (player == null)
 			return;
 
