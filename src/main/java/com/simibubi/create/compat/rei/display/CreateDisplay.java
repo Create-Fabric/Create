@@ -4,11 +4,16 @@ import static com.simibubi.create.compat.rei.category.CreateRecipeCategory.getRe
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import com.simibubi.create.content.processing.recipe.ProcessingOutput;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.Display;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 
 public class CreateDisplay<R extends Recipe<?>> implements Display {
@@ -25,8 +30,21 @@ public class CreateDisplay<R extends Recipe<?>> implements Display {
 	}
 
 	public CreateDisplay(R recipe, CategoryIdentifier<CreateDisplay<R>> id) {
-		this(recipe, id, EntryIngredients.ofIngredients(recipe.getIngredients()), Collections.singletonList(EntryIngredients.of(getResultItem(recipe))));
+		this.uid = id;
+		this.recipe = recipe;
+
+		this.input = EntryIngredients.ofIngredients(recipe.getIngredients());
+
+		if (recipe instanceof ProcessingRecipe) {
+			this.output = ((List<ItemStack>)((ProcessingRecipe) recipe).getRollableResultsAsItemStacks()).stream()
+				.map(EntryIngredients::of)
+				.collect(Collectors.toList());
+		} else {
+			this.output = Collections.singletonList(EntryIngredients.of(getResultItem(recipe)));
+		}
 	}
+
+
 
 	public R getRecipe() {
 		return recipe;

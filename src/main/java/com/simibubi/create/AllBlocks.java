@@ -1631,7 +1631,8 @@ public class AllBlocks {
 
 	public static final BlockEntry<ItemVaultBlock> ITEM_VAULT = REGISTRATE.block("item_vault", ItemVaultBlock::new)
 		.initialProperties(SharedProperties::softMetal)
-		.properties(p -> p.mapColor(MapColor.TERRACOTTA_BLUE).sound(SoundType.NETHERITE_BLOCK)
+		.properties(p -> p.mapColor(MapColor.TERRACOTTA_BLUE)
+			.sound(SoundType.NETHERITE_BLOCK)
 			.explosionResistance(1200))
 		.transform(pickaxeOnly())
 		.blockstate((c, p) -> p.getVariantBuilder(c.get())

@@ -4,16 +4,11 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import com.simibubi.create.AllTags;
-import com.simibubi.create.AllTags.AllBlockTags;
-import com.simibubi.create.AllTags.AllEntityTags;
-import com.simibubi.create.AllTags.AllFluidTags;
-import com.simibubi.create.AllTags.AllItemTags;
 import com.simibubi.create.Create;
 import com.simibubi.create.foundation.data.recipe.Mods;
 import com.simibubi.create.foundation.mixin.fabric.TagAppenderAccessor;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.builders.ItemBuilder;
-import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.RegistrateTagsProvider;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 
@@ -35,8 +30,6 @@ import net.minecraft.tags.TagBuilder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
@@ -91,25 +84,29 @@ public class TagGen {
 		}
 
 		public CreateTagAppender<T> tag(TagKey<T> tag) {
-			FabricTagProvider<T>.FabricTagBuilder fabricBuilder = provider.addTag(tag);
-			return new CreateTagAppender<>(fabricBuilder, keyExtractor);
+			return new CreateTagAppender<>(provider.addTag(tag), keyExtractor);
 		}
-
-		public TagBuilder getOrCreateRawBuilder(TagKey<T> tag) {
-			return provider.addTag(tag).builder;
+		
+		// fabric: this is just used to force datagen of tags
+		public void getOrCreateRawBuilder(TagKey<T> tag) {
+			this.tag(tag);
 		}
 	}
 
 	public static class CreateTagAppender<T> extends TagsProvider.TagAppender<T> {
 
 		private Function<T, ResourceKey<T>> keyExtractor;
-		private FabricTagProvider<T>.FabricTagBuilder fabricBuilder;
+		// fabric: take the fabric builder, use it to call forceAddTag instead of addTag
+		private final FabricTagProvider<T>.FabricTagBuilder fabricBuilder;
 
 		public CreateTagAppender(FabricTagProvider<T>.FabricTagBuilder fabricBuilder, Function<T, ResourceKey<T>> pKeyExtractor) {
-			//noinspection DataFlowIssue
-			super(((TagAppenderAccessor) (Object) fabricBuilder).getBuilder());
-			this.fabricBuilder = fabricBuilder;
+			super(getBuilder(fabricBuilder));
 			this.keyExtractor = pKeyExtractor;
+			this.fabricBuilder = fabricBuilder;
+		}
+
+		private static TagBuilder getBuilder(TagAppender<?> appender) {
+			return ((TagAppenderAccessor) appender).getBuilder();
 		}
 
 		public CreateTagAppender<T> add(T entry) {
@@ -128,8 +125,7 @@ public class TagGen {
 		@Override
 		@NotNull
 		public TagAppender<T> addTag(@NotNull TagKey<T> tag) {
-			// fabric: need to force add, since the vanilla tag validation doesn't work
-			fabricBuilder.forceAddTag(tag);
+			this.fabricBuilder.forceAddTag(tag);
 			return this;
 		}
 	}

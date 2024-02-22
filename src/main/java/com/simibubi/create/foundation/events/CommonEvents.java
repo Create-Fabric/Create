@@ -32,6 +32,7 @@ import com.simibubi.create.content.equipment.wrench.WrenchEventHandler;
 import com.simibubi.create.content.equipment.wrench.WrenchItem;
 import com.simibubi.create.content.equipment.zapper.ZapperInteractionHandler;
 import com.simibubi.create.content.equipment.zapper.ZapperItem;
+import com.simibubi.create.content.kinetics.belt.BeltHelper;
 import com.simibubi.create.content.fluids.FluidBottleItemHook;
 import com.simibubi.create.content.fluids.FluidReactions;
 import com.simibubi.create.content.kinetics.belt.BeltHelper;

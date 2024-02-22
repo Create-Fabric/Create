@@ -67,7 +67,7 @@ public class DebugInformation {
 	static {
 		DebugInfoSection.builder(Create.NAME)
 				.put("Mod Version", Create.VERSION)
-				.put("Fabric API Version", getVersionOfMod("fabric"))
+				.put("Fabric API Version", getVersionOfMod("fabric-api"))
 				.put("Minecraft Version", SharedConstants.getCurrentVersion().getName())
 				.buildTo(DebugInformation::registerBothInfo);
 
@@ -106,7 +106,7 @@ public class DebugInformation {
 		FabricLoader.getInstance().getAllMods().forEach(mod -> {
 			ModMetadata meta = mod.getMetadata();
 			String id = meta.getId();
-			if (!id.equals(Create.ID) && !id.equals("forge") && !id.equals("minecraft") && !id.equals("flywheel")) {
+			if (!id.equals(Create.ID) && !id.equals("fabric-api") && !id.equals("minecraft") && !id.equals("flywheel")) {
 				String name = meta.getName();
 				String version = meta.getVersion().toString();
 				mods.add(new InfoEntry(name, version));

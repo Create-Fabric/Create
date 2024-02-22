@@ -59,7 +59,7 @@ public class AllFluids {
 	// fabric: various Attributes/Types replaced with corresponding handlers
 
 	public static final FluidEntry<PotionFluid> POTION =
-			REGISTRATE.virtualFluid("potion", PotionFluid::new)
+			REGISTRATE.virtualFluid("potion", /*PotionFluidAttributes::new,*/ PotionFluid::new)
 					.lang("Potion")
 					.fluidAttributes(PotionFluidVariantAttributeHandler::new)
 					.register();

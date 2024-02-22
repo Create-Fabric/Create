@@ -2,7 +2,8 @@ package com.simibubi.create.content.kinetics.fan;
 
 import javax.annotation.Nonnull;
 
-import com.simibubi.create.foundation.utility.Color;
+import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
+import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import com.simibubi.create.foundation.utility.VecHelper;

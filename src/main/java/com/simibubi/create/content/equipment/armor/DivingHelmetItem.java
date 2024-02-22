@@ -1,8 +1,7 @@
 package com.simibubi.create.content.equipment.armor;
 
-import java.util.Map;
-
 import java.util.List;
+import java.util.Map;
 
 import com.simibubi.create.AllTags.AllFluidTags;
 import com.simibubi.create.foundation.advancement.AllAdvancements;

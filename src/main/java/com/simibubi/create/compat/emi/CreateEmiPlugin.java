@@ -240,7 +240,7 @@ public class CreateEmiPlugin implements EmiPlugin {
 		addAll(registry, AllRecipeTypes.MIXING, MIXING, MixingEmiRecipe::new);
 		for (CraftingRecipe recipe : manager.getAllRecipesFor(RecipeType.CRAFTING)) {
 			if (recipe instanceof ShapelessRecipe && !MechanicalPressBlockEntity.canCompress(recipe)
-					&& !AllRecipeTypes.shouldIgnoreInAutomation(recipe)) {
+					&& !AllRecipeTypes.shouldIgnoreInAutomation(recipe) && recipe.getIngredients().size() > 1) {
 				registry.addRecipe(new ShapelessEmiRecipe(AUTOMATIC_SHAPELESS, BasinRecipe.convertShapeless(recipe)));
 			}
 		}

@@ -212,7 +212,6 @@ public class CreateRegistrateTags {
 		prov.tag(AllFluidTags.FAN_PROCESSING_CATALYSTS_SPLASHING.tag)
 			.add(Fluids.WATER, Fluids.FLOWING_WATER);
 
-
 		// fabric: this was requested by TelepathicGrunt for swimming in Bumblezone honey.
 		// This is not needed on Forge as FluidType is sufficient.
 		prov.tag(AllFluidTags.DIVING_FLUIDS.tag)

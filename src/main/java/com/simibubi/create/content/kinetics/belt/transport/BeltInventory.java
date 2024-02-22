@@ -243,6 +243,8 @@ public class BeltInventory {
 			}
 
 			ProcessingResult result = processingBehaviour.handleHeldItem(currentItem, stackHandlerBehaviour);
+			if (currentItem.stack.isEmpty())
+				return true; // fabric: catch stacks that were emptied in processing
 			if (result == ProcessingResult.REMOVE)
 				return true;
 			if (result == ProcessingResult.HOLD)

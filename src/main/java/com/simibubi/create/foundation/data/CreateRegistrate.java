@@ -83,8 +83,6 @@ public class CreateRegistrate extends AbstractRegistrate<CreateRegistrate> {
 		return currentTooltipModifierFactory;
 	}
 
-	private static Map<RegistryEntry<?>, ResourceKey<CreativeModeTab>> tabLookup = new IdentityHashMap<>();
-
 	public CreateRegistrate setCreativeTab(ResourceKey<CreativeModeTab> tab) {
 		this.currentTab = tab;
 		return this;
@@ -169,7 +167,7 @@ public class CreateRegistrate extends AbstractRegistrate<CreateRegistrate> {
 		NonNullFunction<SimpleFlowableFluid.Properties, T> factory) {
 		return entry(name,
 			c -> new VirtualFluidBuilder<>(self(), self(), name, c, new ResourceLocation(getModid(), "fluid/" + name + "_still"),
-				new ResourceLocation(getModid(), "fluid/" + name + "_flow"), /*attributesFactory, */factory));
+				new ResourceLocation(getModid(), "fluid/" + name + "_flow"), /*typeFactory, */factory));
 	}
 
 	public <T extends SimpleFlowableFluid> FluidBuilder<T, CreateRegistrate> virtualFluid(String name, ResourceLocation still, ResourceLocation flow,

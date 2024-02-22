@@ -11,7 +11,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageType;
 
-// fabric: Must use addOptional otherwise validation will fail
 public class DamageTypeTagGen extends FabricTagProvider<DamageType> {
 	public DamageTypeTagGen(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
 		super(output, Registries.DAMAGE_TYPE, lookupProvider);
@@ -19,17 +18,12 @@ public class DamageTypeTagGen extends FabricTagProvider<DamageType> {
 
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
-		getOrCreateTagBuilder(DamageTypeTags.BYPASSES_ARMOR)
-				.addOptional(AllDamageTypes.CRUSH)
-				.addOptional(AllDamageTypes.FAN_FIRE)
-				.addOptional(AllDamageTypes.FAN_LAVA)
-				.addOptional(AllDamageTypes.DRILL)
-				.addOptional(AllDamageTypes.SAW);
-		getOrCreateTagBuilder(DamageTypeTags.IS_FIRE)
-				.addOptional(AllDamageTypes.FAN_FIRE)
-				.addOptional(AllDamageTypes.FAN_LAVA);
-		getOrCreateTagBuilder(DamageTypeTags.IS_EXPLOSION)
-				.addOptional(AllDamageTypes.CUCKOO_SURPRISE);
+		tag(DamageTypeTags.BYPASSES_ARMOR)
+				.add(AllDamageTypes.CRUSH, AllDamageTypes.FAN_FIRE, AllDamageTypes.FAN_LAVA, AllDamageTypes.DRILL, AllDamageTypes.SAW);
+		tag(DamageTypeTags.IS_FIRE)
+				.add(AllDamageTypes.FAN_FIRE, AllDamageTypes.FAN_LAVA);
+		tag(DamageTypeTags.IS_EXPLOSION)
+				.add(AllDamageTypes.CUCKOO_SURPRISE);
 	}
 
 	@Override

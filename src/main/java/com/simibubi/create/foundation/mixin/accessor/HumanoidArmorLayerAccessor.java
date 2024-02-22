@@ -26,4 +26,5 @@ public interface HumanoidArmorLayerAccessor {
 
 	@Invoker("setPartVisibility")
 	void create$callSetPartVisibility(HumanoidModel<?> model, EquipmentSlot slot);
+
 }
