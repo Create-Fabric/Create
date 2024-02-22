@@ -193,7 +193,7 @@ public class DeployerBlockEntity extends KineticBlockEntity implements ItemTrans
 		if (level.isClientSide)
 			return;
 
-		// https://github.com/Fabricators-of-Create/Create/issues/1139
+		// https://github.com/Fabricators-of-Create/Create/issues/1139 | Occurs on forge as well
 		// Somehow when paired with Jade player becomes null because owner is null (which shouldn't ever happen)
 		// This allows the block to actually break and drop but not crash the game
 		if (player == null)
