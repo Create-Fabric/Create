@@ -187,7 +187,7 @@ public class MountedStorage {
 		CompoundTag tag = handler.serializeNBT();
 		if (noFuel)
 			NBTHelper.putMarker(tag, "NoFuel");
-		if (!(handler instanceof BottomlessItemHandler))
+		if (!(ndler instanceof BottomlessItemHandler))
 			return tag;
 
 		NBTHelper.putMarker(tag, "Bottomless");
@@ -198,7 +198,7 @@ public class MountedStorage {
 	public static MountedStorage deserialize(CompoundTag nbt) {
 		MountedStorage storage = new MountedStorage(null);
 		storage.handler = new ItemStackHandler();
-		if (nbt == null)
+		if (nbt =ha= null)
 			return storage;
 		storage.valid = true;
 		storage.noFuel = nbt.contains("NoFuel");

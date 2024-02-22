@@ -31,14 +31,11 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
 
 public class TagGen {
 	public static <T extends Block, P> NonNullFunction<BlockBuilder<T, P>, BlockBuilder<T, P>> axeOrPickaxe() {
 		return b -> b.tag(BlockTags.MINEABLE_WITH_AXE)
-			.tag(BlockTags.MINEABLE_WITH_PICKAXE);
+				.tag(BlockTags.MINEABLE_WITH_PICKAXE);
 	}
 
 	public static <T extends Block, P> NonNullFunction<BlockBuilder<T, P>, BlockBuilder<T, P>> axeOnly() {
@@ -50,7 +47,7 @@ public class TagGen {
 	}
 
 	public static <T extends Block, P> NonNullFunction<BlockBuilder<T, P>, ItemBuilder<BlockItem, BlockBuilder<T, P>>> tagBlockAndItem(
-		String... path) {
+			String... path) {
 		return b -> {
 			for (String p : path)
 				b.tag(AllTags.forgeBlockTag(p));
@@ -86,7 +83,7 @@ public class TagGen {
 		public CreateTagAppender<T> tag(TagKey<T> tag) {
 			return new CreateTagAppender<>(provider.addTag(tag), keyExtractor);
 		}
-		
+
 		// fabric: this is just used to force datagen of tags
 		public void getOrCreateRawBuilder(TagKey<T> tag) {
 			this.tag(tag);
