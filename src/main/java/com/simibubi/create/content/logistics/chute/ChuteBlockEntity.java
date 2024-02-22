@@ -390,10 +390,13 @@ public class ChuteBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
 				}
 				if (inserted != 0)
 					return true;
-				invVersionTracker.awaitNewVersion(inv);
-				if (direction == Direction.DOWN)
-					return false;
 			}
+
+			// awaitNewVersion and getVersion cannot be called during a transaction and will throw an IllegalStateException,
+			// so we call this outside of the transaction
+			invVersionTracker.awaitNewVersion(inv);
+			if (direction == Direction.DOWN)
+				return false;
 		}
 
 		if (targetChute != null) {
@@ -454,9 +457,12 @@ public class ChuteBlockEntity extends SmartBlockEntity implements IHaveGoggleInf
 					}
 					if (inserted != 0)
 						return true;
-					invVersionTracker.awaitNewVersion(inv);
-					return false;
 				}
+
+				// awaitNewVersion and getVersion cannot be called during a transaction and will throw an IllegalStateException,
+				// so we call this outside of the transaction
+				invVersionTracker.awaitNewVersion(inv);
+				return false;
 			}
 		}
 
