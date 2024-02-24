@@ -129,10 +129,18 @@ public abstract class CreateRecipeCategory<T extends Recipe<?>> implements Displ
 		itemStacks.stream().filter(widget -> widget instanceof Slot).forEach(widget -> {
 			Slot slot = (Slot) widget;
 
+			int slotIndex = -1;
+			for (int itemStackIndex = 0; itemStackIndex < itemStacks.size(); ++itemStackIndex) {
+				if (widget == itemStacks.get(itemStackIndex)) {
+					slotIndex = itemStackIndex;
+					break;
+				}
+			}
+
 			ClientEntryStacks.setTooltipProcessor(slot.getCurrentEntry(), (entryStack, tooltip) -> {
-//				if (slotIndex < startIndex)
-//					return;
-				ProcessingOutput output = results.get(/*slotIndex - startIndex*/0);
+				if (slotIndex < startIndex)
+					return;
+				ProcessingOutput output = results.get(slotIndex - startIndex);
 				float chance = output.getChance();
 				if (chance != 1)
 					tooltip.add(Lang.translateDirect("recipe.processing.chance", chance < 0.01 ? "<1" : (int) (chance * 100))
