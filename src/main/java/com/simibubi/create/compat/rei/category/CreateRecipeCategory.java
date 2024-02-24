@@ -129,13 +129,7 @@ public abstract class CreateRecipeCategory<T extends Recipe<?>> implements Displ
 		itemStacks.stream().filter(widget -> widget instanceof Slot).forEach(widget -> {
 			Slot slot = (Slot) widget;
 
-			int slotIndex = -1;
-			for (int itemStackIndex = 0; itemStackIndex < itemStacks.size(); ++itemStackIndex) {
-				if (widget == itemStacks.get(itemStackIndex)) {
-					slotIndex = itemStackIndex;
-					break;
-				}
-			}
+			int slotIndex = itemStacks.indexOf(widget);
 
 			ClientEntryStacks.setTooltipProcessor(slot.getCurrentEntry(), (entryStack, tooltip) -> {
 				if (slotIndex < startIndex)
