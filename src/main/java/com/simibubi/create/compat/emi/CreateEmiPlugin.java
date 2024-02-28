@@ -305,7 +305,7 @@ public class CreateEmiPlugin implements EmiPlugin {
 			.distinct()
 			.toList();
 		for (EmiStack stack : EmiApi.getIndexStacks()) {
-			if (stack.getKey() instanceof PotionItem i) {
+			if (stack.getKey() instanceof Item i) {
 				ItemStack is = stack.getItemStack();
 				if (i instanceof PotionItem) {
 					FluidStack potion = PotionFluidHandler.getFluidFromPotionItem(is);
