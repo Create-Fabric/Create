@@ -71,7 +71,7 @@ public class ItemThresholdCondition extends CargoThresholdCondition {
 	@Override
 	protected void writeAdditional(CompoundTag tag) {
 		super.writeAdditional(tag);
-		tag.put("Item", NBTSerializer.serializeNBTCompound(stack));
+		tag.put("Item", stack.serializeNBT());
 	}
 
 	@Override
