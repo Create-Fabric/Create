@@ -286,10 +286,26 @@ public class CreateEmiPlugin implements EmiPlugin {
 		addAll(registry, AllRecipeTypes.MECHANICAL_CRAFTING, MECHANICAL_CRAFTING, MechanicalCraftingEmiRecipe::new);
 
 		// In World Interaction recipes
-		addFluidInteractionRecipe(registry, "create/limestone", AllFluids.HONEY.get(),
-				Fluids.LAVA, AllPaletteStoneTypes.LIMESTONE.getBaseBlock().get());
-		addFluidInteractionRecipe(registry, "create/chocolate", AllFluids.CHOCOLATE.get(),
-				Fluids.LAVA, AllPaletteStoneTypes.SCORIA.getBaseBlock().get());
+
+		EmiStack honey = EmiStack.of(AllFluids.HONEY.get(), 81000);
+		EmiStack chocolate = EmiStack.of(AllFluids.CHOCOLATE.get(), 81000);
+		EmiStack lava = EmiStack.of(Fluids.LAVA, 81000);
+		EmiStack honeyCatalyst = honey.copy().setRemainder(honey);
+		EmiStack chocolateCatalyst = chocolate.copy().setRemainder(chocolate);
+		EmiStack lavaCatalyst = lava.copy().setRemainder(lava);
+		
+		addRecipeSafe(registry, () -> EmiWorldInteractionRecipe.builder()
+				.id(synthetic("world/fluid_interaction", "create/limestone"))
+				.leftInput(honeyCatalyst)
+				.rightInput(lavaCatalyst, false)
+				.output(EmiStack.of(AllPaletteStoneTypes.LIMESTONE.getBaseblock().get()))
+				.build());
+		addRecipeSafe(registry, () -> EmiWorldInteractionRecipe.builder()
+				.id(synthetic("world/fluid_interaction", "create/scoria"))
+				.leftInput(chocolateCatalyst)
+				.rightInput(lavaCatalyst, false)
+				.output(EmiStack.of(AllPaletteStoneTypes.SCORIA.getBaseblock().get()))
+				.build());
 
 		// Introspective recipes based on present stacks need to make sure
 		// all stacks are populated by other plugins
@@ -311,30 +327,22 @@ public class CreateEmiPlugin implements EmiPlugin {
 		}
 	}
 
-	/**
-	 * Register an In World Interaction recipe
-	 *
-	 * @param registry EmiRegistry
-	 * @param outputId The block being outputted in the form of `modid/block` an example for stone would be `minecraft/stone`
-	 * @param left The stack that will be shown in the left input
-	 * @param right The stack that will be shown in the right input
-	 * @param output The stack that will be outputted from this interaction recipe
-	 */
-	private void addFluidInteractionRecipe(@NotNull EmiRegistry registry, String outputId, Fluid left, Fluid right, Block output) {
-		// EmiStack doesnt accept flowing fluids, must always be a source
-		if (left instanceof SimpleFlowableFluid.Flowing flowing)
-			left = flowing.getSource();
-		if (right instanceof SimpleFlowableFluid.Flowing flowing)
-			right = flowing.getSource();
+	// dev/emi/emi/VanillaPlugin.addRecipeSafe(EMIregistry, supplier<EMIRecipe)
+	private static void addRecipeSafe(EmiRegistry registry, Supplier<EmiRecipe> supplier) {
+		try {
+			registry.addRecipe(supplier.get());
+		} catch (Throwable e) {
+			// EmiReloadLog may be unavailable
+			Create.LOGGER.warn("[Create] Exception thrown when parsing EMI recipe (no ID available)");
+			Create.LOGGER.error(String.valueOf(e));
+			// EmiReloadLog.warn("Exception thrown when parsing EMI recipe (no ID available)");
+			// EmiReloadLog.error(e);
+		}
+	}
 
-		// fabric: 81000 droplets = 1000 mb
-		registry.addRecipe(EmiWorldInteractionRecipe.builder()
-				.id(Create.asResource("/world/fluid_interaction/" + outputId))
-				.leftInput(EmiStack.of(left, 81000))
-				.rightInput(EmiStack.of(right, 81000), false)
-				.output(EmiStack.of(output))
-				.build()
-		);
+	// dev/emi/emi/VanillaPlugin.synthetic(string, string)
+	private static ResourceLocation synthetic(String type, String name) {
+		return new ResourceLocation("emi", "/" + type + "/" + name);
 	}
 
 	private void addDeferredRecipes(Consumer<EmiRecipe> consumer) {
