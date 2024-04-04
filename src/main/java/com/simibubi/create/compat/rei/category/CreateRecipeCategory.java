@@ -143,6 +143,13 @@ public abstract class CreateRecipeCategory<T extends Recipe<?>> implements Displ
 		});
 	}
 
+	public static void addStochasticTooltip(Slot slot, ProcessingOutput output) {
+		ClientEntryStacks.setTooltipProcessor(slot.getCurrentEntry(), (entryStack, tooltip) -> {
+			addStochasticTooltip(output, tooltip);
+			return tooltip;
+		});
+	}
+
 	public static void addStochasticTooltip(ProcessingOutput output, Tooltip tooltip) {
 		float chance = output.getChance();
 		if (chance != 1)
