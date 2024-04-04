@@ -40,11 +40,13 @@ public class DeployingCategory extends CreateRecipeCategory<DeployerApplicationR
 		ingredients.add(basicSlot(origin.getX() + 51, origin.getY() + 5)
 				.markInput()
 				.entries(EntryIngredients.ofIngredient(recipe.getRequiredHeldItem())));
-		Slot output = basicSlot(origin.getX() + 132, origin.getY() + 51)
-				.markOutput()
-				.entries(EntryIngredients.of(recipe.getResultItem()));
-		ingredients.add(output);
-		addStochasticTooltip(ingredients, recipe.getRollableResults(), 2);
+		recipe.getRollableResults().stream().limit(1).forEach(result -> {
+			Slot outputSlot = basicSlot(origin.getX() + 132, origin.getY() + 51)
+					.markOutput()
+					.entries(EntryIngredients.of(result.getStack()));
+			ingredients.add(outputSlot);
+			addStochasticTooltip(outputSlot, result);
+		});
 	}
 
 	@Override
