@@ -12,6 +12,7 @@ import com.simibubi.create.compat.rei.display.CreateDisplay;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
+import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.item.ItemHelper;
@@ -42,7 +43,7 @@ public class BasinCategory extends CreateRecipeCategory<BasinRecipe> {
 		BasinRecipe recipe = display.getRecipe();
 		NonNullList<FluidIngredient> fluidIngredients = recipe.getFluidIngredients();
 		List<Pair<Ingredient, MutableInt>> ingredients = ItemHelper.condenseIngredients(recipe.getIngredients());
-		List<ItemStack> itemOutputs = recipe.getRollableResultsAsItemStacks();
+		List<ProcessingOutput> itemOutputs = recipe.getRollableResults();
 		NonNullList<FluidStack> fluidOutputs = recipe.getFluidResults();
 
 		int size = ingredients.size() + fluidIngredients.size();
@@ -77,21 +78,20 @@ public class BasinCategory extends CreateRecipeCategory<BasinRecipe> {
 			widgets.add(fluidSlot);
 		}
 
-		int outSize = fluidOutputs.size() + recipe.getRollableResults()
-				.size();
+		int outSize = fluidOutputs.size() + itemOutputs.size();
 		int outputIndex = 0;
-
-		if (!itemOutputs.isEmpty())
-			addStochasticTooltip(widgets, recipe.getRollableResults(), i);
 
 		for (; outputIndex < outSize; outputIndex++) {
 			int xPosition = 141 - (outSize % 2 != 0 && outputIndex == outSize - 1 ? 0 : outputIndex % 2 == 0 ? 10 : -9);
 			int yPosition = -19 * (outputIndex / 2) + 50 + yOffset;
 
 			if (itemOutputs.size() > outputIndex) {
-				widgets.add(basicSlot(origin.x + xPosition + 1, origin.y + yPosition + yOffset + 1)
+				ProcessingOutput result = itemOutputs.get(outputIndex);
+				Slot outputSlot = basicSlot(origin.x + xPosition + 1, origin.y + yPosition + yOffset + 1)
 						.markOutput()
-						.entries(EntryIngredients.of(itemOutputs.get(outputIndex))));
+						.entries(EntryIngredients.of(result.getStack()));
+				widgets.add(outputSlot);
+				addStochasticTooltip(outputSlot, result);
 				i++;
 			} else {
 				Slot fluidSlot = basicSlot(origin.x + xPosition + 1, origin.y + yPosition + 1 + yOffset)
