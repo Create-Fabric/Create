@@ -46,15 +46,13 @@ public class ItemApplicationCategory extends CreateRecipeCategory<ItemApplicatio
 		});
 		ingredients.add(slot);
 
-		Slot outputSlot = basicSlot(132, 38, origin)
-				.markOutput()
-				.entries(display.getOutputEntries().get(0));
-		ClientEntryStacks.setTooltipProcessor(outputSlot.getCurrentEntry(), (entryStack, tooltip) -> {
-					addStochasticTooltip(display.getRecipe().getRollableResults()
-							.get(0), tooltip);
-			return tooltip;
+		display.getRecipe().getRollableResults().stream().limit(1).forEach(result -> {
+			Slot outputSlot = basicSlot(132, 38, origin)
+					.markOutput()
+					.entries(EntryIngredients.of(result.getStack()));
+			ingredients.add(outputSlot);
+			addStochasticTooltip(outputSlot, result);
 		});
-		ingredients.add(outputSlot);
 	}
 
 	@Override
