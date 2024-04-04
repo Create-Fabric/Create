@@ -12,6 +12,7 @@ import com.simibubi.create.foundation.gui.element.GuiGameElement;
 
 import io.github.fabricators_of_create.porting_lib.util.NBTSerializer;
 import me.shedaniel.math.Point;
+import me.shedaniel.rei.api.client.gui.widgets.Slot;
 import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
 import net.minecraft.core.NonNullList;
@@ -30,16 +31,16 @@ public class PolishingCategory extends CreateRecipeCategory<SandPaperPolishingRe
 
 	@Override
 	public void addWidgets(CreateDisplay<SandPaperPolishingRecipe> display, List<Widget> ingredients, Point origin) {
-		List<ProcessingOutput> results = display.getRecipe().getRollableResults();
-
 		ingredients.add(basicSlot(origin.x + 27, origin.y + 29)
 				.markInput()
 				.entries(display.getInputEntries().get(0)));
-		ingredients.add(basicSlot(origin.x + 132, origin.y + 29)
-				.markOutput()
-				.entries(EntryIngredients.of(results.get(0).getStack())));
-
-		addStochasticTooltip(ingredients, results);
+		display.getRecipe().getRollableResults().stream().limit(1).forEach(result -> {
+			Slot outputSlot = basicSlot(origin.x + 132, origin.y + 29)
+					.markOutput()
+					.entries(EntryIngredients.of(result.getStack()));
+			ingredients.add(outputSlot);
+			addStochasticTooltip(outputSlot, result);
+		});
 	}
 
 	@Override
