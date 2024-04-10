@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags.AllBlockTags;
+import com.simibubi.create.Create;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.blockEntity.IMergeableBE;
 
@@ -43,6 +44,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.IceBlock;
 import net.minecraft.world.level.block.SlimeBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -288,10 +290,15 @@ public class BlockHelper {
 		if (data != null) {
 			if (existingBlockEntity instanceof IMergeableBE mergeable) {
 				BlockEntity loaded = BlockEntity.loadStatic(target, state, data);
-				if (existingBlockEntity.getType()
-					.equals(loaded.getType())) {
-					mergeable.accept(loaded);
-					return;
+				try {
+                    assert loaded != null;
+                    if (existingBlockEntity.getType()
+							.equals(loaded.getType())) {
+						mergeable.accept(loaded);
+						return;
+					}
+				} catch (NullPointerException e){
+					Create.LOGGER.error(e.toString());
 				}
 			}
 			BlockEntity blockEntity = world.getBlockEntity(target);
