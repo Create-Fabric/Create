@@ -269,5 +269,7 @@ public class CommonEvents {
 		EntityEvents.PROJECTILE_IMPACT.register(BlazeBurnerHandler::onThrowableImpact);
 		EntityDataEvents.LOAD.register(ExtendoGripItem::addReachToJoiningPlayersHoldingExtendo);
 		PlayerBlockBreakEvents.BEFORE.register(SymmetryHandler::onBlockDestroyed);
+		PlayerBlockBreakEvents.AFTER.register(ExtendoGripItem::consumeDurabilityOnBreak);
+		BlockEvents.POST_PROCESS_PLACE.register(ExtendoGripItem::consumeDurabilityOnPlace);
 	}
 }
