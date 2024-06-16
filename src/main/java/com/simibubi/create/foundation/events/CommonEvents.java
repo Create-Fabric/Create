@@ -310,5 +310,7 @@ public class CommonEvents {
 		MinecartEvents.WRITE.register(AbstractMinecartExtensions::minecartWrite);
 		MinecartEvents.REMOVE.register(AbstractMinecartExtensions::minecartRemove);
 		PlayerBlockBreakEvents.BEFORE.register(SymmetryHandler::onBlockDestroyed);
+		PlayerBlockBreakEvents.AFTER.register(ExtendoGripItem::consumeDurabilityOnBreak);
+		BlockEvents.POST_PROCESS_PLACE.register(ExtendoGripItem::consumeDurabilityOnPlace);
 	}
 }

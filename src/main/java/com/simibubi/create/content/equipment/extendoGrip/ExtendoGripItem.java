@@ -19,6 +19,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
@@ -31,6 +32,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -158,23 +163,6 @@ public class ExtendoGripItem extends Item  {
 		}
 	}
 
-//	@SubscribeEvent(priority = EventPriority.LOWEST)
-//	public static void consumeDurabilityOnBlockBreak(BreakEvent event) {
-//		findAndDamageExtendoGrip(event.getPlayer());
-//	}
-//
-//	@SubscribeEvent(priority = EventPriority.LOWEST)
-//	public static void consumeDurabilityOnPlace(EntityPlaceEvent event) {
-//		Entity entity = event.getEntity();
-//		if (entity instanceof Player)
-//			findAndDamageExtendoGrip((Player) entity);
-//	}
-
-//	@SubscribeEvent(priority = EventPriority.LOWEST)
-//	public static void consumeDurabilityOnPlace(PlayerInteractEvent event) {
-//		findAndDamageExtendoGrip(event.getPlayer());
-//	}
-
 	private static void findAndDamageExtendoGrip(Player player) {
 		if (player == null)
 			return;
@@ -287,6 +275,14 @@ public class ExtendoGripItem extends Item  {
 		boolean inMain = AllItems.EXTENDO_GRIP.isIn(player.getMainHandItem());
 		boolean holdingGrip = inOff || inMain;
 		return holdingGrip;
+	}
+
+    public static void consumeDurabilityOnBreak(Level level, Player player, BlockPos blockPos, BlockState blockState, BlockEntity blockEntity) {
+		findAndDamageExtendoGrip(player);
+	}
+
+	public static void consumeDurabilityOnPlace(BlockPlaceContext blockPlaceContext, BlockPos blockPos, BlockState blockState) {
+		findAndDamageExtendoGrip(blockPlaceContext.getPlayer());
 	}
 
 //	@Override
