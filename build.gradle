@@ -32,7 +32,7 @@ repositories {
     maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" } // Forge Config API Port
     maven { url = "https://maven.tterrag.com/" } // Flywheel
     maven { url = "https://maven.shedaniel.me/" } // REI and deps
-    maven { url = "https://api.modrinth.com/maven" } // LazyDFU, Sodium, Sandwichable
+    maven { url = "https://api.modrinth.com/maven" } // LazyDFU, Sodium, Sandwichable, ShoulderSurfing
     maven { url = "https://maven.terraformersmc.com/" } // Mod Menu, Trinkets
     maven { url = "https://squiddev.cc/maven" } // CC:T
     maven { url = "https://modmaven.dev" } // Botania
@@ -105,6 +105,7 @@ def compat(DependencyHandler deps) {
     deps.modCompileOnly("com.terraformersmc:modmenu:$modmenu_version")
     deps.modCompileOnly("maven.modrinth:sandwichable:$sandwichable_version")
     deps.modCompileOnly("maven.modrinth:sodium:$sodium_version")
+    deps.modCompileOnly("maven.modrinth:shoulder-surfing-reloaded:$shoulder_surfing_version")
 
     deps.modCompileOnly("dev.emi:trinkets:$trinkets_version")
     // for Trinkets
