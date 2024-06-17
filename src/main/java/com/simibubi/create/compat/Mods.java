@@ -32,7 +32,8 @@ public enum Mods {
 	MODMENU,
 	BOTANIA,
 	SODIUM,
-	INDIUM;
+	INDIUM,
+	SHOULDERSURFING;
 
 	private final String id;
 	private final boolean loaded;

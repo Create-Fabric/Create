@@ -5,6 +5,10 @@ import java.util.Collection;
 
 import javax.annotation.Nullable;
 
+import com.github.exopandora.shouldersurfing.api.client.ShoulderSurfing;
+import com.github.exopandora.shouldersurfing.api.model.PickContext;
+import com.simibubi.create.compat.Mods;
+
 import net.minecraft.world.phys.HitResult;
 
 import org.apache.commons.lang3.mutable.MutableObject;
@@ -129,8 +133,14 @@ public class ContraptionHandlerClient {
 	@Environment(EnvType.CLIENT)
 	public static Couple<Vec3> getRayInputs(LocalPlayer player) {
 		Minecraft mc = Minecraft.getInstance();
-		Vec3 origin = RaycastHelper.getTraceOrigin(player);
 		double reach = ReachEntityAttributes.getReachDistance(player, mc.gameMode.getPickRange());
+		if (Mods.SHOULDERSURFING.isLoaded() && ShoulderSurfing.getInstance().isShoulderSurfing()) {
+			var blockTrace = new PickContext.Builder(mc.gameRenderer.getMainCamera())
+				.build()
+				.blockTrace(reach, mc.getDeltaFrameTime());
+			return Couple.create(blockTrace.left(), blockTrace.right());
+		}
+		Vec3 origin = RaycastHelper.getTraceOrigin(player);
 		if (mc.hitResult != null && mc.hitResult.getLocation() != null)
 			reach = Math.min(mc.hitResult.getLocation()
 				.distanceTo(origin), reach);
