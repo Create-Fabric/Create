@@ -67,7 +67,7 @@ public class BasinEmiRecipe extends CreateEmiRecipe<BasinRecipe> {
 
 		for (int i = 0; i < inputSize; i++) {
 			EmiIngredient stack = input.get(i);
-			addSlot(widgets, stack, xOff + 16 + (i % 3) * 19, yOff + 50 + (i / 3) * 19 - (inputSize - 1) / 3 * 19);
+			addSlot(widgets, stack, xOff + 16 + (i % 3) * 19, yOff + 50 - (i / 3) * 19);
 		}
 
 		for (int i = 0; i < outputSize; i++) {
