@@ -190,7 +190,7 @@ public class AllTags {
 		UA_CORAL(MOD, "upgrade_aquatic/coral"),
 		// fabric: Trinkets compat is used instead
 		//CURIOS_HEAD(CURIOS, "head"),
-		TRINKETS_FACE(TRINKETS, "face")
+		TRINKETS_FACE(TRINKETS, "head/face")
 
 		;
 
