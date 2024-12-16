@@ -133,7 +133,7 @@ public class DeployerHandler {
 			.addTransientAttributeModifiers(attributeModifiers);
 		activateInner(player, vec, clickedPos, extensionVector, mode);
 		player.getAttributes()
-			.addTransientAttributeModifiers(attributeModifiers);
+			.removeAttributeModifiers(attributeModifiers);
 	}
 
 	private static void activateInner(DeployerFakePlayer player, Vec3 vec, BlockPos clickedPos, Vec3 extensionVector,
