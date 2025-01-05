@@ -1,22 +1,29 @@
 # http://editorconfig.org
-root = true
+#root = true
 
 [*]
 indent_style = space
 indent_size = 4
-continuation_indent_size = 8
 end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
+[*.yml]
+indent_size = 2
+
 [*.json]
-indent_style = space
 indent_size = 2
 
 [*.java]
 indent_style = tab
-ij_continuation_indent_size = 8
-ij_java_class_count_to_use_import_on_demand = 99
-ij_java_names_count_to_use_import_on_demand = 99
-ij_java_imports_layout = $*,|,java.**,|,javax.**,|,org.**,|,com.**,|,*
+ij_continuation_indent_size = 4
+ij_java_blank_lines_before_class_end = 0
+ij_java_blank_lines_after_anonymous_class_header = 0
+ij_java_blank_lines_after_class_header = 0
+ij_java_blank_lines_before_method_body = 0
+ij_java_else_on_new_line = false
+ij_java_class_count_to_use_import_on_demand = 999
+ij_java_names_count_to_use_import_on_demand = 999
+ij_java_imports_layout = $*,|,io.github.fabricators_of_create.**,net.fabricmc.**,|,java.**,|,javax.**,|,org.**,|,com.**,|,*
+ij_java_insert_inner_class_imports = true
